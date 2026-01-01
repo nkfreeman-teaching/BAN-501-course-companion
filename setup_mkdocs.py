@@ -295,8 +295,8 @@ def generate_mathjax_js() -> str:
     """Generate MathJax configuration."""
     return r"""window.MathJax = {
   tex: {
-    inlineMath: [["\\(", "\\)"], ["$", "$"]],
-    displayMath: [["\\[", "\\]"], ["$$", "$$"]],
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
     processEscapes: true,
     processEnvironments: true
   },

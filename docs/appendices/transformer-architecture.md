@@ -339,8 +339,6 @@ Final output has the same shape as input: `(2, 4, 8)`.
 
 ![Attention Dimension Flow](../assets/deep_dive/attention_flow-2.png)
 
-![Attention Dimension Flow](../assets/deep_dive/attention_flow-1.png)
-
 ---
 
 ## From-Scratch PyTorch Implementation
