@@ -1,0 +1,2648 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/03-classification/">
+      
+      
+        <link rel="prev" href="../02-regression/">
+      
+      
+        <link rel="next" href="../04-ensemble-methods/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>3. Classification - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-3-classification-methods" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Classification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31-logistic-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Logistic Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 Logistic Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-logistic-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Logistic Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-linear-regression-fails-for-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Linear Regression Fails for Classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sigmoid-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sigmoid Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-odds-and-log-odds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Odds and Log Odds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coefficient-interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coefficient Interpretation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-it-regression-or-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is It Regression or Classification?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-thresholds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Thresholds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roc-curves-and-auc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROC Curves and AUC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-decision-trees-cart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Decision Trees (CART)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Decision Trees (CART)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-decision-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Decision Trees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-tree-intuition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Tree Intuition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splitting-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splitting Criteria
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scikit-learn-api-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scikit-learn API Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demonstrating-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demonstrating Overfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruning-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pruning Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-decision-trees-are-popular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Decision Trees Are Popular
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-handling-imbalanced-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Handling Imbalanced Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 Handling Imbalanced Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-accuracy-is-misleading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Accuracy is Misleading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-precision-recall-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Precision-Recall Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resampling-smote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resampling: SMOTE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threshold-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threshold Adjustment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-context-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Context Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-hyperparameter-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Hyperparameter Optimization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 Hyperparameter Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters-vs-hyperparameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters vs Hyperparameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grid-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grid Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-random-often-beats-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Random Often Beats Grid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayesian-optimization-optuna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bayesian Optimization (optuna)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#never-use-test-set-for-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Never Use Test Set for Tuning!
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31-logistic-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Logistic Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 Logistic Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-logistic-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Logistic Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-linear-regression-fails-for-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Linear Regression Fails for Classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sigmoid-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sigmoid Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-odds-and-log-odds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Odds and Log Odds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coefficient-interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coefficient Interpretation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-it-regression-or-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is It Regression or Classification?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-thresholds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Thresholds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roc-curves-and-auc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROC Curves and AUC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-decision-trees-cart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Decision Trees (CART)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Decision Trees (CART)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-decision-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Decision Trees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-tree-intuition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Tree Intuition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splitting-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splitting Criteria
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-scikit-learn-api-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The scikit-learn API Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demonstrating-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demonstrating Overfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruning-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pruning Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-decision-trees-are-popular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Decision Trees Are Popular
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-handling-imbalanced-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Handling Imbalanced Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 Handling Imbalanced Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-accuracy-is-misleading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Accuracy is Misleading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-precision-recall-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Precision-Recall Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resampling-smote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resampling: SMOTE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threshold-adjustment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threshold Adjustment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-context-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Context Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34-hyperparameter-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Hyperparameter Optimization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 Hyperparameter Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters-vs-hyperparameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters vs Hyperparameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grid-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grid Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-random-often-beats-grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Random Often Beats Grid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayesian-optimization-optuna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bayesian Optimization (optuna)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#never-use-test-set-for-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Never Use Test Set for Tuning!
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-3-classification-methods">Module 3: Classification Methods<a class="headerlink" href="#module-3-classification-methods" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>We've covered a lot of ground—foundations in Module 1, regression in Module 2. Now we move to classification, which is arguably even more prevalent in business applications.</p>
+<p>Think about the decisions businesses make every day: Should we approve this loan? Is this transaction fraudulent? Will this customer cancel their subscription? Is this email spam? These are all classification problems—predicting a category, not a number.</p>
+<p>The concepts extend to <strong>multiclass classification</strong>: logistic regression uses softmax instead of sigmoid; decision trees handle it naturally; evaluation uses per-class precision/recall and NxN confusion matrices. The fundamentals transfer directly—the mechanics get more complex but the reasoning stays the same.</p>
+<p>This module covers four major topics: logistic regression (extending regression concepts to classification), decision trees (intuitive classifiers that set us up for ensemble methods), handling imbalanced data (because when 99% of transactions are legitimate, accuracy is meaningless), and hyperparameter optimization.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Explain</strong> the mechanics and interpretation of logistic regression, including log odds and probability</li>
+<li><strong>Build</strong> and interpret decision tree classifiers, understanding their tendency to overfit</li>
+<li><strong>Apply</strong> appropriate techniques for handling imbalanced classification problems</li>
+<li><strong>Use</strong> hyperparameter optimization techniques to improve model performance</li>
+<li><strong>Select</strong> appropriate evaluation metrics based on business context</li>
+</ol>
+<hr />
+<h2 id="31-logistic-regression">3.1 Logistic Regression<a class="headerlink" href="#31-logistic-regression" title="Permanent link">&para;</a></h2>
+<h3 id="three-components-logistic-regression">Three Components: Logistic Regression<a class="headerlink" href="#three-components-logistic-regression" title="Permanent link">&para;</a></h3>
+<p>Connecting to the framework from Module 2:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Logistic Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision Model</strong></td>
+<td><span class="arithmatex">\(P(Y=1) = \sigma(\beta_0 + \beta_1 x_1 + ...)\)</span> — sigmoid of linear combination</td>
+</tr>
+<tr>
+<td><strong>Quality Measure</strong></td>
+<td>Cross-entropy (log loss) — penalizes confident wrong predictions</td>
+</tr>
+<tr>
+<td><strong>Update Method</strong></td>
+<td>Gradient descent on log-likelihood</td>
+</tr>
+</tbody>
+</table>
+<p>The decision model changes from a line to a sigmoid curve, and the quality measure changes from SSE to cross-entropy—but the overall structure is identical to linear regression.</p>
+<h3 id="why-linear-regression-fails-for-classification">Why Linear Regression Fails for Classification<a class="headerlink" href="#why-linear-regression-fails-for-classification" title="Permanent link">&para;</a></h3>
+<p>Binary outcomes are coded as 0 or 1. If we fit a line, predictions can be less than 0 or greater than 1. "There's a -15% chance of churn" is meaningless.</p>
+<p><strong>The solution</strong>: Transform the output so it's always between 0 and 1.</p>
+<p>Other functions map to (0,1)—probit, scaled tanh—but sigmoid has unique advantages: its derivative is expressible in terms of the output (efficient gradients), its inverse is the logit (clean coefficient interpretation as log-odds), and it arises from maximum entropy principles. Tools and practices are standardized around it.</p>
+<h3 id="the-sigmoid-function">The Sigmoid Function<a class="headerlink" href="#the-sigmoid-function" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[\sigma(z) = \frac{1}{1 + e^{-z}}\]</div>
+<p>Where <span class="arithmatex">\(z = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ...\)</span></p>
+<p><strong>Key properties:</strong>
+- Output is always between 0 and 1—valid probability
+- S-shaped curve—small changes in x have the biggest effect near 0.5
+- At z=0, output is exactly 0.5</p>
+<p>The math:
+- When z is large and positive: <span class="arithmatex">\(e^{-z} \to 0\)</span>, so <span class="arithmatex">\(\sigma(z) \to 1\)</span>
+- When z is large and negative: <span class="arithmatex">\(e^{-z} \to \infty\)</span>, so <span class="arithmatex">\(\sigma(z) \to 0\)</span>
+- When z = 0: <span class="arithmatex">\(e^{0} = 1\)</span>, so <span class="arithmatex">\(\sigma(0) = 0.5\)</span></p>
+<h3 id="understanding-odds-and-log-odds">Understanding Odds and Log Odds<a class="headerlink" href="#understanding-odds-and-log-odds" title="Permanent link">&para;</a></h3>
+<p><strong>Step 1: Odds</strong></p>
+<div class="arithmatex">\[Odds = \frac{P(Y=1)}{P(Y=0)} = \frac{p}{1-p}\]</div>
+<p>If P(churn) = 0.75, odds = 0.75/0.25 = 3. "3 to 1 odds of churning."</p>
+<p><strong>Step 2: Log Odds (Logit)</strong></p>
+<div class="arithmatex">\[\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x_1 + ...\]</div>
+<p><strong>Key insight</strong>: The log odds ARE linear in the predictors. This is where the "linear" in logistic regression comes from.</p>
+<p><strong>Example</strong>: Model: <span class="arithmatex">\(\log(odds) = -2 + 0.5 \times age\)</span></p>
+<table>
+<thead>
+<tr>
+<th>Age</th>
+<th>Log Odds</th>
+<th>Odds</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-2</td>
+<td><span class="arithmatex">\(e^{-2}\)</span> ≈ 0.14</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>20</td>
+<td>8</td>
+<td><span class="arithmatex">\(e^8\)</span> ≈ 2981</td>
+<td>99.97%</td>
+</tr>
+<tr>
+<td>30</td>
+<td>13</td>
+<td><span class="arithmatex">\(e^{13}\)</span> ≈ 442,413</td>
+<td>≈100%</td>
+</tr>
+</tbody>
+</table>
+<p>Log odds change linearly, but probabilities don't. That's the magic of the logit transform.</p>
+<p><strong>Why log odds?</strong> They provide interpretable coefficients (each β is "change in log-odds per unit"), unbounded range (the linear predictor can take any value while output stays bounded 0-1), and additive effects (effects of multiple variables sum in log-odds space, unlike in probability space). The transformation connects linear models to probability naturally.</p>
+<h3 id="coefficient-interpretation">Coefficient Interpretation<a class="headerlink" href="#coefficient-interpretation" title="Permanent link">&para;</a></h3>
+<p><strong>The coefficient <span class="arithmatex">\(\beta_1\)</span></strong>: Change in log odds for a one-unit increase in <span class="arithmatex">\(x_1\)</span>.</p>
+<p><strong>The odds ratio <span class="arithmatex">\(e^{\beta_1}\)</span></strong>: Multiplicative change in odds.</p>
+<p><strong>Example:</strong>
+- If <span class="arithmatex">\(\beta_1 = 0.5\)</span>, then <span class="arithmatex">\(e^{0.5} \approx 1.65\)</span>
+- "Each unit increase in X increases the odds by 65%"</p>
+<p><strong>Converting to probability:</strong>
+1. Calculate log-odds: <span class="arithmatex">\(z = \beta_0 + \beta_1 x_1 + ...\)</span>
+2. Apply sigmoid: <span class="arithmatex">\(P(Y=1) = \frac{1}{1 + e^{-z}}\)</span></p>
+<h3 id="is-it-regression-or-classification">Is It Regression or Classification?<a class="headerlink" href="#is-it-regression-or-classification" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>"Regression" (historical reasons)</td>
+</tr>
+<tr>
+<td>What it models</td>
+<td>Probability (continuous 0-1)</td>
+</tr>
+<tr>
+<td>What we use it for</td>
+<td>Classification (discrete classes)</td>
+</tr>
+<tr>
+<td>How</td>
+<td>Apply a threshold to the probability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight</strong>: Logistic regression IS a regression model (predicts continuous probability), but we USE it for classification by thresholding.</p>
+<p>Probabilities give crucial flexibility over hard class predictions: threshold flexibility (adjust without retraining when costs change), ranking and prioritization ("which 100 customers are most likely to churn?"), confidence communication (P=0.95 vs P=0.55 both classify as positive but represent different confidence), and risk quantification (expected value calculations require probabilities). In business, you almost always benefit from probabilities.</p>
+<h3 id="decision-thresholds">Decision Thresholds<a class="headerlink" href="#decision-thresholds" title="Permanent link">&para;</a></h3>
+<p><strong>The default threshold of 0.5 is often NOT optimal!</strong></p>
+<p><strong>Example - Fraud Detection:</strong>
+- Cost of missing fraud (false negative): $10,000
+- Cost of investigating non-fraud (false positive): $100</p>
+<p>With asymmetric costs, lower the threshold—catch more fraud, accept more false alarms.</p>
+<p><strong>Cost-based threshold formula</strong>: <span class="arithmatex">\(t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}\)</span>. For fraud costing $10,000 (FN) and investigation costing $100 (FP): threshold ≈ 100/(100+10000) ≈ 0.01—predict fraud for anyone above 1% probability! This assumes well-calibrated probabilities; verify calibration first. Alternative: Youden's J statistic (maximize TPR-FPR) when costs are unknown.</p>
+<p><strong>Threshold effects:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Lower Threshold</th>
+<th>Higher Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>More positive predictions</td>
+<td>Fewer positive predictions</td>
+</tr>
+<tr>
+<td>Higher recall</td>
+<td>Higher precision</td>
+</tr>
+<tr>
+<td>Lower precision</td>
+<td>Lower recall</td>
+</tr>
+<tr>
+<td>Fewer false negatives</td>
+<td>Fewer false positives</td>
+</tr>
+</tbody>
+</table>
+<h3 id="roc-curves-and-auc">ROC Curves and AUC<a class="headerlink" href="#roc-curves-and-auc" title="Permanent link">&para;</a></h3>
+<p>For each possible threshold:
+1. Calculate True Positive Rate: <span class="arithmatex">\(TPR = \frac{TP}{TP + FN}\)</span>
+2. Calculate False Positive Rate: <span class="arithmatex">\(FPR = \frac{FP}{FP + TN}\)</span>
+3. Plot the point</p>
+<p><strong>AUC interpretation:</strong>
+- 0.5 = Random guessing
+- 1.0 = Perfect separation
+- 0.8 = "80% chance that a randomly chosen positive ranks higher than a randomly chosen negative"</p>
+<p><strong>Note</strong>: AUC ≠ accuracy. AUC measures ranking ability across all thresholds.</p>
+<p><strong>Ranking ability</strong> means correctly ordering examples by likelihood—higher-risk items get higher scores—even if actual probability values are wrong. This matters for resource allocation ("call top 100 highest-risk customers"), campaign targeting (top decile by response rate), and prioritization (fraud investigators review by score). A model with AUC=0.9 and poor calibration is often more useful than AUC=0.6 with perfect calibration—you can recalibrate using Platt scaling or isotonic regression; you can't easily fix ranking ability.</p>
+<p><strong>Choosing optimal threshold:</strong>
+- Youden's J statistic: Maximize (TPR - FPR)
+- Cost-based: Minimize expected cost given FP/FN costs
+- Precision-Recall trade-off: Use PR curve for imbalanced data</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">log_reg</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">log_reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Get probabilities</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">y_proba</span> <span class="o">=</span> <span class="n">log_reg</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># ROC curve</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_proba</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># Optimal threshold (Youden&#39;s J)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">optimal_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">tpr</span> <span class="o">-</span> <span class="n">fpr</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">optimal_threshold</span> <span class="o">=</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">optimal_idx</span><span class="p">]</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># Interpret coefficients as odds ratios</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">coef</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">log_reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">odds_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">coef</span><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">: odds ratio = </span><span class="si">{</span><span class="n">odds_ratio</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Logistic regression outputs are well-calibrated probabilities"</td>
+<td>Outputs may need calibration (Platt scaling, isotonic regression) for reliable probability estimates.</td>
+</tr>
+<tr>
+<td>"Higher AUC always means better model"</td>
+<td>AUC ignores calibration and threshold choice. A model with lower AUC but better calibration might be preferable.</td>
+</tr>
+<tr>
+<td>"Logistic regression requires linear relationships"</td>
+<td>It requires linearity in LOG ODDS, not probability. Add polynomial terms for non-linear relationships.</td>
+</tr>
+<tr>
+<td>"Logistic regression can't handle multiple classes"</td>
+<td>Multinomial logistic regression extends to multiple classes (one-vs-rest or softmax).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="32-decision-trees-cart">3.2 Decision Trees (CART)<a class="headerlink" href="#32-decision-trees-cart" title="Permanent link">&para;</a></h2>
+<h3 id="three-components-decision-trees">Three Components: Decision Trees<a class="headerlink" href="#three-components-decision-trees" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Decision Trees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision Model</strong></td>
+<td>Tree of if-then rules — follow branches based on feature thresholds</td>
+</tr>
+<tr>
+<td><strong>Quality Measure</strong></td>
+<td>Gini impurity or entropy — measures class mixture in nodes</td>
+</tr>
+<tr>
+<td><strong>Update Method</strong></td>
+<td>Greedy recursive splitting — find best split at each node</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key difference</strong>: We're not doing gradient descent. Trees use a greedy algorithm that builds one split at a time.</p>
+<h3 id="decision-tree-intuition">Decision Tree Intuition<a class="headerlink" href="#decision-tree-intuition" title="Permanent link">&para;</a></h3>
+<p>Imagine you're a loan officer:
+- First: Is income &gt; $50,000?
+  - Yes → Check debt-to-income ratio
+  - No → Check employment history...</p>
+<p><strong>Decision trees formalize this intuitive process.</strong> They automatically learn which questions to ask, in what order, and what thresholds to use.</p>
+<p>The tree picks the feature and threshold that best separates classes (maximally reduces impurity). This is a greedy algorithm—locally best splits without looking ahead. The first feature is often important but not always "most important": a feature might matter most after controlling for another, or correlated features might be interchanged. Feature importance scores (aggregating across all nodes) are more reliable than just the root split.</p>
+<h3 id="splitting-criteria">Splitting Criteria<a class="headerlink" href="#splitting-criteria" title="Permanent link">&para;</a></h3>
+<p><strong>Gini Impurity</strong> (scikit-learn default):
+$<span class="arithmatex">\(Gini = 1 - \sum_{i=1}^{C} p_i^2\)</span>$</p>
+<p>Where <span class="arithmatex">\(p_i\)</span> is the proportion of class <span class="arithmatex">\(i\)</span> in the node.</p>
+<ul>
+<li>Gini = 0: Pure node (all same class)</li>
+<li>Gini = 0.5: Maximum impurity for binary (50-50)</li>
+</ul>
+<p><strong>Entropy</strong>:
+$<span class="arithmatex">\(Entropy = -\sum_{i=1}^{C} p_i \log_2(p_i)\)</span>$</p>
+<p>Usually produces similar results. Gini is slightly faster (no logarithms).</p>
+<p>In practice, Gini vs entropy rarely matters. Entropy penalizes near-equal splits slightly more; with many classes, Gini can favor isolating one class while entropy prefers balanced information gain. Default to Gini (slightly faster); if hyperparameter tuning, include criterion and let cross-validation decide.</p>
+<h3 id="the-scikit-learn-api-pattern">The scikit-learn API Pattern<a class="headerlink" href="#the-scikit-learn-api-pattern" title="Permanent link">&para;</a></h3>
+<p>This pattern is consistent across almost ALL scikit-learn models:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 1. Instantiate</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 2. Fit</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 3. Predict</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">probabilities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="decision-boundaries">Decision Boundaries<a class="headerlink" href="#decision-boundaries" title="Permanent link">&para;</a></h3>
+<p>Trees create rectangular decision regions:
+- Each split creates a horizontal or vertical line
+- Deep trees create many small rectangles
+- Different from logistic regression's smooth boundary</p>
+<h3 id="demonstrating-overfitting">Demonstrating Overfitting<a class="headerlink" href="#demonstrating-overfitting" title="Permanent link">&para;</a></h3>
+<p><strong>Deep Tree (no limit):</strong>
+- Train accuracy: 100%
+- Test accuracy: 75%
+- Hundreds of nodes</p>
+<p><strong>Shallow Tree (depth=3):</strong>
+- Train accuracy: 85%
+- Test accuracy: 82%
+- ~15 nodes</p>
+<p><strong>Key insight</strong>: Deep trees memorize training data including noise. 100% training accuracy almost certainly means overfitting.</p>
+<p>100% training accuracy is occasionally okay: perfectly separable data (predicting even/odd from last digit), very small clean datasets, or memorization tasks. Verify by checking test accuracy (also very high?), the train-test gap (small vs large?), complexity (10 leaves for 10,000 samples = simple rules; 5,000 leaves = memorized), and cross-validation consistency. The heuristic remains useful: 100% training accuracy should trigger suspicion.</p>
+<h3 id="pruning-strategies">Pruning Strategies<a class="headerlink" href="#pruning-strategies" title="Permanent link">&para;</a></h3>
+<p><strong>Pre-pruning (early stopping):</strong>
+- <code>max_depth</code>: Maximum tree depth
+- <code>min_samples_split</code>: Minimum samples to split a node
+- <code>min_samples_leaf</code>: Minimum samples in a leaf</p>
+<p><strong>Post-pruning:</strong>
+- Grow full tree, then prune back
+- Use <code>ccp_alpha</code> parameter
+- Higher alpha = more pruning</p>
+<p><strong>Recommendation</strong>: Start with pre-pruning. Set <code>max_depth=5</code> as starting point, use cross-validation to optimize.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">tree</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;gini&#39;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">min_samples_leaf</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">)</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">tree</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Check for overfitting</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">train_acc</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">test_acc</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train: </span><span class="si">{</span><span class="n">train_acc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Test: </span><span class="si">{</span><span class="n">test_acc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Cross-validation for depth selection</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">):</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">tree_cv</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">tree_cv</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Depth </span><span class="si">{</span><span class="n">depth</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (+/- </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="feature-importance">Feature Importance<a class="headerlink" href="#feature-importance" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[Importance = \sum_{nodes} (impurity\ reduction \times samples)\]</div>
+<p><strong>Caveats:</strong>
+- Importance is relative (sums to 1)
+- Correlated features split importance between them
+- Doesn't indicate direction of effect or causation</p>
+<p>To understand importance with correlated features: use domain knowledge (which is more causal?), remove one and retrain (does importance transfer?), or use permutation importance (shuffles independently). For prediction, keeping both adds complexity without benefit. For interpretation, report both but note correlation. Consider reporting "this cluster of correlated features is important" rather than attributing to one.</p>
+<h3 id="why-decision-trees-are-popular">Why Decision Trees Are Popular<a class="headerlink" href="#why-decision-trees-are-popular" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Explainable</strong>: Show decision rules to stakeholders</li>
+<li><strong>No preprocessing</strong>: Handle different scales, categorical variables, missing values</li>
+<li><strong>Non-linear</strong>: Capture complex relationships automatically</li>
+<li><strong>Visual</strong>: Tree diagrams are intuitive for non-technical audiences</li>
+</ol>
+<h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Deeper trees are always better"</td>
+<td>Deeper trees overfit. Find the sweet spot via cross-validation.</td>
+</tr>
+<tr>
+<td>"Decision trees require feature scaling"</td>
+<td>Trees are scale-invariant! One of their advantages.</td>
+</tr>
+<tr>
+<td>"Feature importance = causal importance"</td>
+<td>Importance only shows predictive power, not causation.</td>
+</tr>
+<tr>
+<td>"Trees can't capture interactions"</td>
+<td>Trees naturally capture interactions through hierarchical structure.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="33-handling-imbalanced-data">3.3 Handling Imbalanced Data<a class="headerlink" href="#33-handling-imbalanced-data" title="Permanent link">&para;</a></h2>
+<h3 id="why-accuracy-is-misleading">Why Accuracy is Misleading<a class="headerlink" href="#why-accuracy-is-misleading" title="Permanent link">&para;</a></h3>
+<p><strong>Fraud detection:</strong>
+- 99.9% of transactions are legitimate
+- 0.1% are fraudulent</p>
+<p><strong>A model that predicts "legitimate" for EVERYTHING:</strong>
+- Accuracy: 99.9%
+- Catches zero fraud!</p>
+<p><strong>Accuracy is useless for imbalanced classes.</strong></p>
+<p><strong>When is it "imbalanced"?</strong> 60/40 is typically fine; 70/30 is mild; 80/20 starts requiring attention; 90/10 likely needs specialized techniques; 95/5 definitely needs SMOTE, class weights, or threshold adjustment. But it's not just about ratio—absolute numbers matter (90/10 with 10,000 minority samples is fine; with 100 is problematic). The practical test: does your model learn anything about the minority class? If accuracy comes from ignoring the minority entirely, you have a problem.</p>
+<h3 id="better-metrics">Better Metrics<a class="headerlink" href="#better-metrics" title="Permanent link">&para;</a></h3>
+<p><strong>Precision</strong>: Of those we flagged as positive, how many actually were?
+$<span class="arithmatex">\(Precision = \frac{TP}{TP + FP}\)</span>$</p>
+<p><strong>Recall</strong>: Of actual positives, how many did we catch?
+$<span class="arithmatex">\(Recall = \frac{TP}{TP + FN}\)</span>$</p>
+<p><strong>F1 Score</strong>: Harmonic mean balancing both
+$<span class="arithmatex">\(F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}\)</span>$</p>
+<p><strong>Why harmonic mean?</strong> It punishes extreme imbalance:
+- Precision = 100%, Recall = 1% → F1 = 2%
+- Precision = 50%, Recall = 50% → F1 = 50%</p>
+<h3 id="the-precision-recall-trade-off">The Precision-Recall Trade-off<a class="headerlink" href="#the-precision-recall-trade-off" title="Permanent link">&para;</a></h3>
+<p>Usually you can't maximize both:
+- High precision → few false alarms but miss some positives
+- High recall → catch most positives but more false alarms</p>
+<p><strong>Business context determines priority:</strong>
+- <strong>High precision</strong>: Email marketing (don't waste budget)
+- <strong>High recall</strong>: Medical screening (don't miss sick patients)</p>
+<h3 id="resampling-smote">Resampling: SMOTE<a class="headerlink" href="#resampling-smote" title="Permanent link">&para;</a></h3>
+<p><strong>SMOTE</strong> (Synthetic Minority Over-sampling Technique):
+- Creates synthetic minority examples
+- Interpolates between existing minority points
+- Better than simple duplication</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.over_sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMOTE</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">smote</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">X_resampled</span><span class="p">,</span> <span class="n">y_resampled</span> <span class="o">=</span> <span class="n">smote</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Important</strong>: Only apply SMOTE to training data, never test data! The test set must reflect real-world conditions—your deployed model will face the true class distribution. SMOTE is a training trick to help the model learn about the minority class, not a data transformation. The correct workflow: (1) Split data first. (2) Apply SMOTE only to training set. (3) Evaluate on original, imbalanced test set. (4) Use appropriate metrics (F1, precision, recall) that work for imbalanced data.</p>
+<h3 id="class-weights">Class Weights<a class="headerlink" href="#class-weights" title="Permanent link">&para;</a></h3>
+<p>Many algorithms have built-in support:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Effect</strong>: Increases penalty for misclassifying minority class. Often simpler than resampling.</p>
+<h3 id="threshold-adjustment">Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">y_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Instead of 0.5</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">y_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_proba</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Lower threshold → predict positive more often → higher recall, lower precision.</p>
+<h3 id="business-context-examples">Business Context Examples<a class="headerlink" href="#business-context-examples" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Priority</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fraud Detection</td>
+<td>High recall</td>
+<td>Cost of fraud &gt;&gt; investigation cost</td>
+</tr>
+<tr>
+<td>Medical Diagnosis</td>
+<td>High recall</td>
+<td>Don't miss sick patients</td>
+</tr>
+<tr>
+<td>Churn Prediction</td>
+<td>Balance</td>
+<td>Retention cost vs customer value</td>
+</tr>
+<tr>
+<td>Manufacturing QC</td>
+<td>Depends</td>
+<td>Defect severity vs discard cost</td>
+</tr>
+</tbody>
+</table>
+<h3 id="common-misconceptions_2">Common Misconceptions<a class="headerlink" href="#common-misconceptions_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Always balance classes to 50-50"</td>
+<td>Optimal ratio depends on the problem. Original distribution may be meaningful.</td>
+</tr>
+<tr>
+<td>"SMOTE is always better than oversampling"</td>
+<td>SMOTE can create unrealistic synthetic examples. Test both.</td>
+</tr>
+<tr>
+<td>"Class weights and resampling do the same thing"</td>
+<td>Similar effect but different mechanisms. Results can differ.</td>
+</tr>
+<tr>
+<td>"Imbalanced data is always a problem"</td>
+<td>If minority class is well-separated, imbalance may not hurt. Always check metrics.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="34-hyperparameter-optimization">3.4 Hyperparameter Optimization<a class="headerlink" href="#34-hyperparameter-optimization" title="Permanent link">&para;</a></h2>
+<h3 id="parameters-vs-hyperparameters">Parameters vs Hyperparameters<a class="headerlink" href="#parameters-vs-hyperparameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Hyperparameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Learned during training</td>
+<td>Set before training</td>
+</tr>
+<tr>
+<td>Model learns via .fit()</td>
+<td>You choose before .fit()</td>
+</tr>
+<tr>
+<td>Example: Coefficients</td>
+<td>Example: Regularization strength</td>
+</tr>
+<tr>
+<td>Example: Split points</td>
+<td>Example: Max tree depth</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hyperparameters control HOW the model learns.</strong></p>
+<p><strong>Finding hyperparameters</strong>: Use official documentation (search "sklearn DecisionTreeClassifier"), in-code exploration (<code>model.get_params()</code>, <code>help(DecisionTreeClassifier)</code>), or IDE autocomplete. Not all hyperparameters matter equally—most algorithms have 3-5 "important" ones: for decision trees, focus on <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>; for Random Forests add <code>n_estimators</code>, <code>max_features</code>; for XGBoost: <code>learning_rate</code>, <code>max_depth</code>, <code>n_estimators</code>, <code>subsample</code>.</p>
+<h3 id="grid-search">Grid Search<a class="headerlink" href="#grid-search" title="Permanent link">&para;</a></h3>
+<p>Try every combination in a predefined grid:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchCV</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Total: 4 × 3 = 12 combinations</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="n">estimator</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">)</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best params: </span><span class="si">{</span><span class="n">grid_search</span><span class="o">.</span><span class="n">best_params_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Pros</strong>: Exhaustive, reproducible
+<strong>Cons</strong>: Exponential growth, wastes time on bad regions</p>
+<h3 id="random-search">Random Search<a class="headerlink" href="#random-search" title="Permanent link">&para;</a></h3>
+<p>Sample random combinations from distributions:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomizedSearchCV</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">randint</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">param_distributions</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">random_search</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="n">estimator</span><span class="o">=</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_distributions</span><span class="p">,</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">n_iter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="p">)</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="n">random_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="why-random-often-beats-grid">Why Random Often Beats Grid<a class="headerlink" href="#why-random-often-beats-grid" title="Permanent link">&para;</a></h3>
+<p><strong>Key insight (Bergstra &amp; Bengio, 2012):</strong>
+- Not all hyperparameters are equally important
+- Grid search wastes trials on unimportant parameters
+- Random search explores more values of what matters</p>
+<p><strong>In practice, random search often beats grid search with the same computational budget.</strong></p>
+<p><strong>Standard ranges for common hyperparameters</strong>: <code>max_depth</code>: 2-20 for trees; <code>n_estimators</code>: 50-500 for forests/boosting; <code>learning_rate</code>: 0.001-0.3 for boosting; <code>min_samples_split</code>: 2-50; <code>C</code> (regularization): 0.001-100 (log scale). If the best value is at the edge of your range, extend that direction. Start with wide, log-spaced ranges, do a coarse search (10 values), then refine in the promising region.</p>
+<h3 id="bayesian-optimization-optuna">Bayesian Optimization (optuna)<a class="headerlink" href="#bayesian-optimization-optuna" title="Permanent link">&para;</a></h3>
+<p>Use past results to guide future trials:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">optuna</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;max_depth&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s1">&#39;min_samples_split&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="p">}</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="k">return</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;maximize&#39;</span><span class="p">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="n">study</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best params: </span><span class="si">{</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>More efficient than random search—learns from previous trials.</p>
+<h3 id="never-use-test-set-for-tuning">Never Use Test Set for Tuning!<a class="headerlink" href="#never-use-test-set-for-tuning" title="Permanent link">&para;</a></h3>
+<p><strong>Correct workflow:</strong>
+1. Split into train/test
+2. Use cross-validation on training set for tuning
+3. Select best hyperparameters via CV score
+4. Retrain on full training set
+5. Evaluate <strong>once</strong> on test set</p>
+<p>If you tune on test set, your estimate is no longer unbiased.</p>
+<p><strong>After tuning</strong>: Retrain on all training data with the best hyperparameters. Cross-validation models were trained on only (K-1)/K of your data. Retraining on 100% gives the model more examples. <code>GridSearchCV</code> does this automatically—<code>grid_search.best_estimator_</code> is already retrained on the full training set.</p>
+<h3 id="common-misconceptions_3">Common Misconceptions<a class="headerlink" href="#common-misconceptions_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"More hyperparameter tuning always helps"</td>
+<td>Diminishing returns. 50-100 trials often enough. Risk overfitting to validation data.</td>
+</tr>
+<tr>
+<td>"Grid search is more thorough"</td>
+<td>Grid is exhaustive only for values you specify. Random can find values between grid points.</td>
+</tr>
+<tr>
+<td>"Best hyperparameters are universal"</td>
+<td>Optimal hyperparameters depend on your specific dataset.</td>
+</tr>
+<tr>
+<td>"Use test set to choose hyperparameters"</td>
+<td>Never! Use cross-validation on training data.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>A model predicts P(churn) = 0.6 for a customer. What does this actually mean? How confident should we be?</p>
+</li>
+<li>
+<p>Why might you choose a threshold other than 0.5? Give scenarios for very low and very high thresholds.</p>
+</li>
+<li>
+<p>A logistic regression coefficient for 'number of support tickets' is 0.3. How would you explain this to a stakeholder?</p>
+</li>
+<li>
+<p>You build a decision tree with 100% training accuracy. Is this good or bad? What would you do next?</p>
+</li>
+<li>
+<p>In fraud detection with 0.1% fraud rate, a model achieves 99.9% accuracy. What's wrong with celebrating this?</p>
+</li>
+<li>
+<p>When would you prefer high precision over high recall? Give a business example.</p>
+</li>
+<li>
+<p>Why might random search find better hyperparameters than grid search with the same budget?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Calculate odds and log-odds for P = 0.8</p>
+</li>
+<li>
+<p>Given coefficients β₀ = -2, β₁ = 0.5, β₂ = -0.3, calculate P(Y=1) when x₁ = 4, x₂ = 2</p>
+</li>
+<li>
+<p>Draw what a decision tree boundary would look like for 2D data with 2 splits</p>
+</li>
+<li>
+<p>Given a 95% legitimate / 5% fraud dataset: if we predict all legitimate, what's accuracy? Precision for fraud? Recall for fraud?</p>
+</li>
+<li>
+<p>Choose between precision and recall priority for: (a) spam filter, (b) cancer screening, (c) loan approval</p>
+</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 3:</strong></p>
+<ol>
+<li>
+<p><strong>Logistic regression</strong> outputs probabilities via sigmoid; threshold for classification</p>
+</li>
+<li>
+<p><strong>Odds ratios</strong> (exponentiate coefficients) translate to business-friendly interpretation</p>
+</li>
+<li>
+<p><strong>Decision trees</strong> are intuitive but overfit easily—use pruning</p>
+</li>
+<li>
+<p><strong>Accuracy is misleading</strong> for imbalanced data—use precision/recall/F1</p>
+</li>
+<li>
+<p><strong>Handle imbalance</strong> with SMOTE, class weights, or threshold adjustment</p>
+</li>
+<li>
+<p><strong>Hyperparameter tuning</strong> via cross-validation, never on test set</p>
+</li>
+</ol>
+<hr />
+<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>In Module 4, we tackle <strong>Ensemble Methods</strong>:
+- Random Forests (ensembles of decision trees)
+- Gradient Boosting (XGBoost, LightGBM)
+- Why combining weak learners creates strong models</p>
+<p>Understanding decision trees is essential—Random Forests take everything we learned about trees and combine many of them for better performance.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

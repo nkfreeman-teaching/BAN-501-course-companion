@@ -1,0 +1,2416 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/02-regression/">
+      
+      
+        <link rel="prev" href="../01-foundations/">
+      
+      
+        <link rel="next" href="../03-classification/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>2. Regression - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-2-classical-machine-learning-regression" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. Regression
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-simple-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Simple Linear Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Simple Linear Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-components-of-every-ml-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Three Components of Every ML Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-goal-of-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Goal of Linear Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-least-squares-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Least Squares Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-regression-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Regression Assumptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Descent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#learning-rate-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Rate Trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-statsmodels-for-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using statsmodels for Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreting-coefficients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpreting Coefficients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#residual-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Residual Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-multiple-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Multiple Linear Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Multiple Linear Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-predictors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple Predictors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confounding-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confounding Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multicollinearity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multicollinearity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detecting-multicollinearity-vif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting Multicollinearity: VIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-regularize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Regularize?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-regularization-lasso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1 Regularization (Lasso)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l2-regularization-ridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 Regularization (Ridge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-net-combining-l1-and-l2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic Net: Combining L1 and L2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choosing-regularization-strength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Regularization Strength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-regression-as-a-neural-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Regression as a Neural Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-business-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Business Application
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 Business Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-regression-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Regression Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-engineering-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Engineering Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translating-statistics-to-business-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translating Statistics to Business Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensitivity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-business-memo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Business Memo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-simple-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Simple Linear Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Simple Linear Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-three-components-of-every-ml-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Three Components of Every ML Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-goal-of-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Goal of Linear Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-least-squares-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Least Squares Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-regression-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Regression Assumptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Descent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#learning-rate-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Rate Trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-statsmodels-for-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using statsmodels for Regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreting-coefficients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpreting Coefficients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#residual-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Residual Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-multiple-linear-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Multiple Linear Regression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Multiple Linear Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-predictors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple Predictors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confounding-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confounding Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multicollinearity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multicollinearity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detecting-multicollinearity-vif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting Multicollinearity: VIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-regularize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Regularize?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l1-regularization-lasso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L1 Regularization (Lasso)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#l2-regularization-ridge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 Regularization (Ridge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-net-combining-l1-and-l2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic Net: Combining L1 and L2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choosing-regularization-strength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Regularization Strength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-regression-as-a-neural-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linear Regression as a Neural Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-business-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Business Application
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 Business Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-regression-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Regression Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-engineering-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Engineering Patterns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translating-statistics-to-business-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translating Statistics to Business Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensitivity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-business-memo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Business Memo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-2-classical-machine-learning-regression">Module 2: Classical Machine Learning - Regression<a class="headerlink" href="#module-2-classical-machine-learning-regression" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>Module 1 established the foundation: what ML is, how to prepare data, and how to evaluate models. Now we put that foundation to work.</p>
+<p>Regression is the workhorse of predictive analytics. When a business wants to predict sales, estimate prices, or forecast demand, regression is often the first tool they reach for. But we're not just going to use regression as a black box—we're going to understand <em>how</em> it works, including implementing gradient descent from scratch.</p>
+<p>Why learn gradient descent? Because gradient descent is the foundation for training neural networks. Every deep learning model you've heard of—GPT, image classifiers, everything—learns through gradient descent. Understanding it for linear regression means understanding it for neural networks.</p>
+<p>The closed-form solution for linear regression requires matrix inversion—O(n³) complexity that's impossible for neural networks with millions of parameters. Neural networks also have non-convex loss surfaces with many local minima; there's no mathematical formula to jump to the optimal weights. Gradient descent works for any differentiable function and scales to billions of parameters—the linear regression closed-form is a special case where we can skip the search.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Explain</strong> the mechanics of linear regression including the least squares method</li>
+<li><strong>Implement</strong> gradient descent from scratch and understand its trade-offs</li>
+<li><strong>Interpret</strong> regression coefficients for business insights</li>
+<li><strong>Diagnose</strong> model issues through residual analysis</li>
+<li><strong>Apply</strong> regularization techniques (L1, L2, Elastic Net) to prevent overfitting</li>
+<li><strong>Communicate</strong> regression findings to non-technical stakeholders</li>
+</ol>
+<hr />
+<h2 id="21-simple-linear-regression">2.1 Simple Linear Regression<a class="headerlink" href="#21-simple-linear-regression" title="Permanent link">&para;</a></h2>
+<h3 id="the-three-components-of-every-ml-model">The Three Components of Every ML Model<a class="headerlink" href="#the-three-components-of-every-ml-model" title="Permanent link">&para;</a></h3>
+<p>Before diving into linear regression, here's a framework that applies to <em>every</em> supervised learning algorithm:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Question It Answers</th>
+<th>Linear Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision Model</strong></td>
+<td>How do we transform inputs into predictions?</td>
+<td><span class="arithmatex">\(\hat{y} = \beta_0 + \beta_1 x\)</span></td>
+</tr>
+<tr>
+<td><strong>Quality Measure</strong></td>
+<td>How do we evaluate prediction quality?</td>
+<td>Sum of Squared Errors (SSE)</td>
+</tr>
+<tr>
+<td><strong>Update Method</strong></td>
+<td>How do we improve the model?</td>
+<td>Gradient descent (or closed-form)</td>
+</tr>
+</tbody>
+</table>
+<p>This same pattern applies to every algorithm: logistic regression, decision trees, random forests, neural networks. The decision model changes, the quality measure may change, but the structure is always the same.</p>
+<p>Different quality measures encode different assumptions about what "good" means. MSE assumes symmetric, quadratic costs—but in demand forecasting, under-predicting (stockouts) might cost more than over-predicting. For classification, cross-entropy penalizes confident wrong predictions. For outlier-heavy data, MAE or Huber loss are more robust. Choose a quality measure that aligns with your actual business costs.</p>
+<h3 id="the-goal-of-linear-regression">The Goal of Linear Regression<a class="headerlink" href="#the-goal-of-linear-regression" title="Permanent link">&para;</a></h3>
+<p>Given input features, we want to predict a continuous output. We assume the relationship can be approximated by a line:</p>
+<div class="arithmatex">\[\hat{y} = \beta_0 + \beta_1 x\]</div>
+<p>Where:
+- <span class="arithmatex">\(\hat{y}\)</span> (y-hat) is the <strong>predicted value</strong>
+- <span class="arithmatex">\(\beta_0\)</span> (beta-zero) is the <strong>intercept</strong>—the baseline prediction when x = 0
+- <span class="arithmatex">\(\beta_1\)</span> (beta-one) is the <strong>slope</strong>—how much y changes for a one-unit change in x
+- <span class="arithmatex">\(x\)</span> is the <strong>input feature</strong></p>
+<p>The key assumption is that a straight line is a reasonable approximation of the true relationship.</p>
+<p>Check linearity visually: scatter plots should show points around an imaginary straight line. Use <code>sns.pairplot()</code> for multiple regression. Correlation measures only <em>linear</em> association—a perfect U-shaped relationship has r=0. Always check residual plots after fitting; curved patterns reveal non-linearity. If non-linear, try transforms (log, square root), polynomial terms (x², x³), or inherently non-linear models (trees, neural networks).</p>
+<h3 id="the-least-squares-method">The Least Squares Method<a class="headerlink" href="#the-least-squares-method" title="Permanent link">&para;</a></h3>
+<p>How do we find the <em>best</em> line? We find the coefficients that minimize squared prediction errors:</p>
+<div class="arithmatex">\[\text{minimize } \sum_{i=1}^{n}(y_i - \hat{y}_i)^2\]</div>
+<p>For each data point, calculate the error (actual minus predicted), square it, and add them all up. The best line is the one that makes this sum as small as possible.</p>
+<p><strong>Why squared errors?</strong></p>
+<ol>
+<li>
+<p><strong>Penalizes large errors more than small ones.</strong> An error of 10 contributes 100; an error of 1 contributes only 1. The algorithm cares about avoiding big mistakes.</p>
+</li>
+<li>
+<p><strong>Mathematically tractable.</strong> The function is differentiable and convex, so we can find the minimum using calculus.</p>
+</li>
+<li>
+<p><strong>Nice statistical properties.</strong> Under certain assumptions, least squares gives the Best Linear Unbiased Estimator (BLUE).</p>
+</li>
+</ol>
+<p>For asymmetric costs, use <strong>weighted least squares</strong> (assign higher weights to observations where errors are more costly) or <strong>quantile regression</strong> (systematically over/under-predicts—useful for safety stock). In deep learning, you can define arbitrary custom loss functions. Start simple; only add complexity when you have clear business justification for asymmetric costs.</p>
+<p><strong>Closed-form solution:</strong></p>
+<div class="arithmatex">\[\beta_1 = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sum(x_i - \bar{x})^2}\]</div>
+<div class="arithmatex">\[\beta_0 = \bar{y} - \beta_1\bar{x}\]</div>
+<h3 id="linear-regression-assumptions">Linear Regression Assumptions<a class="headerlink" href="#linear-regression-assumptions" title="Permanent link">&para;</a></h3>
+<p>For statistical inference to be valid, certain assumptions must hold:</p>
+<ol>
+<li><strong>Linearity</strong>: The relationship between X and Y is linear</li>
+<li><strong>Independence</strong>: Observations are independent of each other</li>
+<li><strong>Homoscedasticity</strong>: Constant variance of residuals across all levels of X</li>
+<li><strong>Normality</strong>: Residuals are normally distributed</li>
+<li><strong>No multicollinearity</strong>: (for multiple regression) Predictors aren't too highly correlated</li>
+</ol>
+<p><strong>When assumptions are violated:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Violation</th>
+<th>Symptom</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Non-linearity</td>
+<td>Curved pattern in residuals</td>
+<td>Transform variables, add polynomial terms</td>
+</tr>
+<tr>
+<td>Heteroscedasticity</td>
+<td>Fan-shaped residual plot</td>
+<td>Transform Y, use robust standard errors</td>
+</tr>
+<tr>
+<td>Non-normality</td>
+<td>Q-Q plot deviates from line</td>
+<td>Transform Y, use bootstrap</td>
+</tr>
+<tr>
+<td>Autocorrelation</td>
+<td>Patterns in time-ordered residuals</td>
+<td>Time series methods</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Common transformations:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Transform</th>
+<th>Formula</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Log</td>
+<td><span class="arithmatex">\(\log(x)\)</span></td>
+<td>Right-skewed data, multiplicative relationships</td>
+</tr>
+<tr>
+<td>Square root</td>
+<td><span class="arithmatex">\(\sqrt{x}\)</span></td>
+<td>Count data, mild right skew</td>
+</tr>
+<tr>
+<td>Box-Cox</td>
+<td><span class="arithmatex">\((x^\lambda - 1)/\lambda\)</span></td>
+<td>Automated selection—finds optimal λ</td>
+</tr>
+</tbody>
+</table>
+<p>The log transform is the workhorse—it handles right-skewed distributions (common in business data like income, prices, counts) and converts multiplicative relationships to additive ones.</p>
+<p>With a log-transformed target, coefficients represent <strong>percentage changes</strong>: a one-unit increase in x multiplies y by <span class="arithmatex">\(e^{\beta_1}\)</span>. For small β (roughly |β| &lt; 0.2), this approximates β × 100% change. If both x and y are logged, coefficients represent <strong>elasticities</strong>: a 1% change in x → β₁% change in y. Always back-transform predictions before evaluating metrics, and document which scale coefficients are interpreted on.</p>
+<h3 id="gradient-descent">Gradient Descent<a class="headerlink" href="#gradient-descent" title="Permanent link">&para;</a></h3>
+<p>We could use the closed-form solution, but gradient descent is worth learning because it's the foundation for all neural network training.</p>
+<p><strong>The algorithm:</strong>
+1. Start with random values for <span class="arithmatex">\(\beta_0\)</span> and <span class="arithmatex">\(\beta_1\)</span>
+2. Calculate the gradient—the direction of steepest error increase
+3. Update parameters in the <strong>opposite</strong> direction—downhill toward lower error
+4. Repeat until convergence</p>
+<p><strong>The gradients:</strong></p>
+<div class="arithmatex">\[\frac{\partial MSE}{\partial \beta_0} = -\frac{2}{n}\sum(y_i - \hat{y}_i)\]</div>
+<div class="arithmatex">\[\frac{\partial MSE}{\partial \beta_1} = -\frac{2}{n}\sum(y_i - \hat{y}_i) \cdot x_i\]</div>
+<p><strong>Update rules:</strong></p>
+<div class="arithmatex">\[\beta_0 \leftarrow \beta_0 - \alpha \cdot \frac{\partial MSE}{\partial \beta_0}$$
+$$\beta_1 \leftarrow \beta_1 - \alpha \cdot \frac{\partial MSE}{\partial \beta_1}\]</div>
+<p>Where <span class="arithmatex">\(\alpha\)</span> is the <strong>learning rate</strong>—how big a step we take each iteration.</p>
+<p><strong>Convergence</strong> means parameters have stabilized—further iterations don't meaningfully improve the solution. Common stopping criteria: loss change below threshold (1e-6), small gradient magnitude, or maximum iterations. Use a combination. For linear regression, the loss surface is convex with one global minimum; for neural networks, you'll find a local minimum (usually good enough). Monitor the loss curve—oscillating or increasing loss suggests the learning rate is too high.</p>
+<p><strong>Implementation:</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">gradient_descent_linear_regression</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">n_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-6</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">):</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="c1"># Initialize parameters randomly</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">beta_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">beta_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">):</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="c1"># Predictions</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">beta_0</span> <span class="o">+</span> <span class="n">beta_1</span> <span class="o">*</span> <span class="n">X</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        <span class="c1"># Compute gradients</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        <span class="n">d_beta_0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        <span class="n">d_beta_1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="c1"># Update parameters</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">beta_0</span> <span class="o">=</span> <span class="n">beta_0</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">d_beta_0</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        <span class="n">beta_1</span> <span class="o">=</span> <span class="n">beta_1</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">d_beta_1</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="c1"># Track loss</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="c1"># Check convergence</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>            <span class="k">break</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="k">return</span> <span class="n">beta_0</span><span class="p">,</span> <span class="n">beta_1</span><span class="p">,</span> <span class="n">history</span>
+</span></code></pre></div>
+<h3 id="learning-rate-trade-offs">Learning Rate Trade-offs<a class="headerlink" href="#learning-rate-trade-offs" title="Permanent link">&para;</a></h3>
+<p>The learning rate <span class="arithmatex">\(\alpha\)</span> is crucial:</p>
+<table>
+<thead>
+<tr>
+<th>Too Small</th>
+<th>Just Right</th>
+<th>Too Large</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Very slow convergence</td>
+<td>Converges in reasonable time</td>
+<td>Overshoots the minimum</td>
+</tr>
+<tr>
+<td>Safe but inefficient</td>
+<td>Reaches good solution</td>
+<td>Can diverge (loss increases!)</td>
+</tr>
+</tbody>
+</table>
+<p>If your loss keeps <em>increasing</em>, the learning rate is too high. Reduce it by a factor of 10.</p>
+<p><strong>Adaptive learning rate methods</strong> automatically adjust during training. Learning rate schedules (step decay, exponential decay, cosine annealing) decrease the rate over time—large steps initially, smaller steps later. <strong>Adaptive optimizers</strong> (AdaGrad, RMSprop, Adam) adjust per parameter based on gradient history. <strong>Adam</strong> is the default for deep learning—it works well with default learning rate 0.001. For scikit-learn's linear regression, optimization is handled automatically.</p>
+<h3 id="using-statsmodels-for-regression">Using statsmodels for Regression<a class="headerlink" href="#using-statsmodels-for-regression" title="Permanent link">&para;</a></h3>
+<p>In practice, we use libraries. For regression with good statistical output, use statsmodels:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># R-style formula interface</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">formula</span><span class="o">=</span><span class="s1">&#39;sales ~ advertising + price&#39;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">data</span><span class="o">=</span><span class="n">df</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</span></code></pre></div>
+<p><strong>Key statistics in the output:</strong></p>
+<p><strong>R² (Coefficient of Determination):</strong>
+$<span class="arithmatex">\(R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\)</span>$</p>
+<p>R² tells you what proportion of variance your model explains. R² = 0.75 means 75% explained, 25% unexplained.</p>
+<p><strong>p-values for coefficients:</strong>
+- Tests: "Is this coefficient different from zero?"
+- p &lt; 0.05 is conventional threshold for "statistically significant"
+- Caution: p-values don't tell you effect <em>size</em></p>
+<p>The 0.05 threshold is a historical convention from R.A. Fisher, not a magic number. Problems: with enough data, trivial effects become "significant"; with little data, real effects may not be. Modern practice: report exact p-values, consider effect sizes and confidence intervals, and remember that practical significance matters more than statistical significance in business—a statistically significant 0.1% improvement might not be worth implementing.</p>
+<p><strong>Confidence intervals:</strong>
+- 95% CI of [1.8, 3.2] means: "We're 95% confident the true effect is between $1.80 and $3.20"
+- If the CI includes zero, the effect is not statistically significant</p>
+<p><strong>F-statistic:</strong>
+- Tests whether the model as a whole is useful
+- "Is this model better than just predicting the mean?"</p>
+<p><strong>When to use scikit-learn instead:</strong> When building ML pipelines, when prediction is the main goal, when you need cross-validation and hyperparameter tuning.</p>
+<h3 id="interpreting-coefficients">Interpreting Coefficients<a class="headerlink" href="#interpreting-coefficients" title="Permanent link">&para;</a></h3>
+<p><strong>The standard interpretation:</strong>
+"A one-unit increase in X is associated with a <span class="arithmatex">\(\beta_1\)</span> change in Y, <em>holding all else constant</em>."</p>
+<p><strong>Example:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sales = 50,000 + 2.5 × advertising + 1,200 × sales_staff
+</span></code></pre></div></p>
+<p>Translation:
+- <strong>Baseline sales: $50,000</strong> (when advertising = 0 and sales_staff = 0)
+- <strong>Each $1 in advertising → $2.50 more in sales</strong> (250% ROI)
+- <strong>Each additional sales staff → $1,200 more in sales</strong></p>
+<p><strong>Caution: Correlation ≠ Causation</strong></p>
+<p>Regression shows <em>association</em>, not <em>causation</em>. When we say "Each $1 in advertising → $2.50 more in sales," we mean they're associated. We haven't proven advertising <em>causes</em> sales.</p>
+<p>Classic example: Ice cream sales and drowning deaths are positively correlated. Both are caused by summer heat—a confounding variable.</p>
+<p>Establishing causation requires experimental design or careful causal inference methods. <strong>Randomized experiments</strong> (A/B tests) are the gold standard. <strong>Natural experiments</strong> (policy changes affecting some regions) create quasi-random groups. <strong>Instrumental variables</strong> find factors that affect treatment but not outcome directly. <strong>Causal inference frameworks</strong> (propensity score matching, difference-in-differences) try to estimate effects from observational data. With observational regression alone, you have association—to claim causation, you need a convincing argument for why confounders are controlled.</p>
+<h3 id="residual-analysis">Residual Analysis<a class="headerlink" href="#residual-analysis" title="Permanent link">&para;</a></h3>
+<p>Residuals reveal problems:</p>
+<div class="arithmatex">\[e_i = y_i - \hat{y}_i\]</div>
+<p>If the model is good and assumptions hold, residuals should look like random noise.</p>
+<p><strong>Diagnostic plots:</strong></p>
+<ol>
+<li><strong>Residuals vs. Fitted Values</strong>: Should show random scatter around zero</li>
+<li>Curve = non-linearity</li>
+<li>
+<p>Funnel = heteroscedasticity</p>
+</li>
+<li>
+<p><strong>Q-Q Plot</strong>: Residuals vs. theoretical normal quantiles</p>
+</li>
+<li>Straight line = normality satisfied</li>
+<li>Curves at ends = heavy/light tails</li>
+</ol>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stats</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">residuals</span><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Fitted Values&#39;</span><span class="p">)</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Residuals&#39;</span><span class="p">)</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Residuals vs Fitted&#39;</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">stats</span><span class="o">.</span><span class="n">probplot</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="s2">&quot;norm&quot;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">)</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Q-Q Plot&#39;</span><span class="p">)</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Residuals&#39;</span><span class="p">)</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Residual Distribution&#39;</span><span class="p">)</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p><strong>Key insight:</strong> High R² with a patterned residual plot is still a bad model. The pattern means you're missing structure in the data.</p>
+<p>To fix a curved residual pattern: (1) Identify which feature causes it by plotting residuals against each predictor. (2) Try transforms—log for diminishing returns, square root for counts, polynomial terms (x², x³). (3) Use <code>PolynomialFeatures(degree=2)</code> with regularization. (4) If transforms don't help, consider non-linear models (trees, GAMs, neural networks). (5) Verify the fix—residuals should show random scatter.</p>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Correlation implies causation"</td>
+<td>Regression shows association only. Causation requires experimental design or causal inference methods.</td>
+</tr>
+<tr>
+<td>"High R² means the model is good"</td>
+<td>R² can be high due to overfitting. Must check test set performance and residual plots.</td>
+</tr>
+<tr>
+<td>"The intercept is always meaningful"</td>
+<td>Often it's not (e.g., salary when experience = 0 years). Focus on slopes for interpretation.</td>
+</tr>
+<tr>
+<td>"Larger coefficients mean more important features"</td>
+<td>Only true if features are on the same scale. Use standardized coefficients to compare.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="22-multiple-linear-regression">2.2 Multiple Linear Regression<a class="headerlink" href="#22-multiple-linear-regression" title="Permanent link">&para;</a></h2>
+<h3 id="multiple-predictors">Multiple Predictors<a class="headerlink" href="#multiple-predictors" title="Permanent link">&para;</a></h3>
+<p>In the real world, we rarely have just one predictor:</p>
+<div class="arithmatex">\[\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_d x_d\]</div>
+<p><strong>Why multiple predictors?</strong>
+1. Single predictor rarely captures the full story
+2. Control for confounding variables
+3. Improve prediction accuracy</p>
+<p><strong>Key insight:</strong> Each coefficient represents the effect of that variable <em>while controlling for the others</em>. This is different from running separate simple regressions!</p>
+<p>Multiple regression coefficients are <strong>partial effects</strong>—the effect of one variable holding others constant. Simple regression captures both direct and indirect effects through correlated variables. If experience and education are correlated, simple regression conflates their effects; multiple regression "controls for" education when estimating experience's effect. Sometimes adding variables can even flip coefficient signs (Simpson's paradox)—the Berkeley admissions example showed apparent disadvantage for women overall that reversed within each department.</p>
+<h3 id="confounding-variables">Confounding Variables<a class="headerlink" href="#confounding-variables" title="Permanent link">&para;</a></h3>
+<p><strong>Example:</strong>
+- <strong>Simple regression:</strong> Salary ~ Experience → <span class="arithmatex">\(\beta = \$5,000\)</span> per year
+- <strong>Multiple regression:</strong> Salary ~ Experience + Education → <span class="arithmatex">\(\beta_{exp} = \$3,500\)</span> per year</p>
+<p>The coefficient for experience dropped because education was <strong>confounded</strong> with experience. People with more experience often have more education. The simple regression was attributing some of education's effect to experience.</p>
+<p>To identify confounders, ask: "What could affect both X and Y?" Draw causal diagrams—confounders have arrows TO both predictor and outcome. Check correlations, but correlation alone isn't sufficient; you need domain reasoning. Don't throw every variable in—mediators (on the causal path) or colliders (affected by both) can introduce bias. Include variables that theory suggests are confounders and were measured before the treatment.</p>
+<h3 id="multicollinearity">Multicollinearity<a class="headerlink" href="#multicollinearity" title="Permanent link">&para;</a></h3>
+<p><strong>What is multicollinearity?</strong> High correlation between predictors.</p>
+<p><strong>Symptoms:</strong>
+- Coefficients change dramatically when you add/remove features
+- High R² but few significant individual predictors
+- Signs of coefficients seem wrong</p>
+<h3 id="detecting-multicollinearity-vif">Detecting Multicollinearity: VIF<a class="headerlink" href="#detecting-multicollinearity-vif" title="Permanent link">&para;</a></h3>
+<p><strong>Variance Inflation Factor (VIF):</strong></p>
+<div class="arithmatex">\[VIF_j = \frac{1}{1 - R_j^2}\]</div>
+<p>Where <span class="arithmatex">\(R_j^2\)</span> is R² from regressing feature j on all other features.</p>
+<table>
+<thead>
+<tr>
+<th>VIF Value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VIF = 1</td>
+<td>No correlation with other features</td>
+</tr>
+<tr>
+<td>VIF &gt; 5</td>
+<td>Moderate multicollinearity—investigate</td>
+</tr>
+<tr>
+<td>VIF &gt; 10</td>
+<td>Serious multicollinearity—must address</td>
+</tr>
+</tbody>
+</table>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.outliers_influence</span><span class="w"> </span><span class="kn">import</span> <span class="n">variance_inflation_factor</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Calculate VIF for each feature</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">vif</span> <span class="o">=</span> <span class="n">variance_inflation_factor</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">: VIF = </span><span class="si">{</span><span class="n">vif</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Solutions for multicollinearity:</strong>
+1. Remove one of the correlated features
+2. Combine features (average or PCA)
+3. Use regularization (Ridge handles this well)
+4. Accept it if prediction is your only goal</p>
+<p>Multicollinearity doesn't affect prediction accuracy—but it creates problems for interpretation. Coefficients become unstable (jumping around with small data changes), standard errors inflate (true effects appear "not significant"), and signs may reverse. If your goal is purely prediction, ignore it. If you need interpretation, address it.</p>
+<h3 id="why-regularize">Why Regularize?<a class="headerlink" href="#why-regularize" title="Permanent link">&para;</a></h3>
+<p>Regularization prevents overfitting by penalizing large coefficients:</p>
+<div class="arithmatex">\[\text{minimize } \sum(y_i - \hat{y}_i)^2 + \lambda \cdot \text{penalty}(\beta)\]</div>
+<p>The parameter <span class="arithmatex">\(\lambda\)</span> controls how strong the penalty is.</p>
+<p>Large coefficients can indicate overfitting—the model making sharp adjustments for individual data points (memorizing). Signs of overfitting: large coefficients only with small samples, huge standard errors, or poor test performance. Regularization forces the model to justify large coefficients—if fitting noise, the penalty isn't worth it; if fitting real patterns, the benefit outweighs the penalty. Note: "large" depends on feature scale—always standardize before judging.</p>
+<h3 id="l1-regularization-lasso">L1 Regularization (Lasso)<a class="headerlink" href="#l1-regularization-lasso" title="Permanent link">&para;</a></h3>
+<p><strong>Penalty:</strong> <span class="arithmatex">\(\lambda \sum|\beta_j|\)</span></p>
+<p><strong>Effect:</strong> Can shrink coefficients <strong>exactly to zero</strong> → automatic feature selection!</p>
+<p>The L1 constraint region is a diamond with corners on the axes; L2 is a smooth circle. Loss function contours typically hit the L1 diamond at corners (coefficients exactly zero), but touch the L2 circle tangentially (rarely on an axis). Additionally, the L1 gradient is constant (±1) regardless of how small β gets—always pulling toward zero—while the L2 gradient (2β) weakens as β approaches zero. L1 performs automatic feature selection; L2 keeps all features with small coefficients.</p>
+<p><strong>When to use:</strong>
+- You suspect many features are irrelevant
+- You want an interpretable, sparse model
+- Feature selection is an explicit goal</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lasso</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">lasso</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># See which features were selected (non-zero coefficients)</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">selected_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_features</span><span class="p">)</span><span class="si">}</span><span class="s2"> features&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="l2-regularization-ridge">L2 Regularization (Ridge)<a class="headerlink" href="#l2-regularization-ridge" title="Permanent link">&para;</a></h3>
+<p><strong>Penalty:</strong> <span class="arithmatex">\(\lambda \sum\beta_j^2\)</span></p>
+<p><strong>Effect:</strong> Shrinks all coefficients toward zero, but <strong>never exactly zero</strong></p>
+<p><strong>When to use:</strong>
+- Multicollinearity is present
+- All features are potentially relevant
+- Prediction accuracy is the main goal</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">ridge</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="elastic-net-combining-l1-and-l2">Elastic Net: Combining L1 and L2<a class="headerlink" href="#elastic-net-combining-l1-and-l2" title="Permanent link">&para;</a></h3>
+<p><strong>Penalty:</strong> <span class="arithmatex">\(\lambda_1 \sum|\beta_j| + \lambda_2 \sum\beta_j^2\)</span></p>
+<p><strong>Benefits:</strong>
+- Feature selection from L1 (can zero out coefficients)
+- Stability from L2 (handles correlated features better)
+- More flexible than either alone</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElasticNet</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">elastic</span> <span class="o">=</span> <span class="n">ElasticNet</span><span class="p">(</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>       <span class="c1"># Overall regularization strength</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">l1_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>    <span class="c1"># Balance between L1 and L2</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">)</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">elastic</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="choosing-regularization-strength">Choosing Regularization Strength<a class="headerlink" href="#choosing-regularization-strength" title="Permanent link">&para;</a></h3>
+<p>Use cross-validation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LassoCV</span><span class="p">,</span> <span class="n">RidgeCV</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Automatic alpha selection via CV</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">lasso_cv</span> <span class="o">=</span> <span class="n">LassoCV</span><span class="p">(</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">alphas</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">cv</span><span class="o">=</span><span class="mi">5</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">)</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">lasso_cv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best alpha: </span><span class="si">{</span><span class="n">lasso_cv</span><span class="o">.</span><span class="n">alpha_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Important:</strong> Always scale your features before regularization! Regularization penalizes large coefficients, and features on different scales are penalized unfairly.</p>
+<p>To convert scaled coefficients back to original units: <span class="arithmatex">\(\beta_{original} = \frac{\beta_{scaled}}{\sigma}\)</span>. In code: <code>original_coefs = model.coef_ / scaler.scale_</code>. Back-transform for business communication ("each $1000 in spending → X more sales"); keep scaled for comparing feature importance. Save your scaler object so you have access to <code>mean_</code> and <code>scale_</code> attributes.</p>
+<h3 id="linear-regression-as-a-neural-network">Linear Regression as a Neural Network<a class="headerlink" href="#linear-regression-as-a-neural-network" title="Permanent link">&para;</a></h3>
+<p>Here's something that will pay off in Module 6:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Input Layer          Output Layer
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>   x₁ ──── w₁ ────┐
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>                   ├──→ Σ + b ──→ ŷ
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>   x₂ ──── w₂ ────┘
+</span></code></pre></div>
+<p>Linear regression is just a neural network with no hidden layers!
+- The weights (w) are our coefficients (<span class="arithmatex">\(\beta\)</span>)
+- The bias (b) is our intercept (<span class="arithmatex">\(\beta_0\)</span>)
+- We sum the weighted inputs and add the bias</p>
+<p>When we add hidden layers and non-linear activations, we get deep learning. But the foundation—weighted sums optimized by gradient descent—is exactly what we learned here.</p>
+<h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Regularization always hurts training performance"</td>
+<td>True, but that's the point! We sacrifice training fit for better generalization.</td>
+</tr>
+<tr>
+<td>"Lasso always performs feature selection"</td>
+<td>Only with sufficient regularization. Very small alpha may keep all features.</td>
+</tr>
+<tr>
+<td>"More features always improve the model"</td>
+<td>Only if they're informative. Irrelevant features add noise and overfitting risk.</td>
+</tr>
+<tr>
+<td>"Ridge is inferior because it doesn't zero out coefficients"</td>
+<td>Ridge is often better when all features matter. Lasso is for sparse solutions.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="23-business-application">2.3 Business Application<a class="headerlink" href="#23-business-application" title="Permanent link">&para;</a></h2>
+<h3 id="end-to-end-regression-workflow">End-to-End Regression Workflow<a class="headerlink" href="#end-to-end-regression-workflow" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Business problem definition</strong> - What are we predicting? Why does it matter?</li>
+<li><strong>Data collection and exploration</strong> - EDA, quality assessment</li>
+<li><strong>Feature engineering</strong> - Create informative variables from raw data</li>
+<li><strong>Model building and evaluation</strong> - Compare approaches, cross-validate</li>
+<li><strong>Interpretation and communication</strong> - Translate for stakeholders</li>
+</ol>
+<p>Most of your time should go into steps 1-3. The modeling itself is almost mechanical once you have good data and features.</p>
+<p><strong>When is "enough" feature engineering?</strong> Track validation performance as you add features—stop when new features don't improve it. The 80/20 rule applies: basic features (raw data, simple transforms) usually dominate; exotic interactions rarely add much. Don't exceed n/10 to n/20 features for n samples without regularization. Start simple, add complexity where residual analysis suggests it, and stop when validation performance plateaus.</p>
+<h3 id="feature-engineering-patterns">Feature Engineering Patterns<a class="headerlink" href="#feature-engineering-patterns" title="Permanent link">&para;</a></h3>
+<p><strong>Time-based features:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;day_of_week&#39;</span><span class="p">),</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;month&#39;</span><span class="p">),</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;is_weekend&#39;</span><span class="p">),</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">])</span>
+</span></code></pre></div></p>
+<p><strong>Aggregations:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">customer_features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s1">&#39;customer_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;amount&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;total_spend&#39;</span><span class="p">),</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;amount&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;avg_order&#39;</span><span class="p">),</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;amount&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;order_count&#39;</span><span class="p">),</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">])</span>
+</span></code></pre></div></p>
+<p><strong>Interactions:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;sqft&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;price_per_sqft&#39;</span><span class="p">),</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">])</span>
+</span></code></pre></div></p>
+<p><strong>Polynomial features:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">poly</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">X_poly</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</span></code></pre></div></p>
+<h3 id="translating-statistics-to-business-language">Translating Statistics to Business Language<a class="headerlink" href="#translating-statistics-to-business-language" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Statistical Term</th>
+<th>Business Translation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coefficient = 2.5</td>
+<td>"Every $1 more in advertising is associated with $2.50 more in sales"</td>
+</tr>
+<tr>
+<td>R² = 0.75</td>
+<td>"Our model explains about 75% of the variation in sales"</td>
+</tr>
+<tr>
+<td>p-value &lt; 0.05</td>
+<td>"We're confident this factor genuinely affects sales, not just by chance"</td>
+</tr>
+<tr>
+<td>95% CI: [1.8, 3.2]</td>
+<td>"We estimate the effect is between $1.80 and $3.20 per dollar spent"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Standardized vs. unstandardized coefficients:</strong>
+- <strong>Unstandardized</strong> (original units): For business interpretation—"Every $1 in advertising → $2.50 in sales"
+- <strong>Standardized</strong> (z-scores): For comparing feature importance—"Which variable has the biggest effect?"</p>
+<h3 id="sensitivity-analysis">Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Permanent link">&para;</a></h3>
+<p>Stakeholders love "what-if" scenarios:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Base prediction</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">base</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_current</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Modified scenario</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">X_modified</span> <span class="o">=</span> <span class="n">X_current</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">X_modified</span><span class="p">[</span><span class="s1">&#39;advertising&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1.10</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">new</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_modified</span><span class="p">)</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;10% more advertising → $</span><span class="si">{</span><span class="n">new</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">base</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> more sales&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="the-business-memo">The Business Memo<a class="headerlink" href="#the-business-memo" title="Permanent link">&para;</a></h3>
+<p><strong>Structure:</strong></p>
+<ol>
+<li><strong>Executive Summary</strong> - 2-3 sentences. Main finding plus recommendation.</li>
+<li><strong>Key Findings</strong> - Bullet points with business impact.</li>
+<li><strong>Recommendations</strong> - Specific, actionable steps.</li>
+<li><strong>Limitations</strong> - What the analysis cannot tell us.</li>
+</ol>
+<p><strong>Rules:</strong>
+- No code
+- No jargon without explanation
+- No p-values without context
+- Always include limitations</p>
+<p>The limitations section matters. Every analysis has limitations. If you don't acknowledge them, you're either unaware (bad) or hiding them (worse).</p>
+<p>Frame limitations as <strong>scope definition, not weakness</strong>. Instead of "The model doesn't account for competitor pricing," say "The model predicts based on our historical data. For decisions involving major competitor moves, supplement with competitive intelligence." Quantify uncertainty ("accurate to within ±15% 80% of the time") rather than saying "predictions might be wrong." Lead with capabilities, then contextualize what's left. Provide recommendations within limitations ("Given ±15% uncertainty, keep 20% buffer inventory"). Models presented as perfect lose credibility when they fail; honest limitations build trust.</p>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>You implement gradient descent and the loss keeps increasing. What's likely wrong? How would you fix it?</p>
+</li>
+<li>
+<p>A regression coefficient for 'ice cream sales' on 'drowning deaths' is positive and statistically significant. Should ice cream vendors be concerned about causing drownings?</p>
+</li>
+<li>
+<p>Your model has R² = 0.95 but the residual plot shows a clear curved pattern. Is this a good model?</p>
+</li>
+<li>
+<p>When would you prefer Lasso over Ridge regression? Give a business scenario.</p>
+</li>
+<li>
+<p>You add more features to your model and R² on training data increases, but test set performance decreases. What's happening?</p>
+</li>
+<li>
+<p>How would you explain regularization to a business stakeholder without using math?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Given a fitted model equation, interpret each coefficient in business terms.</p>
+</li>
+<li>
+<p>Diagnose issues from residual plots (identify non-linearity, heteroscedasticity).</p>
+</li>
+<li>
+<p>Calculate VIF and decide which features to remove.</p>
+</li>
+<li>
+<p>Choose between Lasso, Ridge, and ElasticNet for different scenarios.</p>
+</li>
+<li>
+<p>Write a business memo interpreting regression results for a non-technical audience.</p>
+</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 2:</strong></p>
+<ol>
+<li>
+<p><strong>Linear regression minimizes squared errors</strong> to find the best-fit line. The math is elegant, but the intuition is simple: find the line that makes predictions as close as possible to reality.</p>
+</li>
+<li>
+<p><strong>Gradient descent iteratively optimizes parameters</strong>. This is the foundation for all neural network training. Learning rate matters: too small is slow, too large is unstable.</p>
+</li>
+<li>
+<p><strong>Coefficients show association, not causation</strong>. Be careful how you communicate this. "Associated with" is not "causes."</p>
+</li>
+<li>
+<p><strong>Residual analysis reveals assumption violations</strong>. Always check your residual plots. High R² with a patterned residual plot is a bad model.</p>
+</li>
+<li>
+<p><strong>Regularization prevents overfitting</strong>. Lasso selects features, Ridge handles multicollinearity, Elastic Net does both.</p>
+</li>
+<li>
+<p><strong>Communication matters</strong>. Translate statistics to business impact. Include limitations. Make it actionable.</p>
+</li>
+</ol>
+<hr />
+<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>In Module 3, we tackle <strong>Classification Methods</strong>:
+- Logistic regression (extends linear regression to classification)
+- Decision boundaries and probability estimation
+- Classification metrics in depth
+- Handling imbalanced classes</p>
+<p>You'll apply everything from Module 2:
+- Same data preparation workflow
+- Gradient descent concepts
+- Regularization techniques</p>
+<p>The difference: we're predicting categories instead of numbers.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

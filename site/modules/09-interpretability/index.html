@@ -1,0 +1,2159 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/09-interpretability/">
+      
+      
+        <link rel="prev" href="../08-nlp/">
+      
+      
+        <link rel="next" href="../10-ethics-deployment/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>9. Interpretability - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-9-model-interpretability-explainability" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              9. Interpretability
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#91-why-interpretability-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Why Interpretability Matters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.1 Why Interpretability Matters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-business-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Business Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regulatory-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regulatory Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-stakeholder-trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building Stakeholder Trust
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-and-improving-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging and Improving Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovering-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovering Bias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#92-interpretation-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Interpretation Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.2 Interpretation Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-vs-local-interpretability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global vs Local Interpretability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permutation-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permutation Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partial-dependence-plots-pdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial Dependence Plots (PDP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-shapley-additive-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP (SHapley Additive exPlanations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP in Practice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP Visualizations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lime-local-interpretable-model-agnostic-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LIME (Local Interpretable Model-agnostic Explanations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-vs-lime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP vs LIME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#93-communicating-model-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Communicating Model Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.3 Communicating Model Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-communication-challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Communication Challenge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executive-summary-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizations-for-business-audiences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizations for Business Audiences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explaining-individual-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explaining Individual Predictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adverse-action-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adverse Action Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documenting-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting Limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#91-why-interpretability-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Why Interpretability Matters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.1 Why Interpretability Matters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-business-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Business Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regulatory-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regulatory Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-stakeholder-trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building Stakeholder Trust
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-and-improving-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging and Improving Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovering-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovering Bias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#92-interpretation-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Interpretation Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.2 Interpretation Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-vs-local-interpretability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global vs Local Interpretability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permutation-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permutation Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partial-dependence-plots-pdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partial Dependence Plots (PDP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-shapley-additive-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP (SHapley Additive exPlanations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP in Practice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP Visualizations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lime-local-interpretable-model-agnostic-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LIME (Local Interpretable Model-agnostic Explanations)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shap-vs-lime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHAP vs LIME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-caveats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Caveats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#93-communicating-model-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Communicating Model Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.3 Communicating Model Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-communication-challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Communication Challenge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executive-summary-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizations-for-business-audiences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizations for Business Audiences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explaining-individual-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explaining Individual Predictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adverse-action-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adverse Action Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documenting-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting Limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-9-model-interpretability-explainability">Module 9: Model Interpretability &amp; Explainability<a class="headerlink" href="#module-9-model-interpretability-explainability" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>We've covered a wide range of modeling techniques: linear models, decision trees, random forests, XGBoost, neural networks, CNNs, and transformers. Some are simple—you can look at coefficients. Others are complex—millions of parameters that no human can comprehend directly.</p>
+<p>Here's the challenge: <strong>A model that can't be explained often can't be deployed.</strong></p>
+<p>Think about it. A bank denies someone a loan. A hospital's AI recommends a treatment. An insurance company sets a premium. In all these cases, people deserve to know why. And in many cases, the law requires it.</p>
+<p>This module bridges the gap between model performance and real-world deployment. You'll learn how to explain any model—black box or not—and how to communicate those explanations to stakeholders who don't know (or care) about gradient descent.</p>
+<p><strong>Interpretability vs. performance</strong>: Modern tools largely eliminate this tradeoff. Train a complex model for maximum performance, then use SHAP/LIME to explain it—you get both accuracy and explanations. Intrinsically interpretable models (linear regression, short decision trees) provide explanations directly if regulations require them. A well-regularized linear model can often match tree ensemble performance anyway.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Explain</strong> why model interpretability matters for business and regulatory compliance</li>
+<li><strong>Distinguish</strong> between global and local interpretability</li>
+<li><strong>Apply</strong> SHAP and LIME to explain model predictions</li>
+<li><strong>Create</strong> effective visualizations of model behavior</li>
+<li><strong>Communicate</strong> model insights to non-technical stakeholders</li>
+<li><strong>Document</strong> models with model cards and limitations</li>
+</ol>
+<hr />
+<h2 id="91-why-interpretability-matters">9.1 Why Interpretability Matters<a class="headerlink" href="#91-why-interpretability-matters" title="Permanent link">&para;</a></h2>
+<h3 id="the-business-case">The Business Case<a class="headerlink" href="#the-business-case" title="Permanent link">&para;</a></h3>
+<p><strong>The best model in the world is worthless if no one trusts it.</strong></p>
+<p>You could build a fraud detection system with 99% accuracy. But if the compliance team can't explain why it flagged a transaction, they can't defend that decision to regulators. If loan officers can't explain why an application was denied, they can't legally send that denial letter.</p>
+<h3 id="regulatory-requirements">Regulatory Requirements<a class="headerlink" href="#regulatory-requirements" title="Permanent link">&para;</a></h3>
+<p><strong>GDPR (EU General Data Protection Regulation):</strong>
+- Citizens have a "right to explanation" for automated decisions
+- If a machine makes a decision that significantly affects someone, they can demand to know why
+- Applies to credit scoring, hiring, insurance, healthcare</p>
+<p><strong>Fair Lending Laws (US):</strong>
+- Equal Credit Opportunity Act requires reasons for adverse actions
+- "Your application was denied because..." is legally required
+- "The algorithm said no" doesn't satisfy the law</p>
+<p><strong>Healthcare Regulations:</strong>
+- FDA scrutinizes AI medical devices
+- Clinicians need to understand recommendations before acting
+- Liability concerns: if something goes wrong, why did the AI recommend that?</p>
+<h3 id="building-stakeholder-trust">Building Stakeholder Trust<a class="headerlink" href="#building-stakeholder-trust" title="Permanent link">&para;</a></h3>
+<p><strong>Business stakeholders want to know:</strong>
+- Why did the model make this prediction?
+- Which factors are most important?
+- Can we trust this prediction?
+- What would change the prediction?</p>
+<p><strong>Without trust:</strong>
+- Models won't be adopted—people ignore recommendations
+- Decisions get overridden—defeating the model's purpose
+- ML investment value is lost—months of work unused</p>
+<h3 id="debugging-and-improving-models">Debugging and Improving Models<a class="headerlink" href="#debugging-and-improving-models" title="Permanent link">&para;</a></h3>
+<p>Interpretability helps identify:
+- <strong>Spurious correlations</strong>: Model learned wrong patterns
+- <strong>Data leakage</strong>: Model using information it shouldn't have
+- <strong>Bias in training data</strong>: Historical biases encoded in predictions
+- <strong>Overfitting</strong>: Model memorized patterns that won't generalize</p>
+<p><strong>The pneumonia example:</strong></p>
+<p>Researchers trained a model to predict pneumonia severity from X-rays. The model performed exceptionally well—too well.</p>
+<p>Investigation revealed: The model learned to associate "portable X-ray" equipment markers with low risk. Why? Portable X-rays were used for patients well enough to not need a trip to the radiology department. The model was predicting equipment type, not disease severity.</p>
+<p>Without interpretability tools, this would have been deployed and potentially harmed patients.</p>
+<p><strong>Catching spurious correlations</strong>: For consequential models, investigating what the model learned is a professional responsibility. Use SHAP/LIME/PDP in your standard workflow. Show top features to domain experts (a radiologist would question equipment markers). Ask: "What shortcuts could the model have taken?" Test on out-of-distribution data. The investigation level should match the stakes—product recommendations warrant less scrutiny than medical diagnosis.</p>
+<h3 id="discovering-bias">Discovering Bias<a class="headerlink" href="#discovering-bias" title="Permanent link">&para;</a></h3>
+<p>ML models can encode and amplify biases:
+- Historical bias in training data
+- Proxy variables for protected attributes
+- Feedback loops</p>
+<p>Interpretability reveals:
+- Which features drive predictions for different groups
+- Whether protected attributes have indirect influence
+- Unexpected correlations that might indicate bias</p>
+<p><strong>Example</strong>: A hiring model heavily weights ZIP code. ZIP code correlates with race and income. The model might be making discriminatory decisions even without explicit race features. This is proxy discrimination—often unethical and sometimes illegal.</p>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Accuracy is all that matters"</td>
+<td>Without interpretability, you can't trust, debug, or deploy responsibly</td>
+</tr>
+<tr>
+<td>"Deep learning can never be interpreted"</td>
+<td>Many techniques exist (SHAP, attention, feature visualization)</td>
+</tr>
+<tr>
+<td>"Simple models are always more interpretable"</td>
+<td>A 100-feature linear model isn't necessarily interpretable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="92-interpretation-techniques">9.2 Interpretation Techniques<a class="headerlink" href="#92-interpretation-techniques" title="Permanent link">&para;</a></h2>
+<h3 id="global-vs-local-interpretability">Global vs Local Interpretability<a class="headerlink" href="#global-vs-local-interpretability" title="Permanent link">&para;</a></h3>
+<p><strong>Global interpretability</strong>: Understand overall model behavior
+- Which features are generally important?
+- What patterns does the model use?</p>
+<p><strong>Local interpretability</strong>: Understand individual predictions
+- Why was THIS customer predicted to churn?
+- What would change THIS decision?</p>
+<p>Both matter. Executives want global insights: "What drives churn?" Customer service needs local explanations: "Why was this specific customer flagged?"</p>
+<h3 id="permutation-importance">Permutation Importance<a class="headerlink" href="#permutation-importance" title="Permanent link">&para;</a></h3>
+<p><strong>The idea:</strong>
+1. Train model, measure baseline performance
+2. Shuffle one feature's values (break its signal)
+3. Measure performance drop
+4. Larger drop = more important feature</p>
+<p><strong>Why it works</strong>: If a feature is important, breaking its signal hurts predictions.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">result</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">model</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">X_test</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">y_test</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># Sort by importance</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">importances_mean</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">feature_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">importances_mean</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Advantages:</strong>
+- Works with any model (model-agnostic)
+- Uses held-out test data (reliable)</p>
+<p><strong>Disadvantages:</strong>
+- Slow for many features
+- Misleading with correlated features (shuffling one is compensated by another)</p>
+<h3 id="partial-dependence-plots-pdp">Partial Dependence Plots (PDP)<a class="headerlink" href="#partial-dependence-plots-pdp" title="Permanent link">&para;</a></h3>
+<p>PDPs show the average effect of a feature on predictions.</p>
+<p><strong>How it works:</strong>
+1. For each value of feature X (e.g., age from 20 to 80)
+2. Set ALL samples to that value
+3. Average the predictions
+4. Plot average prediction vs feature value</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialDependenceDisplay</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">PartialDependenceDisplay</span><span class="o">.</span><span class="n">from_estimator</span><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">model</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">X_train</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">]</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Interpretation:</strong>
+- Upward slope: Higher feature value → higher prediction
+- Flat line: Little average effect
+- Non-linear shape: Complex relationship</p>
+<p><strong>Limitation</strong>: Assumes feature independence. Can show impossible combinations (20-year-olds with $500K income).</p>
+<h3 id="shap-shapley-additive-explanations">SHAP (SHapley Additive exPlanations)<a class="headerlink" href="#shap-shapley-additive-explanations" title="Permanent link">&para;</a></h3>
+<p><strong>Foundation</strong>: Shapley values from game theory—fairly distribute "credit" among players.</p>
+<p><strong>Applied to ML</strong>: How much did each feature contribute to pushing this prediction away from the average?</p>
+<p><strong>Key properties (mathematically proven):</strong>
+1. <strong>Local accuracy</strong>: SHAP values sum to prediction minus baseline
+2. <strong>Consistency</strong>: More important features get higher values
+3. <strong>Missingness</strong>: Unused features get zero attribution</p>
+<p><strong>Interpretation:</strong>
+- SHAP &gt; 0: Feature pushed prediction higher
+- SHAP &lt; 0: Feature pushed prediction lower
+- Magnitude: Strength of effect</p>
+<p><strong>The Shapley formula:</strong></p>
+<div class="arithmatex">\[\phi_j = \sum_{S \subseteq N \setminus \{j\}} \frac{|S|!(|N|-|S|-1)!}{|N|!} [f(S \cup \{j\}) - f(S)]\]</div>
+<p><strong>In plain English:</strong> Consider all possible subsets of features. For each subset, measure how much adding feature j changes the prediction. Average these contributions with weights ensuring fairness.</p>
+<p><strong>Computational complexity</strong>: Exact Shapley computation is exponential (2^n subsets). TreeSHAP exploits tree structure for polynomial-time exact values—use it for random forests, XGBoost, LightGBM. DeepSHAP uses gradient approximations for neural networks. KernelSHAP handles arbitrary models but is slow. This often influences model choice: if interpretability + speed are required, tree-based models with TreeSHAP become attractive.</p>
+<h3 id="shap-in-practice">SHAP in Practice<a class="headerlink" href="#shap-in-practice" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># For tree-based models (fast!)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">TreeExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Summary plot (global view)</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">shap</span><span class="o">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Force plot (single prediction)</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Waterfall plot (detailed breakdown)</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="p">(</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">values</span><span class="o">=</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">base_values</span><span class="o">=</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">data</span><span class="o">=</span><span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="p">))</span>
+</span></code></pre></div>
+<p><strong>SHAP variants:</strong>
+- <strong>TreeSHAP</strong>: Exact, fast for tree models
+- <strong>KernelSHAP</strong>: Model-agnostic, slower
+- <strong>DeepSHAP</strong>: For neural networks</p>
+<p>Use TreeSHAP when possible—it's exact and fast.</p>
+<h3 id="shap-visualizations">SHAP Visualizations<a class="headerlink" href="#shap-visualizations" title="Permanent link">&para;</a></h3>
+<p><strong>Summary plot</strong>: Global importance with direction
+- Each dot is one sample
+- X-axis: SHAP value
+- Color: Feature value (red = high, blue = low)</p>
+<p><strong>Force plot</strong>: Single prediction breakdown
+- Starts from baseline
+- Shows features pushing up and down
+- Ends at actual prediction</p>
+<p><strong>Waterfall plot</strong>: Step-by-step breakdown
+- From baseline to prediction
+- Each bar is one feature's contribution</p>
+<p><strong>Dependence plot</strong>: Feature effect with interactions
+- Like PDP but shows actual points
+- Can color by another feature to see interactions</p>
+<h3 id="lime-local-interpretable-model-agnostic-explanations">LIME (Local Interpretable Model-agnostic Explanations)<a class="headerlink" href="#lime-local-interpretable-model-agnostic-explanations" title="Permanent link">&para;</a></h3>
+<p><strong>Core idea</strong>: Approximate complex model locally with a simple one.</p>
+<p><strong>How it works:</strong>
+1. Generate perturbed samples around the instance
+2. Get complex model's predictions for those samples
+3. Fit simple model (linear) weighted by distance
+4. Interpret the simple model</p>
+<p><em>"In the neighborhood of THIS prediction, what does the model behave like?"</em></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lime.lime_tabular</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">X_train</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Not Churn&#39;</span><span class="p">,</span> <span class="s1">&#39;Churn&#39;</span><span class="p">],</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">)</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">explanation</span><span class="o">.</span><span class="n">show_in_notebook</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="shap-vs-lime">SHAP vs LIME<a class="headerlink" href="#shap-vs-lime" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>SHAP</th>
+<th>LIME</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foundation</td>
+<td>Game theory</td>
+<td>Local approximation</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>Mathematically guaranteed</td>
+<td>Not guaranteed</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Fast with TreeSHAP</td>
+<td>Generally slower</td>
+</tr>
+<tr>
+<td>Global view</td>
+<td>Yes (aggregate)</td>
+<td>Limited</td>
+</tr>
+</tbody>
+</table>
+<p>Both are valuable. SHAP has stronger theoretical foundations. LIME can be more intuitive.</p>
+<h3 id="important-caveats">Important Caveats<a class="headerlink" href="#important-caveats" title="Permanent link">&para;</a></h3>
+<p><strong>Feature importance ≠ causation.</strong></p>
+<p>When SHAP says "age is the most important feature," it means age most influences predictions. It does NOT mean age <em>causes</em> the outcome.</p>
+<p>A model might use age as a strong predictor of churn, but that doesn't mean getting older causes churn. There might be a confounder.</p>
+<p><strong>Don't confuse prediction importance with causal importance.</strong></p>
+<h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Feature importance = causation"</td>
+<td>Importance shows prediction influence, not causal effect</td>
+</tr>
+<tr>
+<td>"SHAP values are always exact"</td>
+<td>KernelSHAP is approximate; TreeSHAP is exact only for trees</td>
+</tr>
+<tr>
+<td>"High attention = high importance"</td>
+<td>Attention weights can be misleading</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="93-communicating-model-insights">9.3 Communicating Model Insights<a class="headerlink" href="#93-communicating-model-insights" title="Permanent link">&para;</a></h2>
+<h3 id="the-communication-challenge">The Communication Challenge<a class="headerlink" href="#the-communication-challenge" title="Permanent link">&para;</a></h3>
+<p>You've learned powerful interpretation techniques. SHAP gives detailed attributions. PDP shows relationships. LIME approximates local behavior.</p>
+<p><strong>But your stakeholders don't care about SHAP values.</strong></p>
+<p>The CEO wants: "Should we invest in this model?"
+The marketing VP wants: "Which customers should we target?"
+The compliance officer wants: "Can we legally use this?"</p>
+<p>Your job is to translate technical insights into actionable business recommendations.</p>
+<h3 id="executive-summary-structure">Executive Summary Structure<a class="headerlink" href="#executive-summary-structure" title="Permanent link">&para;</a></h3>
+<p><strong>Five parts:</strong></p>
+<ol>
+<li><strong>Business question</strong>: What were we predicting and why?</li>
+<li><strong>Key finding</strong>: What's the main takeaway?</li>
+<li><strong>Top factors</strong>: What drives predictions? (3-5 factors max)</li>
+<li><strong>Confidence</strong>: How reliable? Any limitations?</li>
+<li><strong>Recommendation</strong>: What should we do?</li>
+</ol>
+<p><em>No code. No jargon. Just business value.</em></p>
+<h3 id="example-executive-summary">Example Executive Summary<a class="headerlink" href="#example-executive-summary" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>EXECUTIVE SUMMARY: Customer Churn Model
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Business Question: Which customers are likely to cancel
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>their subscription in the next 90 days?
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>Key Finding: We can identify 75% of churning customers
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>before they leave, with 80% precision—meaning 4 out of 5
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>customers we flag will actually churn.
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>Top Factors Driving Churn Risk:
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>1. Support tickets in last 30 days (more tickets = higher risk)
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>2. Days since last login (longer gap = higher risk)
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>3. Contract type (monthly contracts 3x more likely to churn)
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>Confidence: Model validated on 6 months of holdout data.
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>Limitation: Works best for customers with 90+ days of history.
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>Recommendation: Prioritize retention outreach to customers
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>with churn probability &gt; 70%. Expected ROI: $2.50 saved
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>per $1 spent on retention.
+</span></code></pre></div>
+<p>No mention of random forests, SHAP, or cross-validation. Just business-relevant insights.</p>
+<h3 id="visualizations-for-business-audiences">Visualizations for Business Audiences<a class="headerlink" href="#visualizations-for-business-audiences" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Keep visualizations simple</li>
+<li>Use familiar formats (bar charts, line plots)</li>
+<li>Add clear labels and titles</li>
+<li>Highlight key insights with annotations</li>
+</ul>
+<p><strong>Bad</strong>: Show a SHAP summary plot with no explanation</p>
+<p><strong>Good</strong>: Show "Top 5 Factors Driving Churn Risk" with clear labels</p>
+<p>You might derive it from SHAP values, but the presentation is business-focused.</p>
+<p><strong>Ethics of simplification</strong>: Simplification is often your professional obligation—communication your audience can't understand serves no one. Distinguish appropriate simplification ("the model uses engagement patterns") from misleading omission ("95% accurate" without mentioning failure on new customers). Report uncertainty and limitations clearly. The ethical burden is on honesty, not exhaustive technical detail.</p>
+<h3 id="explaining-individual-predictions">Explaining Individual Predictions<a class="headerlink" href="#explaining-individual-predictions" title="Permanent link">&para;</a></h3>
+<p>For customer-facing explanations:
+- Use natural language
+- Focus on top 2-3 factors
+- Avoid technical jargon
+- Provide actionable insights</p>
+<h3 id="adverse-action-example">Adverse Action Example<a class="headerlink" href="#adverse-action-example" title="Permanent link">&para;</a></h3>
+<p>When someone is denied credit, they're legally entitled to reasons:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Your loan application was declined. The main factors were:
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>1. Your debt-to-income ratio is above our threshold
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>2. Your credit history is shorter than we typically require
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>3. Recent credit inquiries suggest high credit-seeking behavior
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>Steps you can take to improve your chances:
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>- Pay down existing debt to lower your debt-to-income ratio
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>- Wait 6 months to build more credit history
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>- Avoid applying for new credit in the near term
+</span></code></pre></div>
+<p>Specific, actionable, no jargon.</p>
+<h3 id="model-cards">Model Cards<a class="headerlink" href="#model-cards" title="Permanent link">&para;</a></h3>
+<p><strong>Model cards</strong> are documentation standards for ML models (introduced by Google).</p>
+<p><strong>Components:</strong>
+1. <strong>Model details</strong>: Type, version, date, owner
+2. <strong>Intended use</strong>: What is this model for? What is it NOT for?
+3. <strong>Factors</strong>: Relevant attributes (demographics, etc.)
+4. <strong>Metrics</strong>: Performance overall AND by subgroup
+5. <strong>Training data</strong>: What data was used?
+6. <strong>Limitations</strong>: When does the model fail?
+7. <strong>Ethical considerations</strong>: Potential harms, biases</p>
+<p><strong>What belongs in a model card that wouldn't be in a technical report?</strong></p>
+<p>Intended use and ethical considerations. A technical report says "accuracy is 95%." A model card says "this model is intended for prioritizing retention outreach, not for making final decisions about customer termination. It should not be used for populations under 18."</p>
+<h3 id="documenting-limitations">Documenting Limitations<a class="headerlink" href="#documenting-limitations" title="Permanent link">&para;</a></h3>
+<p>Being honest about limitations builds trust and prevents misuse.</p>
+<p><strong>Good:</strong>
+- "Model performance degrades for customers in the first 30 days"
+- "Validated only on US customers; may not generalize internationally"
+- "Does not account for seasonal effects"</p>
+<p><strong>Bad:</strong>
+- "Model has some limitations" (too vague)
+- Nothing at all (dangerous)</p>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>A bank's loan approval model has 95% accuracy but can't explain decisions. Why might regulators reject it?</p>
+</li>
+<li>
+<p>You discover your hiring model relies heavily on ZIP code. Why is this concerning?</p>
+</li>
+<li>
+<p>SHAP shows 'age' has highest importance, but PDP shows a flat relationship. How is this possible?</p>
+</li>
+<li>
+<p>You need to explain a loan denial to a customer. Would you use SHAP or LIME? Why?</p>
+</li>
+<li>
+<p>A stakeholder asks "which feature is most important?" What clarifying questions should you ask?</p>
+</li>
+<li>
+<p>Your model uses 50 features. How do you explain it to a CEO in 5 minutes?</p>
+</li>
+<li>
+<p>A customer asks why their insurance premium increased. How do you respond without technical jargon?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Given SHAP values for a prediction, write the explanation in plain English</p>
+</li>
+<li>
+<p>Identify potential problems from PDP shapes (non-monotonic, discontinuous)</p>
+</li>
+<li>
+<p>Choose appropriate explanation technique for different scenarios</p>
+</li>
+<li>
+<p>Write an adverse action notice from model output</p>
+</li>
+<li>
+<p>Create a model card outline for a fraud detection system</p>
+</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 9:</strong></p>
+<ol>
+<li>
+<p><strong>Interpretability</strong> is required for regulation, trust, and debugging</p>
+</li>
+<li>
+<p><strong>Global</strong> shows overall patterns; <strong>Local</strong> shows individual predictions</p>
+</li>
+<li>
+<p><strong>SHAP</strong> provides mathematically principled feature attribution</p>
+</li>
+<li>
+<p><strong>LIME</strong> approximates complex models locally with simple ones</p>
+</li>
+<li>
+<p><strong>Executive summaries</strong> translate technical findings to business value</p>
+</li>
+<li>
+<p><strong>Model cards</strong> standardize documentation including limitations</p>
+</li>
+</ol>
+<hr />
+<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>In Module 10, we tackle <strong>Ethics, Fairness &amp; Deployment</strong>:
+- Bias in ML systems and how it arises
+- Fairness metrics and definitions
+- Bias mitigation techniques
+- Responsible AI practices
+- Model deployment considerations</p>
+<p>Interpretability is the foundation for fairness analysis! You can't assess whether a model is fair if you can't understand what it's doing.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

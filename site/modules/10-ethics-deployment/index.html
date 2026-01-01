@@ -1,0 +1,2470 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/10-ethics-deployment/">
+      
+      
+        <link rel="prev" href="../09-interpretability/">
+      
+      
+        <link rel="next" href="../../appendices/universal-approximators/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>10. Ethics & Deployment - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-10-ethics-deployment-real-world-ml" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              10. Ethics & Deployment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#101-ethics-responsible-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Ethics &amp; Responsible AI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 Ethics &amp; Responsible AI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-stakes-are-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Stakes Are High
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sources-of-bias-in-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources of Bias in ML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-study-amazon-hiring-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: Amazon Hiring Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-study-compas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: COMPAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fairness-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fairness Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-impossibility-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Impossibility Theorem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculating-fairness-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calculating Fairness Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxy-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proxy Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to Use ML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-time-series-forecasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Time Series Forecasting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 Time Series Forecasting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-time-series-is-different" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Time Series Is Different
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-series-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time Series Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arima-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARIMA Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prophet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prophet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-choose-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Choose What
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-series-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time Series Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-model-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Model Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Model Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-notebook-to-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Notebook to Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-serialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Serialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating APIs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerization-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containerization with Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-deployment-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cloud Deployment Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-production-business-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Production &amp; Business Value
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 Production &amp; Business Value">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-in-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring in Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Drift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retraining-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retraining Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ab-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A/B Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roi-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROI Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communicating-uncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Communicating Uncertainty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managing-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Expectations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#course-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next-capstone-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next: Capstone Project
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#101-ethics-responsible-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Ethics &amp; Responsible AI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 Ethics &amp; Responsible AI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-stakes-are-high" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Stakes Are High
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sources-of-bias-in-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources of Bias in ML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-study-amazon-hiring-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: Amazon Hiring Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-study-compas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case Study: COMPAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fairness-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fairness Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-impossibility-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Impossibility Theorem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculating-fairness-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calculating Fairness Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxy-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proxy Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-ml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to Use ML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#102-time-series-forecasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Time Series Forecasting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 Time Series Forecasting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-time-series-is-different" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Time Series Is Different
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-series-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time Series Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arima-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARIMA Models
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prophet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prophet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-choose-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Choose What
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-series-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Time Series Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#103-model-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Model Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Model Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-notebook-to-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Notebook to Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-serialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Serialization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating APIs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerization-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containerization with Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-deployment-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cloud Deployment Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#104-production-business-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Production &amp; Business Value
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 Production &amp; Business Value">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-in-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring in Production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Drift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retraining-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retraining Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ab-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A/B Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roi-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROI Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communicating-uncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Communicating Uncertainty
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managing-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Expectations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#course-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next-capstone-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next: Capstone Project
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-10-ethics-deployment-real-world-ml">Module 10: Ethics, Deployment &amp; Real-World ML<a class="headerlink" href="#module-10-ethics-deployment-real-world-ml" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>We've covered an incredible amount of ground in this course. You can build regression models, classification models, ensemble methods, neural networks, CNNs for images, transformers for text. You can interpret models with SHAP and LIME. You know how to evaluate, tune, and avoid common pitfalls.</p>
+<p>But here's the thing: <strong>Building a model is only half the journey.</strong></p>
+<p>This module tackles the other half—getting models into the real world responsibly and effectively. This means grappling with ethics and fairness, learning time series forecasting, understanding deployment, and calculating business value.</p>
+<p>These topics bridge technical skills to real-world impact. Every data scientist who wants to make a difference needs to master them.</p>
+<p><strong>Responsibility for fairness</strong>: All three share responsibility. Data scientists are the first line of defense and should raise concerns. Companies set culture, allocate resources for fairness audits, and establish review processes—they're culpable for pressuring fast deployment without ethical review. Regulators provide external accountability that markets fail to create. The healthiest ecosystem has all three layers; relying on any single one is insufficient.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Identify</strong> sources of bias in ML systems and propose mitigation strategies</li>
+<li><strong>Apply</strong> fairness metrics to evaluate model equity across groups</li>
+<li><strong>Build</strong> time series forecasting models using appropriate techniques</li>
+<li><strong>Explain</strong> the basics of model deployment and MLOps</li>
+<li><strong>Calculate</strong> business value and ROI of ML projects</li>
+<li><strong>Communicate</strong> uncertainty and manage stakeholder expectations</li>
+</ol>
+<hr />
+<h2 id="101-ethics-responsible-ai">10.1 Ethics &amp; Responsible AI<a class="headerlink" href="#101-ethics-responsible-ai" title="Permanent link">&para;</a></h2>
+<h3 id="the-stakes-are-high">The Stakes Are High<a class="headerlink" href="#the-stakes-are-high" title="Permanent link">&para;</a></h3>
+<p>ML systems are making consequential decisions: who gets a loan, who gets a job, who gets parole, who gets medical treatment. These aren't abstract technical problems—they affect real people's lives.</p>
+<p>And here's the uncomfortable truth: <strong>ML systems can be biased. They can be unfair. They can cause harm.</strong></p>
+<p>Not because the engineers are malicious, but because bias creeps in through data, design choices, and blind spots. If we're going to deploy these systems, we need to understand how bias arises and how to mitigate it.</p>
+<h3 id="sources-of-bias-in-ml">Sources of Bias in ML<a class="headerlink" href="#sources-of-bias-in-ml" title="Permanent link">&para;</a></h3>
+<p><strong>Historical Bias</strong>: Training data reflects past discrimination.
+- If you train on 10 years of hiring data, and that data reflects historical biases against women or minorities, your model learns those biases.
+- The model isn't "biased by itself"—it's learning patterns from biased data.</p>
+<p><strong>Selection Bias</strong>: Training data doesn't represent the population.
+- A medical AI trained mostly on data from white patients may perform worse on underrepresented groups.
+- The model has never learned the patterns for those populations.</p>
+<p><strong>Measurement Bias</strong>: Features are measured differently across groups.
+- "Years of experience" penalizes career gaps, which disproportionately affects women.
+- "Arrests" doesn't mean "crimes committed"—it reflects policing patterns.</p>
+<p><strong>Aggregation Bias</strong>: One model for heterogeneous populations.
+- A single diabetes prediction model may work differently across ethnicities.
+- Sometimes you need separate models or careful feature engineering.</p>
+<p><strong>Feedback Loops</strong>: Model predictions affect future data.
+- Predictive policing sends more officers to certain neighborhoods → more arrests → more "crime" data → model sends even more officers.
+- The bias becomes self-reinforcing.</p>
+<h3 id="case-study-amazon-hiring-tool">Case Study: Amazon Hiring Tool<a class="headerlink" href="#case-study-amazon-hiring-tool" title="Permanent link">&para;</a></h3>
+<p>In 2018, it was reported that Amazon had built a hiring tool trained on 10 years of resume data.</p>
+<p><strong>What went wrong:</strong>
+- The model learned to penalize words like "women's" (as in "women's chess club captain")
+- It downgraded graduates of women's colleges
+- It effectively discriminated against female applicants</p>
+<p><strong>The lesson</strong>: Historical data encodes historical bias. Amazon's tech workforce was predominantly male. The model learned that being male correlated with getting hired. It wasn't explicitly told "penalize women," but it learned it from the patterns.</p>
+<p>Amazon scrapped the tool.</p>
+<h3 id="case-study-compas">Case Study: COMPAS<a class="headerlink" href="#case-study-compas" title="Permanent link">&para;</a></h3>
+<p>COMPAS is a recidivism prediction algorithm used in the US criminal justice system to predict whether defendants will reoffend.</p>
+<p><strong>ProPublica's analysis found:</strong>
+- Black defendants had a higher <strong>false positive rate</strong> (incorrectly flagged as high risk)
+- White defendants had a higher <strong>false negative rate</strong> (incorrectly flagged as low risk)
+- Same overall accuracy, very different error patterns</p>
+<p>This shows that identical accuracy can hide profoundly different impacts on different groups.</p>
+<p><strong>Choosing between fairness criteria</strong>: This is an ethical decision, not technical—it shouldn't be made solely by data scientists. The data scientist's role is to make tradeoffs transparent ("if we optimize for A, here's what happens to X and Y"), not to unilaterally decide. These decisions should involve domain experts, affected communities, legal experts, and ethicists. Document the decision, reasoning, and who was involved.</p>
+<h3 id="fairness-metrics">Fairness Metrics<a class="headerlink" href="#fairness-metrics" title="Permanent link">&para;</a></h3>
+<p>There are multiple mathematical definitions of fairness:</p>
+<p><strong>Demographic Parity</strong> (Statistical Parity):
+$<span class="arithmatex">\(P(\hat{Y}=1|A=0) = P(\hat{Y}=1|A=1)\)</span>$
+- Equal positive prediction rates across groups
+- If 30% of men get approved, 30% of women should get approved
+- <strong>Limitation</strong>: Ignores actual qualification rates</p>
+<p><strong>Equalized Odds</strong>:
+$<span class="arithmatex">\(P(\hat{Y}=1|Y=1, A=0) = P(\hat{Y}=1|Y=1, A=1)\)</span>$
+$<span class="arithmatex">\(P(\hat{Y}=1|Y=0, A=0) = P(\hat{Y}=1|Y=0, A=1)\)</span>$
+- Equal true positive rates AND equal false positive rates across groups
+- If you're qualified, you should have equal chance of being accepted regardless of group
+- If you're unqualified, you should have equal chance of being rejected</p>
+<p><strong>Predictive Parity</strong>:
+$<span class="arithmatex">\(P(Y=1|\hat{Y}=1, A=0) = P(Y=1|\hat{Y}=1, A=1)\)</span>$
+- Equal precision across groups
+- If the model says "yes," the probability of actually being qualified should be the same across groups</p>
+<h3 id="the-impossibility-theorem">The Impossibility Theorem<a class="headerlink" href="#the-impossibility-theorem" title="Permanent link">&para;</a></h3>
+<p><strong>You cannot satisfy all fairness criteria simultaneously</strong> (except in special cases).</p>
+<p>This isn't a technical limitation—it's mathematically proven. If groups have different base rates (different proportions of positive outcomes), you have to choose which fairness criterion matters most.</p>
+<p><strong>Example:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Accuracy</th>
+<th>FPR</th>
+<th>FNR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>85%</td>
+<td>10%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>B</td>
+<td>85%</td>
+<td>25%</td>
+<td>5%</td>
+</tr>
+</tbody>
+</table>
+<p>Same accuracy. But Group B has more false positives (more people incorrectly flagged). Group A has more false negatives (more people incorrectly missed).</p>
+<p>Which is worse depends on context. In criminal justice, high FPR means innocent people in jail. In medical diagnosis, high FNR means sick people going untreated.</p>
+<h3 id="calculating-fairness-metrics">Calculating Fairness Metrics<a class="headerlink" href="#calculating-fairness-metrics" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fairlearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetricFrame</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Calculate metrics by group</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">metric_frame</span> <span class="o">=</span> <span class="n">MetricFrame</span><span class="p">(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">metrics</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="n">precision_score</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="s1">&#39;recall&#39;</span><span class="p">:</span> <span class="n">recall_score</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="p">},</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">y_true</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">y_pred</span><span class="o">=</span><span class="n">y_pred</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">sensitive_features</span><span class="o">=</span><span class="n">demographic_feature</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># View metrics by group</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">metric_frame</span><span class="o">.</span><span class="n">by_group</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># View maximum difference between groups</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nb">print</span><span class="p">(</span><span class="n">metric_frame</span><span class="o">.</span><span class="n">difference</span><span class="p">())</span>
+</span></code></pre></div>
+<p>The <code>fairlearn</code> library makes this straightforward. Calculate your metrics by demographic group and look for disparities.</p>
+<h3 id="proxy-variables">Proxy Variables<a class="headerlink" href="#proxy-variables" title="Permanent link">&para;</a></h3>
+<p>"We don't use race in our model, so it can't be biased."</p>
+<p>This is wrong.</p>
+<p><strong>Proxy variables</strong> are features that correlate with protected attributes:
+- ZIP code correlates with race and income
+- Name can indicate gender or ethnicity
+- Arrest history correlates with race (due to policing patterns)
+- "Years since last job" correlates with gender (career gaps)</p>
+<p>Removing the protected attribute doesn't remove the bias if proxies remain.</p>
+<h3 id="when-not-to-use-ml">When NOT to Use ML<a class="headerlink" href="#when-not-to-use-ml" title="Permanent link">&para;</a></h3>
+<p>Not every problem needs machine learning.</p>
+<p><strong>Consider avoiding ML when:</strong>
+- Stakes are very high and errors are catastrophic
+- Accountability and explanation are paramount
+- Training data is fundamentally biased
+- The problem is better solved by policy
+- Human judgment is essential</p>
+<p><strong>Questions to ask:</strong>
+- Who is affected by this system?
+- What happens when it's wrong?
+- Can we explain decisions to affected parties?
+- Is the training data representative?
+- Are we automating an already unfair process?</p>
+<p>Sometimes the right answer is "don't build this model."</p>
+<p><strong>Pushing back on unethical projects</strong>: Document concerns and frame in terms of business risk (legal liability, reputational damage). Escalate through appropriate channels—ethics hotlines, ombudspersons. If internal advocacy fails: comply under protest (documented), refuse the project (accept consequences), or leave. Building a financial cushion gives leverage. Long-term: seek employers whose values align with yours—ask about ethics review processes during interviews.</p>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"ML is objective because it's math"</td>
+<td>ML learns patterns from data, including human biases</td>
+</tr>
+<tr>
+<td>"Equal accuracy = fairness"</td>
+<td>Same accuracy can hide very different error patterns across groups</td>
+</tr>
+<tr>
+<td>"Just remove protected attributes"</td>
+<td>Proxy variables can encode same information</td>
+</tr>
+<tr>
+<td>"Fairness is a purely technical problem"</td>
+<td>Requires ethical choices that should involve diverse stakeholders</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="102-time-series-forecasting">10.2 Time Series Forecasting<a class="headerlink" href="#102-time-series-forecasting" title="Permanent link">&para;</a></h2>
+<h3 id="why-time-series-is-different">Why Time Series Is Different<a class="headerlink" href="#why-time-series-is-different" title="Permanent link">&para;</a></h3>
+<p>Time series data has a unique property: <strong>temporal ordering matters</strong>.</p>
+<p>In standard ML, we assume observations are independent—shuffling rows shouldn't matter. In time series, shuffling destroys the information. Yesterday's sales tell you something about today's sales. January's patterns repeat every January.</p>
+<p>This changes everything about how we model and validate.</p>
+<h3 id="time-series-components">Time Series Components<a class="headerlink" href="#time-series-components" title="Permanent link">&para;</a></h3>
+<p>Time series can be decomposed into components:</p>
+<p><strong>Trend</strong>: Long-term direction (sales growing over years)</p>
+<p><strong>Seasonality</strong>: Regular patterns (sales spike every December)</p>
+<p><strong>Cyclical</strong>: Irregular longer-term fluctuations (economic cycles)</p>
+<p><strong>Noise</strong>: Random variation</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.tsa.seasonal</span><span class="w"> </span><span class="kn">import</span> <span class="n">seasonal_decompose</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">decomposition</span> <span class="o">=</span> <span class="n">seasonal_decompose</span><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">series</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">model</span><span class="o">=</span><span class="s1">&#39;additive&#39;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">period</span><span class="o">=</span><span class="mi">12</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">decomposition</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Understanding these components helps you choose the right model and spot problems.</p>
+<h3 id="arima-models">ARIMA Models<a class="headerlink" href="#arima-models" title="Permanent link">&para;</a></h3>
+<p>ARIMA is the classic statistical approach to time series.</p>
+<p><strong>ARIMA(p, d, q):</strong>
+- <strong>AR (AutoRegressive)</strong>: Predict from past values (how many lags to use = p)
+- <strong>I (Integrated)</strong>: Differencing for stationarity (how many times to difference = d)
+- <strong>MA (Moving Average)</strong>: Predict from past errors (how many lag errors to use = q)</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.tsa.arima.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ARIMA</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">model</span> <span class="o">=</span> <span class="n">ARIMA</span><span class="p">(</span><span class="n">train_series</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">forecast</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Choosing p, d, q:</strong>
+- ACF/PACF plots give guidance
+- AIC/BIC criteria for model selection
+- Or use auto_arima:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">auto_arima</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">model</span> <span class="o">=</span> <span class="n">auto_arima</span><span class="p">(</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">train_series</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>  <span class="c1"># Monthly seasonality</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">trace</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Auto_arima searches through parameter combinations and picks the best one.</p>
+<h3 id="prophet">Prophet<a class="headerlink" href="#prophet" title="Permanent link">&para;</a></h3>
+<p>Facebook's Prophet is a popular alternative to ARIMA.</p>
+<p><strong>Advantages:</strong>
+- Handles seasonality automatically (multiple seasonalities!)
+- Robust to missing data
+- Interpretable components
+- Easy to add holidays and special events</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">prophet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Prophet</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Data must have columns &#39;ds&#39; (date) and &#39;y&#39; (value)</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">Prophet</span><span class="p">(</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">yearly_seasonality</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">weekly_seasonality</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">future</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_future_dataframe</span><span class="p">(</span><span class="n">periods</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">forecast</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">model</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="n">model</span><span class="o">.</span><span class="n">plot_components</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span>  <span class="c1"># Shows trend, seasonality, etc.</span>
+</span></code></pre></div>
+<p>Prophet is particularly good for business applications with strong seasonal patterns.</p>
+<h3 id="when-to-choose-what">When to Choose What<a class="headerlink" href="#when-to-choose-what" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Prophet</strong>: Multiple seasonalities, missing data, holidays, interpretable components</li>
+<li><strong>ARIMA</strong>: More control, complex series that don't fit Prophet's assumptions, very short series</li>
+<li><strong>LSTM</strong>: Complex non-linear patterns, multiple input features, long sequences</li>
+</ul>
+<h3 id="time-series-validation">Time Series Validation<a class="headerlink" href="#time-series-validation" title="Permanent link">&para;</a></h3>
+<p><strong>You cannot use standard k-fold cross-validation for time series.</strong></p>
+<p>Why? Because it would leak future information into training. If your test set contains January 2024 and your training set contains February 2024, you're cheating—you're using the future to predict the past.</p>
+<p><strong>Walk-forward validation:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Train: [----]          Test: [-]
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Train: [------]        Test: [-]
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Train: [--------]      Test: [-]
+</span></code></pre></div></p>
+<p>Always train on the past, test on the future. Never the reverse.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesSplit</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">tscv</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">tscv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">train</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="c1"># Train and evaluate</span>
+</span></code></pre></div>
+<h3 id="business-applications">Business Applications<a class="headerlink" href="#business-applications" title="Permanent link">&para;</a></h3>
+<p>Time series forecasting is everywhere in business:
+- <strong>Sales forecasting</strong>: Budget planning, resource allocation
+- <strong>Demand planning</strong>: Inventory management, supply chain
+- <strong>Capacity planning</strong>: Staffing, infrastructure
+- <strong>Financial forecasting</strong>: Revenue projections, cash flow</p>
+<hr />
+<h2 id="103-model-deployment">10.3 Model Deployment<a class="headerlink" href="#103-model-deployment" title="Permanent link">&para;</a></h2>
+<h3 id="from-notebook-to-production">From Notebook to Production<a class="headerlink" href="#from-notebook-to-production" title="Permanent link">&para;</a></h3>
+<p>You've built a model in a Jupyter notebook. It works great. Now what?</p>
+<p><strong>The gap between "model works" and "model is deployed" is significant:</strong>
+- How do other systems call your model?
+- How do you handle errors?
+- How do you scale?
+- How do you update the model?
+- How do you monitor performance?</p>
+<p>This is where software engineering meets data science.</p>
+<h3 id="model-serialization">Model Serialization<a class="headerlink" href="#model-serialization" title="Permanent link">&para;</a></h3>
+<p>First, you need to save your model so it can be loaded elsewhere.</p>
+<p><strong>Pickle/Joblib</strong> (for scikit-learn models):
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Save model</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># Load model</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p><strong>ONNX</strong> (cross-platform format):
+- Works across different frameworks (PyTorch, TensorFlow, scikit-learn)
+- Optimized for inference
+- Useful when production environment differs from development</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.onnx</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">torch</span><span class="o">.</span><span class="n">onnx</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">model</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">dummy_input</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="s2">&quot;model.onnx&quot;</span><span class="p">,</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">input_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">output_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="creating-apis">Creating APIs<a class="headerlink" href="#creating-apis" title="Permanent link">&para;</a></h3>
+<p>To let other systems use your model, wrap it in an API.</p>
+<p><strong>Flask</strong> (simple, widely used):
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/predict&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">():</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">features</span><span class="p">])</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;prediction&#39;</span><span class="p">:</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]})</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p><strong>FastAPI</strong> (modern, automatic documentation):
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model.pkl&#39;</span><span class="p">)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">PredictionRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="n">features</span><span class="p">:</span> <span class="nb">list</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/predict&quot;</span><span class="p">)</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">PredictionRequest</span><span class="p">):</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">request</span><span class="o">.</span><span class="n">features</span><span class="p">])</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;prediction&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+</span></code></pre></div></p>
+<p>Now other applications can send HTTP requests to get predictions.</p>
+<h3 id="containerization-with-docker">Containerization with Docker<a class="headerlink" href="#containerization-with-docker" title="Permanent link">&para;</a></h3>
+<p>Docker packages your application with all its dependencies.</p>
+<p><strong>Dockerfile:</strong>
+<div class="language-dockerfile highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.9-slim</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="k">COPY</span><span class="w"> </span>model.pkl<span class="w"> </span>.
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="k">COPY</span><span class="w"> </span>app.py<span class="w"> </span>.
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="k">EXPOSE</span><span class="w"> </span><span class="s">5000</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;app.py&quot;</span><span class="p">]</span>
+</span></code></pre></div></p>
+<p><strong>Benefits:</strong>
+- <strong>Reproducibility</strong>: Same environment everywhere
+- <strong>Portability</strong>: Runs on any system with Docker
+- <strong>Scalability</strong>: Easy to run multiple containers
+- <strong>Isolation</strong>: Dependencies don't conflict</p>
+<h3 id="cloud-deployment-options">Cloud Deployment Options<a class="headerlink" href="#cloud-deployment-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Use Case</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS SageMaker</td>
+<td>Full ML platform</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Google Vertex AI</td>
+<td>Full ML platform</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Azure ML</td>
+<td>Full ML platform</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Heroku</td>
+<td>Simple web apps</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>AWS Lambda</td>
+<td>Serverless, simple models</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<p>For production ML at scale, the major cloud platforms provide integrated solutions. For simple models or prototypes, Heroku or Lambda can be quick to set up.</p>
+<hr />
+<h2 id="104-production-business-value">10.4 Production &amp; Business Value<a class="headerlink" href="#104-production-business-value" title="Permanent link">&para;</a></h2>
+<h3 id="monitoring-in-production">Monitoring in Production<a class="headerlink" href="#monitoring-in-production" title="Permanent link">&para;</a></h3>
+<p>Deployment isn't the end—it's the beginning of a new phase.</p>
+<p><strong>Metrics to track continuously:</strong>
+- <strong>Model accuracy over time</strong>: Is performance degrading?
+- <strong>Feature distributions</strong>: Are inputs changing?
+- <strong>Latency and throughput</strong>: Is the system fast enough?
+- <strong>Error rates</strong>: Are there failures?</p>
+<p>Set up alerts. If accuracy drops below a threshold, you want to know immediately.</p>
+<h3 id="model-drift">Model Drift<a class="headerlink" href="#model-drift" title="Permanent link">&para;</a></h3>
+<p><strong>Data drift</strong>: Input distribution changes.
+- Customer demographics shift
+- Seasonality wasn't captured
+- Data collection process changed</p>
+<p><strong>Concept drift</strong>: The relationship between inputs and outputs changes.
+- Customer behavior changed (e.g., during COVID)
+- What used to predict churn no longer does</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">evidently</span><span class="w"> </span><span class="kn">import</span> <span class="n">Report</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">evidently.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataDriftTable</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">DataDriftTable</span><span class="p">()])</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">report</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">reference_data</span><span class="o">=</span><span class="n">training_data</span><span class="p">,</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">current_data</span><span class="o">=</span><span class="n">production_data</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">)</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">report</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Evidently AI and similar tools help detect when your data has shifted.</p>
+<h3 id="retraining-strategies">Retraining Strategies<a class="headerlink" href="#retraining-strategies" title="Permanent link">&para;</a></h3>
+<p>When drift is detected (or just periodically), you need to retrain.</p>
+<p><strong>Scheduled retraining</strong>: Weekly, monthly—on a fixed schedule</p>
+<p><strong>Triggered retraining</strong>: When drift exceeds a threshold</p>
+<p><strong>Continuous training</strong>: Update with each new batch of data</p>
+<p><strong>Automate the pipeline:</strong>
+1. Data validation
+2. Feature engineering
+3. Model training
+4. Evaluation (reject if metrics don't meet threshold)
+5. Deployment</p>
+<p>This is where MLOps comes in—applying DevOps principles to ML.</p>
+<h3 id="ab-testing">A/B Testing<a class="headerlink" href="#ab-testing" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose</strong>: Compare new model against current model</p>
+<p><strong>Implementation:</strong>
+1. Route percentage of traffic to new model
+2. Track metrics for both models
+3. Statistical test for significance
+4. Roll out winner</p>
+<p><strong>Key considerations:</strong>
+- Sample size requirements
+- Duration of test
+- Guardrail metrics (don't harm user experience)</p>
+<h3 id="roi-calculation">ROI Calculation<a class="headerlink" href="#roi-calculation" title="Permanent link">&para;</a></h3>
+<p>How do you justify an ML project?</p>
+<p><strong>Example: Churn prevention model</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Annual churning customers: 10,000
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>Customer lifetime value: $500
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>Churn cost without model: $5,000,000
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>Model performance:
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>- Identifies 75% of churners
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>- Intervention success rate: 30%
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>- Customers saved: 10,000 × 0.75 × 0.30 = 2,250
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>- Value saved: 2,250 × $500 = $1,125,000
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>Costs:
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>- Development: $100,000
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>- Annual maintenance: $20,000
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>- Intervention cost: $50 per flagged customer
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>- Total intervention cost: 7,500 × $50 = $375,000
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>- Total costs: $495,000
+</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>First year ROI: ($1,125,000 - $495,000) / $495,000 = 127%
+</span></code></pre></div>
+<p><strong>The key</strong>: Quantify business impact, not just accuracy. "95% accuracy" means nothing to a CFO. "$630,000 net value in year one" does.</p>
+<h3 id="communicating-uncertainty">Communicating Uncertainty<a class="headerlink" href="#communicating-uncertainty" title="Permanent link">&para;</a></h3>
+<p><strong>Be honest about limitations:</strong>
+- Model accuracy is not 100%
+- Performance varies across segments
+- Future performance is not guaranteed
+- Edge cases exist</p>
+<p><strong>Use confidence intervals:</strong>
+- "We predict revenue of $1.2M ± $150K"
+- "The model is 85% confident this customer will churn"</p>
+<p><strong>Scenario analysis:</strong>
+- Best case / Base case / Worst case</p>
+<p>Stakeholders appreciate honesty. Overpromising leads to disappointment and loss of trust.</p>
+<h3 id="managing-expectations">Managing Expectations<a class="headerlink" href="#managing-expectations" title="Permanent link">&para;</a></h3>
+<p><strong>Common pitfalls:</strong>
+- Overpromising accuracy
+- Underestimating timeline
+- Ignoring maintenance needs
+- Assuming it's a one-time effort</p>
+<p><strong>Best practices:</strong>
+- Start with a pilot project
+- Set realistic expectations upfront
+- Plan for iteration—first version won't be perfect
+- Communicate progress regularly
+- Budget for ongoing maintenance</p>
+<p>ML models are more like products than projects. The world changes, data shifts, and models degrade. You wouldn't build a website and never update it. Same with ML models.</p>
+<p><strong>Estimating maintenance costs</strong>: Rule of thumb: 15-25% of initial development cost per year. Break down components: monitoring infrastructure, data pipeline maintenance, periodic retraining, model auditing, incident response. Staff time is usually the largest cost (one person at 20% time ≈ $30-50K/year). Present stakeholders with scenarios: "minimum maintenance" costs X with degradation risk; "recommended maintenance" costs Y with better reliability.</p>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Amazon's hiring tool was trained on successful employees. Why did it still produce biased results?</p>
+</li>
+<li>
+<p>A model has 85% accuracy for both men and women. Is it fair? What else would you check?</p>
+</li>
+<li>
+<p>Your model uses ZIP code, which correlates with race. Should you remove it? What are the trade-offs?</p>
+</li>
+<li>
+<p>A hospital wants to use ML to allocate scarce medical resources. What ethical considerations arise?</p>
+</li>
+<li>
+<p>Why can't we use regular k-fold cross-validation for time series?</p>
+</li>
+<li>
+<p>When would you choose Prophet over ARIMA?</p>
+</li>
+<li>
+<p>Your model works on your laptop but fails in production. What might cause this?</p>
+</li>
+<li>
+<p>A model improves accuracy by 2% but costs $500K to develop. How do you decide if it's worth it?</p>
+</li>
+<li>
+<p>How do you explain to a CFO that ML requires ongoing investment, not a one-time cost?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Calculate fairness metrics from confusion matrices for two demographic groups</p>
+</li>
+<li>
+<p>Identify bias sources in a case study scenario</p>
+</li>
+<li>
+<p>Design a monitoring plan for a deployed fraud detection model</p>
+</li>
+<li>
+<p>Calculate ROI for an ML project given costs and projected benefits</p>
+</li>
+<li>
+<p>Write a brief stakeholder communication explaining a model's limitations</p>
+</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 10:</strong></p>
+<ol>
+<li>
+<p><strong>Bias</strong> enters ML through data and design; measure and mitigate it actively</p>
+</li>
+<li>
+<p><strong>Fairness</strong> has multiple incompatible definitions—you must choose</p>
+</li>
+<li>
+<p><strong>Time series</strong> requires temporal validation; never use k-fold</p>
+</li>
+<li>
+<p><strong>Deployment</strong> needs APIs, containers, and monitoring infrastructure</p>
+</li>
+<li>
+<p><strong>Drift</strong> happens; plan for detection and retraining</p>
+</li>
+<li>
+<p><strong>Business value</strong> must be quantified and communicated in dollars, not accuracy</p>
+</li>
+</ol>
+<hr />
+<h2 id="course-summary">Course Summary<a class="headerlink" href="#course-summary" title="Permanent link">&para;</a></h2>
+<p>Take a moment to appreciate how far you've come.</p>
+<p><strong>You've learned to:</strong>
+- Build ML models (regression, classification, clustering)
+- Train ensemble methods and understand their power
+- Train neural networks for structured data, images, and text
+- Interpret and explain model decisions
+- Deploy responsibly with fairness considerations and monitoring</p>
+<p><strong>You understand:</strong>
+- The ML workflow from data to deployment
+- Evaluation, validation, and avoiding common pitfalls
+- When to use which technique
+- How to communicate with stakeholders</p>
+<p><strong>You're ready for the Capstone Project!</strong></p>
+<hr />
+<h2 id="whats-next-capstone-project">What's Next: Capstone Project<a class="headerlink" href="#whats-next-capstone-project" title="Permanent link">&para;</a></h2>
+<p>The capstone project is your chance to apply everything you've learned to a real problem.</p>
+<p>You'll:
+- Define a business problem
+- Collect and prepare data
+- Build and evaluate models
+- Interpret and explain results
+- Create deployment and monitoring plans
+- Present to stakeholders</p>
+<p>This is the culmination of the course—showing that you can take a problem from start to finish.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

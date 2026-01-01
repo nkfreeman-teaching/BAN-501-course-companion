@@ -1,0 +1,2360 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/04-ensemble-methods/">
+      
+      
+        <link rel="prev" href="../03-classification/">
+      
+      
+        <link rel="next" href="../05-unsupervised/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>4. Ensemble Methods - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-4-ensemble-methods" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4. Ensemble Methods
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41-ensemble-learning-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Ensemble Learning Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1 Ensemble Learning Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-wisdom-of-crowds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Wisdom of Crowds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-ensembles-improve-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Ensembles Improve Predictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-diversity-is-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Diversity is Critical
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-bagging-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Bagging Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Bagging Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-random-forest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Random Forest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-aggregating-bagging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bootstrap Aggregating (Bagging)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-forests-double-randomness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random Forests: Double Randomness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-bagging-reduces-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Bagging Reduces Overfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-bag-oob-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out-of-Bag (OOB) Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-boosting-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Boosting Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Boosting Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-gradient-boosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Gradient Boosting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-boosting-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Boosting Philosophy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaboost-adaptive-boosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AdaBoost: Adaptive Boosting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-boosting-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Boosting Machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-boosting-hyperparameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Boosting Hyperparameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xgboost-the-competition-champion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XGBoost: The Competition Champion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xgboost-with-early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XGBoost with Early Stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightgbm-and-catboost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LightGBM and CatBoost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bagging-vs-boosting-when-to-use-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bagging vs Boosting: When to Use Each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-other-ensemble-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Other Ensemble Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Other Ensemble Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stacking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voting-classifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voting Classifiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-each-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use Each Approach
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41-ensemble-learning-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Ensemble Learning Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.1 Ensemble Learning Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-wisdom-of-crowds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Wisdom of Crowds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-ensembles-improve-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Ensembles Improve Predictions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-diversity-is-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Diversity is Critical
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-bagging-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Bagging Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Bagging Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-random-forest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Random Forest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-aggregating-bagging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bootstrap Aggregating (Bagging)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-forests-double-randomness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random Forests: Double Randomness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-bagging-reduces-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Bagging Reduces Overfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Importance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-bag-oob-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out-of-Bag (OOB) Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-boosting-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Boosting Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Boosting Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#three-components-gradient-boosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Components: Gradient Boosting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-boosting-philosophy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Boosting Philosophy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaboost-adaptive-boosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AdaBoost: Adaptive Boosting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gradient-boosting-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Boosting Machines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-boosting-hyperparameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Boosting Hyperparameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xgboost-the-competition-champion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XGBoost: The Competition Champion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xgboost-with-early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XGBoost with Early Stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lightgbm-and-catboost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LightGBM and CatBoost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bagging-vs-boosting-when-to-use-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bagging vs Boosting: When to Use Each
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-other-ensemble-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Other Ensemble Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Other Ensemble Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stacking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#voting-classifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voting Classifiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-each-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use Each Approach
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-4-ensemble-methods">Module 4: Ensemble Methods<a class="headerlink" href="#module-4-ensemble-methods" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>In Module 3, we learned about decision trees—intuitive classifiers that are easy to interpret but prone to overfitting. Deep trees memorize training data; shallow trees underfit.</p>
+<p>This module answers a natural question: <strong>What if we could get the benefits of deep trees without the overfitting?</strong></p>
+<p>The answer is ensemble methods. Instead of training one model, we train many models and combine their predictions. This simple idea—the wisdom of crowds—turns out to be one of the most powerful techniques in machine learning.</p>
+<p>By the end of this module, you'll understand two major ensemble paradigms: <strong>bagging</strong> (where Random Forests come from) and <strong>boosting</strong> (where XGBoost comes from). These methods dominate tabular data competitions and are workhorses in industry.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Explain</strong> the intuition behind ensemble methods and why combining models outperforms individuals</li>
+<li><strong>Implement</strong> bagging (Random Forests) and boosting (XGBoost)</li>
+<li><strong>Interpret</strong> feature importance for business stakeholders</li>
+<li><strong>Select</strong> appropriate ensemble strategies based on problem characteristics</li>
+</ol>
+<hr />
+<h2 id="41-ensemble-learning-concepts">4.1 Ensemble Learning Concepts<a class="headerlink" href="#41-ensemble-learning-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="the-wisdom-of-crowds">The Wisdom of Crowds<a class="headerlink" href="#the-wisdom-of-crowds" title="Permanent link">&para;</a></h3>
+<p><strong>Galton's Ox Experiment (1907):</strong></p>
+<p>At a county fair, 787 people tried to guess the weight of an ox. Individual guesses varied wildly—some way too high, some way too low.</p>
+<ul>
+<li><strong>Median of all guesses: 1,207 lbs</strong></li>
+<li><strong>Actual weight: 1,198 lbs</strong> (&lt; 1% error!)</li>
+</ul>
+<p>How can a crowd of non-experts outperform individuals?</p>
+<p><strong>Key insight</strong>: Errors cancel out when they're uncorrelated. Some people guessed too high, some too low. The errors went in different directions. When you average, errors cancel and the true signal remains.</p>
+<p>This is exactly the principle behind ensemble machine learning.</p>
+<p><strong>Correlation matters</strong>: Ensembles work best with uncorrelated errors, but help even with partially correlated errors. If individual models have variance σ² and correlation ρ between errors, ensemble variance is ρσ² + (1-ρ)σ²/n. With perfect independence (ρ=0), variance drops as 1/n. With perfect correlation (ρ=1), averaging doesn't help. In practice, even 50% correlation provides substantial benefit.</p>
+<h3 id="how-ensembles-improve-predictions">How Ensembles Improve Predictions<a class="headerlink" href="#how-ensembles-improve-predictions" title="Permanent link">&para;</a></h3>
+<p><strong>Variance Reduction (Bagging):</strong>
+- Single decision trees are high-variance estimators
+- Small changes in training data → very different trees
+- Averaging multiple trees reduces instability
+- Mathematically: <span class="arithmatex">\(Var(average) = Var(individual) / n\)</span> when predictions are uncorrelated</p>
+<p><strong>Bias Reduction (Boosting):</strong>
+- Each new model focuses on errors of previous models
+- The ensemble gradually learns patterns individual weak learners missed
+- Sequential learning reduces systematic error</p>
+<h3 id="model-diversity-is-critical">Model Diversity is Critical<a class="headerlink" href="#model-diversity-is-critical" title="Permanent link">&para;</a></h3>
+<p><strong>Ensembles only help if the models are different!</strong></p>
+<p>If all models make the same mistakes, averaging doesn't help. Think: if you ask 787 people the same leading question and they all guess the same wrong answer, the median is still wrong.</p>
+<p><strong>How ensemble methods create diversity:</strong>
+- Random Forests: Random sampling of data AND features
+- Boosting: Sequential focus on different examples
+- Different algorithms: Different inductive biases (heterogeneous ensembles)</p>
+<p><strong>Heterogeneous ensembles</strong> combine completely different algorithms (neural network + decision tree + logistic regression). Different algorithms have different inductive biases, making them unlikely to make the same mistakes. The Netflix Prize winning solution combined 107 different models.</p>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"More models always means better results"</td>
+<td>Diminishing returns kick in quickly. 1 → 10 trees helps a lot; 100 → 1000 helps little.</td>
+</tr>
+<tr>
+<td>"Ensembles are always better than single models"</td>
+<td>For simple problems or when interpretability is paramount, single models may be preferable.</td>
+</tr>
+<tr>
+<td>"You need sophisticated models in your ensemble"</td>
+<td>Ensembles of simple models (shallow trees, stumps) can be remarkably effective.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="42-bagging-methods">4.2 Bagging Methods<a class="headerlink" href="#42-bagging-methods" title="Permanent link">&para;</a></h2>
+<h3 id="three-components-random-forest">Three Components: Random Forest<a class="headerlink" href="#three-components-random-forest" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Random Forest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision Model</strong></td>
+<td>Ensemble of decision trees — each tree votes, majority wins</td>
+</tr>
+<tr>
+<td><strong>Quality Measure</strong></td>
+<td>Gini/entropy for individual trees; OOB error for ensemble</td>
+</tr>
+<tr>
+<td><strong>Update Method</strong></td>
+<td>Independent parallel training — no iteration between trees</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight</strong>: Random Forest doesn't "update" traditionally. Each tree trains independently on a bootstrap sample. Learning happens through aggregation—the wisdom of crowds.</p>
+<h3 id="bootstrap-aggregating-bagging">Bootstrap Aggregating (Bagging)<a class="headerlink" href="#bootstrap-aggregating-bagging" title="Permanent link">&para;</a></h3>
+<p><strong>Algorithm:</strong></p>
+<ol>
+<li><strong>Create B bootstrap samples</strong> (sample with replacement)</li>
+<li>Each sample same size as original data</li>
+<li>Some observations appear multiple times, some not at all</li>
+<li>
+<p>~63.2% unique observations per sample</p>
+</li>
+<li>
+<p><strong>Train a separate model on each sample</strong></p>
+</li>
+<li>
+<p><strong>Aggregate predictions:</strong></p>
+</li>
+<li>Regression: Average</li>
+<li>Classification: Majority vote</li>
+</ol>
+<p><strong>Why ~63.2%?</strong> When sampling n observations with replacement from n, the probability any specific row is never selected is:</p>
+<div class="arithmatex">\[(1 - \frac{1}{n})^n \approx e^{-1} \approx 0.368\]</div>
+<p>So ~36.8% are left out ("out-of-bag"), meaning ~63.2% are included.</p>
+<p><strong>Why replacement?</strong> Without replacement at the same size, you'd get identical datasets. With replacement: some observations appear multiple times (emphasized), some don't appear (~36.8%, providing OOB validation), and different trees emphasize different observations—creating diversity. Bootstrap sampling approximates drawing fresh samples from the true population.</p>
+<h3 id="random-forests-double-randomness">Random Forests: Double Randomness<a class="headerlink" href="#random-forests-double-randomness" title="Permanent link">&para;</a></h3>
+<p>Random Forests extend bagging with <strong>two sources of randomness</strong>:</p>
+<ol>
+<li>
+<p><strong>Row sampling</strong> (from bagging): Each tree gets a bootstrap sample</p>
+</li>
+<li>
+<p><strong>Feature sampling</strong> (unique to RF): At each split, consider only a random subset</p>
+</li>
+<li>Default: <span class="arithmatex">\(\sqrt{d}\)</span> features for classification (where d = total features)</li>
+</ol>
+<p><strong>Why feature sampling matters:</strong></p>
+<p>Imagine one incredibly predictive feature (credit score for loan default). Without feature sampling, every tree uses it as the root split. All trees become highly correlated.</p>
+<p>With feature sampling, each split considers a random subset. Sometimes credit score isn't available. The tree finds other splits. This creates diversity.</p>
+<p><strong>The tradeoff</strong>: Ignoring the best feature sometimes hurts individual trees (higher bias), but trees become more diverse (lower correlation). The ensemble variance formula shows reducing correlation (ρ) often helps more than the slight increase in individual variance (σ²). Random Forests typically outperform bagged trees precisely because of this tradeoff. The <code>max_features</code> hyperparameter controls this—default √d is a good starting point.</p>
+<h3 id="why-bagging-reduces-overfitting">Why Bagging Reduces Overfitting<a class="headerlink" href="#why-bagging-reduces-overfitting" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A single deep tree overfits to specific patterns</li>
+<li>Each tree in the forest also overfits, but to DIFFERENT patterns</li>
+<li>When we average, idiosyncratic overfitting cancels out</li>
+<li>True signal remains (all trees agree on it)</li>
+</ul>
+<p><strong>The ensemble variance formula:</strong></p>
+<div class="arithmatex">\[Var(ensemble) = \rho\sigma^2 + \frac{(1-\rho)\sigma^2}{n}\]</div>
+<p>Where:
+- <span class="arithmatex">\(\sigma^2\)</span> = variance of individual tree predictions
+- <span class="arithmatex">\(\rho\)</span> = average correlation between trees (0 = independent, 1 = identical)
+- <span class="arithmatex">\(n\)</span> = number of trees</p>
+<p><strong>Reading this formula:</strong>
+- First term (<span class="arithmatex">\(\rho\sigma^2\)</span>): Irreducible variance from correlation
+- Second term: Shrinks as you add trees</p>
+<p><strong>Key insight:</strong> Lower correlation between trees = better ensemble. Feature sampling specifically reduces <span class="arithmatex">\(\rho\)</span>.</p>
+<p><strong>Number of trees</strong>: 100-500 trees usually sufficient. Plot OOB error vs. n_estimators—it decreases rapidly then flattens. Unlike boosting, more RF trees never hurt performance; they just stop helping. More trees mean more memory and slower inference, so balance accuracy against cost.</p>
+<h3 id="feature-importance">Feature Importance<a class="headerlink" href="#feature-importance" title="Permanent link">&para;</a></h3>
+<p><strong>Mean Decrease in Impurity (MDI):</strong>
+- Sum of impurity decreases from splits using each feature, averaged across trees
+- Fast to compute
+- Can favor high-cardinality features</p>
+<p><strong>Permutation Importance:</strong>
+- Shuffle each feature and measure accuracy decrease
+- More reliable, slower
+- Preferred for stakeholder communication</p>
+<p><strong>Important caveat</strong>: Importance ≠ direction of effect! Importance tells you which features the model relies on, not HOW they affect predictions. For that, use SHAP values (Module 9).</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># OOB score (free validation!)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OOB Accuracy: </span><span class="si">{</span><span class="n">rf</span><span class="o">.</span><span class="n">oob_score_</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1"># MDI importance (fast)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">importance_mdi</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">feature_importances_</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># Permutation importance (more reliable)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="n">perm_imp</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="out-of-bag-oob-error">Out-of-Bag (OOB) Error<a class="headerlink" href="#out-of-bag-oob-error" title="Permanent link">&para;</a></h3>
+<p>Each bootstrap sample leaves out ~36.8% of observations. These "out-of-bag" samples provide free validation:</p>
+<ul>
+<li>For each observation, predict using only trees that didn't train on it</li>
+<li>OOB error ≈ cross-validation error, but FREE!</li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">oob_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OOB Accuracy: </span><span class="si">{</span><span class="n">rf</span><span class="o">.</span><span class="n">oob_score_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Random Forest can't overfit"</td>
+<td>It can! Deep trees with too few estimators still overfit. Tuning on test set causes overfitting to that.</td>
+</tr>
+<tr>
+<td>"More trees is always better"</td>
+<td>Diminishing returns. 100-500 usually sufficient.</td>
+</tr>
+<tr>
+<td>"Random Forest is a black box"</td>
+<td>Feature importance and SHAP make it reasonably interpretable.</td>
+</tr>
+<tr>
+<td>"Feature importance = feature effect"</td>
+<td>Importance shows reliance, not direction of effect.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="43-boosting-methods">4.3 Boosting Methods<a class="headerlink" href="#43-boosting-methods" title="Permanent link">&para;</a></h2>
+<h3 id="three-components-gradient-boosting">Three Components: Gradient Boosting<a class="headerlink" href="#three-components-gradient-boosting" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Gradient Boosting (XGBoost)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision Model</strong></td>
+<td>Sequential ensemble — sum of many shallow trees</td>
+</tr>
+<tr>
+<td><strong>Quality Measure</strong></td>
+<td>Any differentiable loss + regularization</td>
+</tr>
+<tr>
+<td><strong>Update Method</strong></td>
+<td>Gradient descent in function space — each tree corrects previous errors</td>
+</tr>
+</tbody>
+</table>
+<p>The update method is fascinating: instead of updating parameters, we add new functions (trees). Each tree predicts the negative gradient (residuals).</p>
+<h3 id="the-boosting-philosophy">The Boosting Philosophy<a class="headerlink" href="#the-boosting-philosophy" title="Permanent link">&para;</a></h3>
+<p>Build models sequentially, where each new model focuses on mistakes of previous ones.</p>
+<table>
+<thead>
+<tr>
+<th>Bagging</th>
+<th>Boosting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parallel (independent trees)</td>
+<td>Sequential (dependent trees)</td>
+</tr>
+<tr>
+<td>Reduces variance</td>
+<td>Reduces bias (and variance)</td>
+</tr>
+<tr>
+<td>Deep trees</td>
+<td>Shallow trees typical</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Visual metaphors:</strong>
+- Bagging: Committee of experts who work independently and vote
+- Boosting: Relay team where each runner covers for previous weaknesses</p>
+<h3 id="adaboost-adaptive-boosting">AdaBoost: Adaptive Boosting<a class="headerlink" href="#adaboost-adaptive-boosting" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Start with equal weights for all training examples</li>
+<li>Train a weak learner (often a "stump"—one split)</li>
+<li>Identify misclassified examples</li>
+<li>Increase weights on misclassified examples</li>
+<li>Train next weak learner on reweighted data</li>
+<li>Repeat</li>
+</ol>
+<p><strong>Key insight</strong>: Each subsequent learner specializes in hard examples previous learners got wrong.</p>
+<p><strong>Boosting and outliers</strong>: Boosting can obsess over mislabeled or impossible-to-fit examples. Mitigation: (1) <code>subsample</code> (0.8) so outliers don't appear every round, (2) lower learning rate to limit per-iteration damage, (3) regularization (<code>reg_alpha</code>, <code>reg_lambda</code>) to prevent extreme predictions, (4) early stopping before overfitting to noise. Random Forests are more robust because outliers only affect ~63% of trees and no tree specifically focuses on them.</p>
+<h3 id="gradient-boosting-machines">Gradient Boosting Machines<a class="headerlink" href="#gradient-boosting-machines" title="Permanent link">&para;</a></h3>
+<p><strong>Core innovation</strong>: Fit each new tree to the residuals (errors).</p>
+<ol>
+<li>Make initial prediction (often the mean)</li>
+<li>Calculate residuals: <span class="arithmatex">\(actual - predicted\)</span></li>
+<li>Fit a tree to predict the residuals</li>
+<li>Add this tree's predictions (with learning rate)</li>
+<li>Calculate new residuals</li>
+<li>Repeat</li>
+</ol>
+<p><strong>Why "gradient"?</strong> For MSE loss:</p>
+<div class="arithmatex">\[\frac{\partial L}{\partial \hat{y}} = -(y - \hat{y}) = -\text{residual}\]</div>
+<p>The residual IS the negative gradient of the loss. When we fit trees to residuals, we're following the gradient in function space.</p>
+<p><strong>Gradient in function space</strong>: Normal gradient descent optimizes parameters (adjust θ). Gradient boosting optimizes functions (add a new tree). For squared error, the negative gradient is simply the residual. Fitting a tree to residuals approximates "what should I add to reduce error?" The learning rate works like in gradient descent—taking fractional steps (0.1 × tree_prediction) prevents overshooting. So: F_new(x) = F_old(x) + learning_rate × new_tree(x). Each tree is a step in function space toward lower loss.</p>
+<h3 id="key-boosting-hyperparameters">Key Boosting Hyperparameters<a class="headerlink" href="#key-boosting-hyperparameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n_estimators</code></td>
+<td>More → more capacity, but overfit risk</td>
+</tr>
+<tr>
+<td><code>learning_rate</code></td>
+<td>Smaller → need more trees, often better</td>
+</tr>
+<tr>
+<td><code>max_depth</code></td>
+<td>Usually 3-8 (much shallower than RF)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trade-off</strong>: Lower learning rate + more trees often gives best results but takes longer.</p>
+<p><strong>Tree depth difference:</strong>
+- Random Forest: Deep, fully-grown trees (low bias, high variance). Averaging reduces variance.
+- Boosting: Shallow trees (high bias). Sequential correction reduces bias.</p>
+<h3 id="xgboost-the-competition-champion">XGBoost: The Competition Champion<a class="headerlink" href="#xgboost-the-competition-champion" title="Permanent link">&para;</a></h3>
+<p>XGBoost adds optimizations that make it dominant:</p>
+<ol>
+<li><strong>Regularization</strong>: L1/L2 penalties on leaf weights</li>
+<li><strong>Parallel processing</strong>: Split evaluation parallelized within trees</li>
+<li><strong>Missing value handling</strong>: Learns optimal direction for missing values</li>
+<li><strong>Histogram-based splitting</strong>: Bins features for speed</li>
+</ol>
+<p><strong>Why it dominates</strong>: Won more Kaggle competitions than any other algorithm. Widely adopted in finance, insurance, tech.</p>
+<p><strong>When Random Forest is better</strong>: (1) Noisy labels—RF more robust, noise doesn't compound; (2) Limited tuning time—RF works well with defaults; (3) Parallelization—RF trees train independently; (4) Small datasets—boosting can overfit quickly. A well-tuned XGBoost beats a well-tuned RF, but default RF often beats default XGBoost. In many real-world scenarios, the difference is 1-2%.</p>
+<h3 id="xgboost-with-early-stopping">XGBoost with Early Stopping<a class="headerlink" href="#xgboost-with-early-stopping" title="Permanent link">&para;</a></h3>
+<p><strong>Always use early stopping with boosting!</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">xgboost</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xgb</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">xgb_model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">reg_alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">reg_lambda</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">xgb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">eval_set</span><span class="o">=</span><span class="p">[(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">)],</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># Stop if no improvement for 10 rounds</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">)</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best iteration: </span><span class="si">{</span><span class="n">xgb_model</span><span class="o">.</span><span class="n">best_iteration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Without early stopping, boosting overfits. With it, training stops when validation plateaus.</p>
+<p><strong>Why early stopping beats fixed n_estimators</strong>: The optimal number depends on learning rate, tree depth, data complexity, and sample size—a fixed number can't adapt. Set a large n_estimators as an upper limit, monitor validation loss, stop when no improvement for N consecutive rounds. The model finds its own stopping point, works with any learning rate, and prevents overfitting automatically. Always use a separate validation set for early stopping—not your final test set.</p>
+<h3 id="lightgbm-and-catboost">LightGBM and CatBoost<a class="headerlink" href="#lightgbm-and-catboost" title="Permanent link">&para;</a></h3>
+<p><strong>LightGBM:</strong>
+- Even faster than XGBoost
+- Histogram-based splitting
+- Great for very large datasets</p>
+<p><strong>CatBoost:</strong>
+- Excellent categorical feature handling
+- No one-hot encoding needed
+- Often works well with defaults</p>
+<p><strong>Rule of thumb</strong>: Start with XGBoost. Try LightGBM for very large data. Try CatBoost for many categorical features.</p>
+<h3 id="bagging-vs-boosting-when-to-use-each">Bagging vs Boosting: When to Use Each<a class="headerlink" href="#bagging-vs-boosting-when-to-use-each" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High-variance (deep trees)</td>
+<td>Bagging (RF)</td>
+</tr>
+<tr>
+<td>High-bias (shallow trees)</td>
+<td>Boosting</td>
+</tr>
+<tr>
+<td>Fast training needed</td>
+<td>Bagging (parallelizable)</td>
+</tr>
+<tr>
+<td>Best accuracy needed</td>
+<td>Boosting (often wins)</td>
+</tr>
+<tr>
+<td>Noisy labels</td>
+<td>Bagging (more robust)</td>
+</tr>
+<tr>
+<td>Need interpretability</td>
+<td>Random Forest</td>
+</tr>
+</tbody>
+</table>
+<h3 id="common-misconceptions_2">Common Misconceptions<a class="headerlink" href="#common-misconceptions_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"XGBoost is always best"</td>
+<td>No Free Lunch. Linear models beat it on linear data. Neural networks beat it on images/text.</td>
+</tr>
+<tr>
+<td>"Boosting can't overfit"</td>
+<td>Very much can! Use early stopping.</td>
+</tr>
+<tr>
+<td>"More boosting rounds = better"</td>
+<td>Unlike RF, more rounds increases overfit risk.</td>
+</tr>
+<tr>
+<td>"XGBoost, LightGBM, CatBoost are completely different"</td>
+<td>All gradient boosting variants. Similar core ideas.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="44-other-ensemble-techniques">4.4 Other Ensemble Techniques<a class="headerlink" href="#44-other-ensemble-techniques" title="Permanent link">&para;</a></h2>
+<h3 id="stacking">Stacking<a class="headerlink" href="#stacking" title="Permanent link">&para;</a></h3>
+<p>Use model predictions as features for a "meta-learner."</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Level 0:   RF_pred    XGB_pred    LR_pred
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>              ↓           ↓          ↓
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Level 1:     Meta-model (e.g., Logistic Regression)
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                         ↓
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                  Final Prediction
+</span></code></pre></div>
+<p><strong>How it works:</strong>
+1. Train several level-0 models (RF, XGBoost, logistic regression)
+2. Generate predictions using cross-validation (out-of-fold)
+3. Use predictions as features for level-1 meta-model
+4. Meta-model learns which base models to trust</p>
+<p><strong>Critical</strong>: Must use out-of-fold predictions to avoid leakage!</p>
+<p><strong>Why out-of-fold matters:</strong></p>
+<p>If you train RF on all training data and use its predictions on that same data as meta-features, RF makes artificially confident predictions (it's seen those examples). This won't generalize.</p>
+<p><strong>Correct approach:</strong>
+1. Split into K folds
+2. For fold 1: Train on folds 2-5, predict fold 1
+3. For fold 2: Train on folds 1,3-5, predict fold 2
+4. Continue for all folds
+5. Meta-model trains on these honest predictions</p>
+<p><strong>Multi-level stacking</strong>: Going deeper is possible but rarely worthwhile. Two levels is usually sufficient (Netflix Prize used two). Each additional level requires proper out-of-fold predictions (complex bookkeeping), increases overfitting risk, and slows inference. In production, a single well-tuned XGBoost or simple two-level stack is almost always preferred.</p>
+<h3 id="voting-classifiers">Voting Classifiers<a class="headerlink" href="#voting-classifiers" title="Permanent link">&para;</a></h3>
+<p>Simpler than stacking: combine predictions directly.</p>
+<p><strong>Hard voting</strong>: Each model votes; majority wins.</p>
+<p><strong>Soft voting</strong>: Average probability estimates; pick highest.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Model 1: P(A)=0.7, P(B)=0.3</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Model 2: P(A)=0.4, P(B)=0.6</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Model 3: P(A)=0.8, P(B)=0.2</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Average: P(A)=0.63 → Class A</span>
+</span></code></pre></div>
+<p><strong>Soft voting usually performs better</strong> (uses more information).</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">VotingClassifier</span><span class="p">,</span> <span class="n">StackingClassifier</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Soft Voting</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">voting_clf</span> <span class="o">=</span> <span class="n">VotingClassifier</span><span class="p">(</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">estimators</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)),</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)),</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">())</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="p">],</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">voting</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># Stacking</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">stacking_clf</span> <span class="o">=</span> <span class="n">StackingClassifier</span><span class="p">(</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">estimators</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>        <span class="p">(</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)),</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="p">(</span><span class="s1">&#39;gb&#39;</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="p">],</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="n">final_estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    <span class="n">cv</span><span class="o">=</span><span class="mi">5</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="when-to-use-each-approach">When to Use Each Approach<a class="headerlink" href="#when-to-use-each-approach" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Use When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple voting</td>
+<td>Models roughly equal; quick solution</td>
+</tr>
+<tr>
+<td>Weighted voting</td>
+<td>Some models clearly better</td>
+</tr>
+<tr>
+<td>Stacking</td>
+<td>Time for complexity; competition setting</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Avoid sophisticated ensembles when:</strong>
+- Explainability is crucial
+- Fast inference needed
+- Limited compute</p>
+<h3 id="common-misconceptions_3">Common Misconceptions<a class="headerlink" href="#common-misconceptions_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Stacking always improves performance"</td>
+<td>If base models are highly correlated, stacking adds complexity without benefit.</td>
+</tr>
+<tr>
+<td>"More diverse base models = better"</td>
+<td>Diversity helps, but models still need to be individually competent.</td>
+</tr>
+<tr>
+<td>"Stacking is just averaging with extra steps"</td>
+<td>Meta-learner can learn complex patterns like "trust RF for certain input ranges."</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Why does the wisdom of crowds work? Under what conditions would it fail?</p>
+</li>
+<li>
+<p>A colleague says Random Forest can never overfit. How would you respond?</p>
+</li>
+<li>
+<p>Why sample features at each split rather than once per tree?</p>
+</li>
+<li>
+<p>When might boosting overfit more easily than bagging? What would you adjust?</p>
+</li>
+<li>
+<p>A data scientist says they always use XGBoost because "it wins Kaggle." What's your response?</p>
+</li>
+<li>
+<p>You have 5 models with accuracies 82%, 81%, 79%, 78%, 75%. Would you ensemble all 5? Why or why not?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Derive why ~63.2% of observations appear in each bootstrap sample</p>
+</li>
+<li>
+<p>If you have 100 features in a classification problem, how many are considered at each split in Random Forest (default)?</p>
+</li>
+<li>
+<p>Explain why Random Forest feature importance might differ from permutation importance</p>
+</li>
+<li>
+<p>Draw a diagram showing how 5 stumps combine in AdaBoost vs how 5 shallow trees combine in Gradient Boosting</p>
+</li>
+<li>
+<p>You train XGBoost without early stopping and see training accuracy at 99% but test accuracy at 75%. Diagnose and fix.</p>
+</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 4:</strong></p>
+<ol>
+<li>
+<p><strong>Ensembles</strong> work by combining diverse models—errors cancel out</p>
+</li>
+<li>
+<p><strong>Bagging</strong> (Random Forests) reduces variance through averaging independent trees</p>
+</li>
+<li>
+<p><strong>Boosting</strong> (XGBoost) reduces bias through sequential learning from errors</p>
+</li>
+<li>
+<p><strong>Feature importance</strong> shows predictive power, not effect direction</p>
+</li>
+<li>
+<p><strong>Early stopping</strong> is essential for boosting methods</p>
+</li>
+<li>
+<p><strong>Choose wisely</strong>: Random Forest for robustness, XGBoost for accuracy</p>
+</li>
+</ol>
+<hr />
+<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>In Module 5, we tackle <strong>Unsupervised Learning</strong>:
+- Clustering (K-Means, hierarchical)
+- Dimensionality reduction (PCA)
+- Finding structure without labels</p>
+<p>So far, we've had a target variable to predict. In unsupervised learning, there's no target—we're discovering hidden patterns in the data.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

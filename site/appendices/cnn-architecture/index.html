@@ -1,0 +1,2278 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/appendices/cnn-architecture/">
+      
+      
+        <link rel="prev" href="../universal-approximators/">
+      
+      
+        <link rel="next" href="../transformer-architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>CNN Architecture - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deep-dive-cnn-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CNN Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-parameter-explosion-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Parameter Explosion Problem
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Parameter Explosion Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-fully-connected-networks-fail-for-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Fully Connected Networks Fail for Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-problems-this-creates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Problems This Creates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-principles-that-save-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Three Principles That Save Parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Three Principles That Save Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principle-1-local-connectivity-sparse-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 1: Local Connectivity (Sparse Connections)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principle-2-weight-sharing-translation-equivariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 2: Weight Sharing (Translation Equivariance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principle-3-hierarchical-feature-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 3: Hierarchical Feature Learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-savings-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Savings Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Savings Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cnn-architecture-vgg-16-style-simplified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CNN Architecture (VGG-16 style, simplified)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-convolution-works-for-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Convolution Works for Images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Convolution Works for Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#property-1-spatial-locality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 1: Spatial Locality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-2-stationarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 2: Stationarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-3-compositionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 3: Compositionality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-convolution-doesnt-work-well" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Convolution Doesn't Work Well
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-convolution-operation-in-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Convolution Operation In-Depth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Convolution Operation In-Depth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sliding-window-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sliding Window Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concrete Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-size-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Size Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#annotated-nnconv2d-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotated nn.Conv2d Walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Annotated nn.Conv2d Walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-the-weight-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding the Weight Tensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-parameter-sharing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Parameter Sharing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pooling-trading-resolution-for-invariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling: Trading Resolution for Invariance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pooling: Trading Resolution for Invariance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-max-pooling-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Max Pooling Does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-max-pooling-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Max Pooling Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling-vs-stride-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling vs Stride Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-parameter-explosion-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Parameter Explosion Problem
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Parameter Explosion Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-fully-connected-networks-fail-for-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Fully Connected Networks Fail for Images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-problems-this-creates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Problems This Creates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-principles-that-save-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Three Principles That Save Parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Three Principles That Save Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principle-1-local-connectivity-sparse-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 1: Local Connectivity (Sparse Connections)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principle-2-weight-sharing-translation-equivariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 2: Weight Sharing (Translation Equivariance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principle-3-hierarchical-feature-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principle 3: Hierarchical Feature Learning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-savings-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Savings Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Savings Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cnn-architecture-vgg-16-style-simplified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CNN Architecture (VGG-16 style, simplified)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-convolution-works-for-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Convolution Works for Images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Convolution Works for Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#property-1-spatial-locality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 1: Spatial Locality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-2-stationarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 2: Stationarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-3-compositionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Property 3: Compositionality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-convolution-doesnt-work-well" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Convolution Doesn't Work Well
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-convolution-operation-in-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Convolution Operation In-Depth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Convolution Operation In-Depth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sliding-window-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sliding Window Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concrete Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-size-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output Size Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#annotated-nnconv2d-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotated nn.Conv2d Walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Annotated nn.Conv2d Walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-the-weight-tensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding the Weight Tensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-parameter-sharing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Parameter Sharing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pooling-trading-resolution-for-invariance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling: Trading Resolution for Invariance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pooling: Trading Resolution for Invariance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-max-pooling-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Max Pooling Does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-max-pooling-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Max Pooling Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling-vs-stride-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pooling vs Stride Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="deep-dive-cnn-architecture">Deep Dive: CNN Architecture<a class="headerlink" href="#deep-dive-cnn-architecture" title="Permanent link">&para;</a></h1>
+<p><em>Extends Module 7: Computer Vision &amp; CNNs</em></p>
+<hr />
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>In Module 7, we learned that CNNs are dramatically more parameter-efficient than fully connected networks for images. But <em>why</em>? What makes convolution so special?</p>
+<p>This deep dive explores the three principles that make CNNs work, walks through the convolution operation with concrete numbers, and shows exactly where parameters live in PyTorch's <code>nn.Conv2d</code>.</p>
+<p>By the end, you'll understand not just <em>how</em> CNNs work, but <em>why</em> they're designed the way they are.</p>
+<p><strong>Why weren't CNNs always used?</strong> CNNs were discovered early (LeNet, 1989) but required computational resources that didn't exist. The 2012 AlexNet breakthrough combined sufficient data (ImageNet), compute (GPUs), and architecture improvements (ReLU, dropout). CNNs existed but weren't practical; FC networks and hand-crafted features (SIFT, HOG) were what people could actually train.</p>
+<hr />
+<h2 id="the-parameter-explosion-problem">The Parameter Explosion Problem<a class="headerlink" href="#the-parameter-explosion-problem" title="Permanent link">&para;</a></h2>
+<h3 id="why-fully-connected-networks-fail-for-images">Why Fully Connected Networks Fail for Images<a class="headerlink" href="#why-fully-connected-networks-fail-for-images" title="Permanent link">&para;</a></h3>
+<p>Consider a standard image classification task:
+- <strong>Input</strong>: 224 × 224 RGB image
+- <strong>Goal</strong>: Classify into 1000 categories</p>
+<p>If we flatten the image and connect to a hidden layer:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Input pixels: 224 × 224 × 3 = 150,528 features
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Hidden layer: 1,000 neurons
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Parameters: 150,528 × 1,000 = 150,528,000 (just the first layer!)
+</span></code></pre></div>
+<p><strong>That's 150 million parameters for ONE layer!</strong></p>
+<p>A typical network might have several hidden layers:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Input Size</th>
+<th>Output Size</th>
+<th>Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FC1</td>
+<td>150,528</td>
+<td>4,096</td>
+<td>616,562,688</td>
+</tr>
+<tr>
+<td>FC2</td>
+<td>4,096</td>
+<td>4,096</td>
+<td>16,781,312</td>
+</tr>
+<tr>
+<td>FC3</td>
+<td>4,096</td>
+<td>1,000</td>
+<td>4,097,000</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td><strong>637,441,000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>637 million parameters</strong> just to process a 224×224 image!</p>
+<h3 id="the-problems-this-creates">The Problems This Creates<a class="headerlink" href="#the-problems-this-creates" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Memory</strong>: Each parameter is 4 bytes (float32)</li>
+<li>637M params × 4 bytes = 2.5 GB just for weights</li>
+<li>
+<p>Plus gradients, optimizer states: 10+ GB</p>
+</li>
+<li>
+<p><strong>Overfitting</strong>: More parameters than training examples</p>
+</li>
+<li>ImageNet has 1.2M training images</li>
+<li>
+<p>637M parameters would massively overfit</p>
+</li>
+<li>
+<p><strong>Computation</strong>: Each forward pass multiplies huge matrices</p>
+</li>
+<li>
+<p>Billions of multiply-add operations per image</p>
+</li>
+<li>
+<p><strong>No spatial understanding</strong>:</p>
+</li>
+<li>Pixel (0,0) and pixel (223,223) are equally "distant"</li>
+<li>A cat in the corner looks completely different than a cat in the center</li>
+</ol>
+<hr />
+<h2 id="the-three-principles-that-save-parameters">The Three Principles That Save Parameters<a class="headerlink" href="#the-three-principles-that-save-parameters" title="Permanent link">&para;</a></h2>
+<p>CNNs achieve <strong>99.9%+ parameter reduction</strong> through three key principles:</p>
+<h3 id="principle-1-local-connectivity-sparse-connections">Principle 1: Local Connectivity (Sparse Connections)<a class="headerlink" href="#principle-1-local-connectivity-sparse-connections" title="Permanent link">&para;</a></h3>
+<p><strong>The insight</strong>: Nearby pixels are related; distant pixels are less so.</p>
+<p>Instead of connecting every input pixel to every hidden neuron, each neuron only "sees" a small local region called the <strong>receptive field</strong>.</p>
+<p><strong>Connectivity Comparison:</strong></p>
+<p><strong>Fully Connected</strong>:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Every input pixel → Every hidden neuron
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Connections: 150,528 × 1,000 = 150,528,000
+</span></code></pre></div></p>
+<p><strong>Locally Connected</strong> (3×3 receptive field):
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Each hidden neuron sees only 3×3×3 = 27 input values
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Connections per neuron: 27
+</span></code></pre></div></p>
+<p><img alt="Local Connectivity" src="../../assets/deep_dive/local_connectivity.png" /></p>
+<p>This mirrors the visual cortex: neurons in V1 respond to small regions of the visual field. Hubel &amp; Wiesel won the Nobel Prize for discovering this.</p>
+<p><strong>Brain inspiration</strong>: CNNs were directly inspired by neuroscience—Hubel &amp; Wiesel showed visual cortex neurons respond to simple patterns in small regions. Other brain-inspired ideas: the neuron model (McCulloch-Pitts), ReLU (firing thresholds), dropout (neural noise), attention (selective focus). Caution warranted: backpropagation has no clear biological analog; transformers aren't obviously brain-like.</p>
+<h3 id="principle-2-weight-sharing-translation-equivariance">Principle 2: Weight Sharing (Translation Equivariance)<a class="headerlink" href="#principle-2-weight-sharing-translation-equivariance" title="Permanent link">&para;</a></h3>
+<p><strong>The insight</strong>: The same pattern can appear anywhere in an image.</p>
+<p>A "vertical edge detector" should work whether the edge is in the top-left or bottom-right. Why learn separate detectors for each position?</p>
+<p><strong>Without Weight Sharing</strong> (Locally Connected):</p>
+<p>If we had local connectivity but different weights at each position:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>For 224×224 output with 3×3 filters:
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Positions: 224 × 224 = 50,176
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Parameters per position: 3 × 3 × 3 = 27
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Total: 50,176 × 27 = 1,354,752 parameters (per filter)
+</span></code></pre></div>
+<p>Still a lot!</p>
+<p><strong>With Weight Sharing</strong> (Convolutional):</p>
+<p>The same 3×3×3 filter is applied at every position:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Parameters: 3 × 3 × 3 + 1 (bias) = 28 parameters (per filter)
+</span></code></pre></div>
+<p><strong>That's a 50,000× reduction!</strong></p>
+<p><strong>What This Enables: Translation Equivariance</strong></p>
+<p>If you shift the input, the output shifts by the same amount:
+$<span class="arithmatex">\(f(\text{shift}(x)) = \text{shift}(f(x))\)</span>$</p>
+<p>A cat detector fires whether the cat is at (10, 10) or (200, 200).</p>
+<h3 id="principle-3-hierarchical-feature-learning">Principle 3: Hierarchical Feature Learning<a class="headerlink" href="#principle-3-hierarchical-feature-learning" title="Permanent link">&para;</a></h3>
+<p><strong>The insight</strong>: Complex features are built from simpler ones.</p>
+<p>Through multiple layers, CNNs build a hierarchy:</p>
+<table>
+<thead>
+<tr>
+<th>Layer Depth</th>
+<th>Receptive Field</th>
+<th>What's Learned</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer 1</td>
+<td>3×3</td>
+<td>Edges, colors</td>
+<td>Horizontal line, blue patch</td>
+</tr>
+<tr>
+<td>Layer 2</td>
+<td>7×7</td>
+<td>Textures, corners</td>
+<td>Fur texture, eye corner</td>
+</tr>
+<tr>
+<td>Layer 3</td>
+<td>15×15</td>
+<td>Parts</td>
+<td>Eye, ear, nose</td>
+</tr>
+<tr>
+<td>Layer 4</td>
+<td>31×31</td>
+<td>Objects</td>
+<td>Cat face, dog face</td>
+</tr>
+<tr>
+<td>Layer 5</td>
+<td>63×63</td>
+<td>Scenes</td>
+<td>Cat on couch</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Effective Receptive Field Calculation:</strong></p>
+<p>For a network with L layers of K×K convolutions:</p>
+<div class="arithmatex">\[\text{Receptive Field} = 1 + L \times (K - 1)\]</div>
+<p>Example with 3×3 convolutions:
+- After 1 layer: 1 + 1×2 = 3×3
+- After 2 layers: 1 + 2×2 = 5×5
+- After 5 layers: 1 + 5×2 = 11×11
+- After 10 layers: 1 + 10×2 = 21×21</p>
+<p>With pooling (stride 2), receptive field grows much faster—each pooling layer doubles the effective receptive field.</p>
+<p><strong>Seeing the whole object</strong>: The calculation above is without pooling—practical networks reach 200+ pixel receptive fields via pooling. More importantly, the network doesn't need every neuron to see the whole object. Hierarchical structure means different neurons specialize at different scales. Global average pooling aggregates information across all positions, giving the classifier access to features detected anywhere.</p>
+<hr />
+<h2 id="the-savings-breakdown">The Savings Breakdown<a class="headerlink" href="#the-savings-breakdown" title="Permanent link">&para;</a></h2>
+<p>Let's compare a CNN to an equivalent fully connected network:</p>
+<h3 id="cnn-architecture-vgg-16-style-simplified">CNN Architecture (VGG-16 style, simplified)<a class="headerlink" href="#cnn-architecture-vgg-16-style-simplified" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Output Shape</th>
+<th>Parameters</th>
+<th>Calculation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input</td>
+<td>224×224×3</td>
+<td>0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Conv1 (3×3, 64)</td>
+<td>224×224×64</td>
+<td>1,792</td>
+<td>3×3×3×64 + 64</td>
+</tr>
+<tr>
+<td>Conv2 (3×3, 64)</td>
+<td>224×224×64</td>
+<td>36,928</td>
+<td>3×3×64×64 + 64</td>
+</tr>
+<tr>
+<td>MaxPool</td>
+<td>112×112×64</td>
+<td>0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>Flatten</td>
+<td>25,088</td>
+<td>0</td>
+<td>7×7×512</td>
+</tr>
+<tr>
+<td>FC1</td>
+<td>4,096</td>
+<td>102,764,544</td>
+<td>25,088×4,096 + 4,096</td>
+</tr>
+<tr>
+<td><strong>Conv layers total</strong></td>
+<td></td>
+<td><strong>~9.5M</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>FC layers total</strong></td>
+<td></td>
+<td><strong>~123M</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The convolution layers have <strong>~9.5 million parameters</strong> vs potential <strong>trillions</strong> for equivalent FC layers.</p>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Savings Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local Connectivity</td>
+<td>~150,000× (150,528 → ~27 connections)</td>
+</tr>
+<tr>
+<td>Weight Sharing</td>
+<td>~50,000× (one filter for all positions)</td>
+</tr>
+<tr>
+<td>Combined</td>
+<td><strong>~7,500,000,000×</strong> (billions)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="why-convolution-works-for-images">Why Convolution Works for Images<a class="headerlink" href="#why-convolution-works-for-images" title="Permanent link">&para;</a></h2>
+<h3 id="property-1-spatial-locality">Property 1: Spatial Locality<a class="headerlink" href="#property-1-spatial-locality" title="Permanent link">&para;</a></h3>
+<p><strong>Nearby pixels are statistically related</strong></p>
+<ul>
+<li>Adjacent pixels often have similar values (smooth regions)</li>
+<li>Edges are local phenomena (sharp transitions between neighbors)</li>
+<li>Texture is defined by local patterns</li>
+</ul>
+<p><strong>This justifies local connectivity</strong>: Most useful information is local.</p>
+<h3 id="property-2-stationarity">Property 2: Stationarity<a class="headerlink" href="#property-2-stationarity" title="Permanent link">&para;</a></h3>
+<p><strong>The same patterns appear throughout the image</strong></p>
+<ul>
+<li>Edges can occur anywhere</li>
+<li>Textures repeat across regions</li>
+<li>Objects can appear at any location</li>
+</ul>
+<p><strong>This justifies weight sharing</strong>: One detector works everywhere.</p>
+<h3 id="property-3-compositionality">Property 3: Compositionality<a class="headerlink" href="#property-3-compositionality" title="Permanent link">&para;</a></h3>
+<p><strong>Complex patterns are built from simpler ones</strong></p>
+<ul>
+<li>Eyes are made of edges, curves, and colors</li>
+<li>Faces are made of eyes, nose, mouth</li>
+<li>Scenes are made of objects</li>
+</ul>
+<p><strong>This justifies hierarchical layers</strong>: Build complexity gradually.</p>
+<h3 id="when-convolution-doesnt-work-well">When Convolution Doesn't Work Well<a class="headerlink" href="#when-convolution-doesnt-work-well" title="Permanent link">&para;</a></h3>
+<p>CNNs struggle when these properties don't hold:</p>
+<ol>
+<li><strong>Absolute position matters</strong>:</li>
+<li>Satellite imagery where "top" means north</li>
+<li>Document layouts where header is always at top</li>
+<li>
+<p>Solution: Add positional encoding or coordinates</p>
+</li>
+<li>
+<p><strong>Global context needed immediately</strong>:</p>
+</li>
+<li>Recognizing objects from single distinctive features</li>
+<li>Tasks requiring reasoning about entire image at once</li>
+<li>
+<p>Solution: Attention mechanisms, Vision Transformers</p>
+</li>
+<li>
+<p><strong>Non-grid data</strong>:</p>
+</li>
+<li>Graphs, point clouds, irregular meshes</li>
+<li>Solution: Graph neural networks, PointNet</li>
+</ol>
+<hr />
+<h2 id="the-convolution-operation-in-depth">The Convolution Operation In-Depth<a class="headerlink" href="#the-convolution-operation-in-depth" title="Permanent link">&para;</a></h2>
+<p>Let's trace through a convolution with concrete numbers.</p>
+<h3 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Input</strong>: 1 image, 3 channels (RGB), 8×8 pixels</li>
+<li>
+<p>Shape: <code>(1, 3, 8, 8)</code> - (batch, channels, height, width)</p>
+</li>
+<li>
+<p><strong>Filter</strong>: 1 filter, 3×3 kernel</p>
+</li>
+<li>
+<p>Shape: <code>(1, 3, 3, 3)</code> - (out_channels, in_channels, kernel_h, kernel_w)</p>
+</li>
+<li>
+<p><strong>Output</strong>: 1 feature map, 6×6</p>
+</li>
+<li>Shape: <code>(1, 1, 6, 6)</code> - (batch, out_channels, height, width)</li>
+</ul>
+<h3 id="the-sliding-window-process">The Sliding Window Process<a class="headerlink" href="#the-sliding-window-process" title="Permanent link">&para;</a></h3>
+<p>For each position (i, j) in the output:</p>
+<div class="arithmatex">\[\text{output}[0, 0, i, j] = \sum_{c=0}^{2} \sum_{m=0}^{2} \sum_{n=0}^{2} \text{filter}[0, c, m, n] \times \text{input}[0, c, i+m, j+n] + \text{bias}[0]\]</div>
+<h3 id="concrete-example">Concrete Example<a class="headerlink" href="#concrete-example" title="Permanent link">&para;</a></h3>
+<p>Let's compute one output value at position (0, 0):</p>
+<p><strong>Input patch</strong> (top-left 3×3 of each channel):
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Red channel:        Green channel:      Blue channel:
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│ 0.1 0.2 0.3 │     │ 0.4 0.5 0.6 │     │ 0.7 0.8 0.9 │
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│ 0.2 0.3 0.4 │     │ 0.5 0.6 0.7 │     │ 0.8 0.9 1.0 │
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ 0.3 0.4 0.5 │     │ 0.6 0.7 0.8 │     │ 0.9 1.0 1.1 │
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
+</span></code></pre></div></p>
+<p><strong>Filter weights</strong> (Sobel-like vertical edge detector):
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Red weights:        Green weights:      Blue weights:
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│ 2   0  -2   │     │ 2   0  -2   │     │ 2   0  -2   │
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
+</span></code></pre></div></p>
+<p><strong>Computation</strong>:
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Red channel contribution</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>       <span class="mf">0.2</span><span class="err">×</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>       <span class="mf">0.3</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="o">=</span> <span class="mf">0.1</span> <span class="o">-</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">-</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.5</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="o">=</span> <span class="o">-</span><span class="mf">0.8</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Similarly for green and blue...</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Total (sum across channels) + bias</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">green</span> <span class="o">+</span> <span class="n">blue</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.4</span>
+</span></code></pre></div></p>
+<p>The filter slides across all valid positions to fill the 6×6 output.</p>
+<h3 id="output-size-formula">Output Size Formula<a class="headerlink" href="#output-size-formula" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_size} + 2 \times \text{padding}}{\text{stride}} \right\rfloor + 1\]</div>
+<p>For our example:
+$<span class="arithmatex">\(\frac{8 - 3 + 2 \times 0}{1} + 1 = 6\)</span>$</p>
+<hr />
+<h2 id="annotated-nnconv2d-walkthrough">Annotated nn.Conv2d Walkthrough<a class="headerlink" href="#annotated-nnconv2d-walkthrough" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Create a convolutional layer</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># RGB input</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>    <span class="c1"># Number of filters (feature maps)</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># 3×3 filter</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>           <span class="c1"># Move 1 pixel at a time</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>          <span class="c1"># Add 1 pixel border of zeros</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="n">bias</span><span class="o">=</span><span class="kc">True</span>           <span class="c1"># Include bias term</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="c1"># WHERE THE PARAMETERS LIVE</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="c1"># Output: torch.Size([64, 3, 3, 3])</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Interpretation: [out_channels, in_channels, kernel_height, kernel_width]</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="c1"># - 64 different filters</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="c1"># - Each filter has 3 channels (one for R, G, B)</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="c1"># - Each channel is 3×3</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight parameters: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="c1"># Output: 1728</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="c1"># Calculation: 64 × 3 × 3 × 3 = 1,728</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bias shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="c1"># Output: torch.Size([64])</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="c1"># One bias per output channel (filter)</span>
+</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>
+</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total parameters: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">conv</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="c1"># Output: 1792</span>
+</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="c1"># = 1,728 (weights) + 64 (biases)</span>
+</span></code></pre></div>
+<h3 id="understanding-the-weight-tensor">Understanding the Weight Tensor<a class="headerlink" href="#understanding-the-weight-tensor" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Access filter 0 (first of 64 filters)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">filter_0</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3, 3]</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Filter 0&#39;s red channel weights</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">filter_0_red</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Filter 0&#39;s green channel weights</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">filter_0_green</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Filter 0&#39;s blue channel weights</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="n">filter_0_blue</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+</span></code></pre></div>
+<h3 id="visualizing-parameter-sharing">Visualizing Parameter Sharing<a class="headerlink" href="#visualizing-parameter-sharing" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># The SAME weights are used for EVERY spatial position</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># This is what makes CNNs parameter-efficient</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># These two output positions use the SAME filter weights:</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># y[0, 0, 0, 0] uses conv.weight[0] applied at position (0,0)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># y[0, 0, 5, 5] uses conv.weight[0] applied at position (5,5)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># Without weight sharing, we&#39;d need:</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># 64 filters × 8×8 positions × 3×3×3 weights = 884,736 parameters</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1"># With weight sharing:</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="c1"># 64 filters × 3×3×3 weights = 1,728 parameters</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># That&#39;s a 512× reduction!</span>
+</span></code></pre></div>
+<hr />
+<h2 id="pooling-trading-resolution-for-invariance">Pooling: Trading Resolution for Invariance<a class="headerlink" href="#pooling-trading-resolution-for-invariance" title="Permanent link">&para;</a></h2>
+<h3 id="what-max-pooling-does">What Max Pooling Does<a class="headerlink" href="#what-max-pooling-does" title="Permanent link">&para;</a></h3>
+<p><strong>Max pooling</strong> takes the maximum value in each patch:</p>
+<p><img alt="Max Pooling" src="../../assets/deep_dive/max_pooling.png" /></p>
+<h3 id="why-max-pooling-works">Why Max Pooling Works<a class="headerlink" href="#why-max-pooling-works" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Translation invariance</strong>: The feature's exact position within the pooling region doesn't matter</li>
+<li><strong>Dimensionality reduction</strong>: Halves spatial dimensions, reducing computation</li>
+<li><strong>Increased receptive field</strong>: Each pooled output sees a larger input region</li>
+<li><strong>Slight noise robustness</strong>: Small perturbations don't change the max</li>
+</ol>
+<h3 id="pooling-vs-stride-trade-off">Pooling vs Stride Trade-off<a class="headerlink" href="#pooling-vs-stride-trade-off" title="Permanent link">&para;</a></h3>
+<p>Modern networks often use <strong>strided convolutions</strong> instead of pooling:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Operation</th>
+<th>Parameters</th>
+<th>Learned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Max Pool</td>
+<td>Take max</td>
+<td>0</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Avg Pool</td>
+<td>Take mean</td>
+<td>0</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Strided Conv</td>
+<td>Conv with stride 2</td>
+<td>kernel² × channels²</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Strided convolution</strong> can learn what information to preserve, but requires more parameters.</p>
+<hr />
+<h2 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"CNNs learn the filters by hand"</td>
+<td>Filters are learned automatically through backpropagation, not designed by humans</td>
+</tr>
+<tr>
+<td>"More filters is always better"</td>
+<td>Diminishing returns; excess filters learn redundant or noise patterns</td>
+</tr>
+<tr>
+<td>"CNNs work on any image task"</td>
+<td>CNNs assume spatial locality and translation equivariance; they struggle when these don't hold</td>
+</tr>
+<tr>
+<td>"The first layer must have 3 input channels"</td>
+<td>Input channels match your data: 1 for grayscale, 3 for RGB, any number for multi-spectral</td>
+</tr>
+<tr>
+<td>"Pooling is necessary"</td>
+<td>Modern architectures often use strided convolutions instead</td>
+</tr>
+<tr>
+<td>"Deeper is always better"</td>
+<td>Without residual connections, very deep CNNs fail to train</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>If we didn't share weights across positions, how many parameters would a 3×3 conv layer have for a 224×224 image with 64 filters?</p>
+</li>
+<li>
+<p>Why might a CNN struggle with satellite imagery where "up" always means north?</p>
+</li>
+<li>
+<p>How does the receptive field grow through layers? Why does this matter?</p>
+</li>
+<li>
+<p>A 7×7 conv has 49 weights per channel. Two stacked 3×3 convs have only 18 weights but achieve the same receptive field. What's the trade-off?</p>
+</li>
+<li>
+<p>What happens if you set padding=0 with a 3×3 kernel on a 224×224 input?</p>
+</li>
+<li>
+<p>Why do we typically increase the number of filters as we go deeper while decreasing spatial size?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Calculate parameters for VGG-16 from scratch</p>
+</li>
+<li>
+<p>Compute output size for: input 64×64, kernel 5×5, stride 2, padding 2</p>
+</li>
+<li>
+<p>Design a CNN for 64×64 grayscale images with target receptive field of 32×32</p>
+</li>
+</ol>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><strong>Key takeaways:</strong></p>
+<ol>
+<li>
+<p><strong>Local connectivity</strong> reduces connections from millions to dozens per neuron</p>
+</li>
+<li>
+<p><strong>Weight sharing</strong> reduces parameters by 50,000× for a single filter</p>
+</li>
+<li>
+<p><strong>Hierarchical learning</strong> builds complex features from simple ones</p>
+</li>
+<li>
+<p>These principles work because images have <strong>spatial locality</strong>, <strong>stationarity</strong>, and <strong>compositionality</strong></p>
+</li>
+<li>
+<p>The total savings is on the order of <strong>billions of parameters</strong></p>
+</li>
+<li>
+<p>Understanding where parameters live helps you reason about model capacity and design</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

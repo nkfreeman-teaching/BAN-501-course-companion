@@ -1,0 +1,3015 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/modules/01-foundations/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../02-regression/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>1. Foundations of ML - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-1-foundations-of-machine-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              1. Foundations of ML
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-introduction-historical-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Introduction &amp; Historical Context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 Introduction &amp; Historical Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-aimldata-science-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The AI/ML/Data Science Landscape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historical Timeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Historical Timeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#early-years" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Years
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modern-era" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modern Era
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ml-task-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ML Task Categories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-applications-by-industry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Applications by Industry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-data-preparation-feature-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Data Preparation &amp; Feature Engineering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 Data Preparation &amp; Feature Engineering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-golden-rule-garbage-in-garbage-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Golden Rule: Garbage In, Garbage Out
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-data-quality-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Data Quality Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-data-exploration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Data Exploration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-missing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Missing Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-data-is-missing-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Data is Missing Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Scaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outlier Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-categorical-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoding Categorical Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-cardinal-rule-preventing-data-leakage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Cardinal Rule: Preventing Data Leakage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-model-evaluation-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Model Evaluation &amp; Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 Model Evaluation &amp; Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-evaluation-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Evaluation Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regression-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classification-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classification Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overfitting-vs-underfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overfitting vs Underfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bias-variance-tradeoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bias-Variance Tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-specific-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business-Specific Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-python-ecosystem-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Python Ecosystem Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 Python Ecosystem Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jupyter-notebooks-and-google-colab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jupyter Notebooks and Google Colab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marimo-notebooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        marimo Notebooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixi-package-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pixi Package Manager
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polars-essentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        polars Essentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-eda-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic EDA Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualization-with-matplotlibseaborn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualization with matplotlib/seaborn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-computing-and-cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Computing and CUDA
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-introduction-historical-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Introduction &amp; Historical Context
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 Introduction &amp; Historical Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-aimldata-science-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The AI/ML/Data Science Landscape
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historical Timeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Historical Timeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#early-years" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Years
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modern-era" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modern Era
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ml-task-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ML Task Categories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-applications-by-industry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business Applications by Industry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-data-preparation-feature-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Data Preparation &amp; Feature Engineering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 Data Preparation &amp; Feature Engineering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-golden-rule-garbage-in-garbage-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Golden Rule: Garbage In, Garbage Out
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-data-quality-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Data Quality Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-data-exploration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Data Exploration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-missing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Missing Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-data-is-missing-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Data is Missing Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Scaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outlier Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-categorical-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoding Categorical Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-cardinal-rule-preventing-data-leakage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Cardinal Rule: Preventing Data Leakage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-model-evaluation-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Model Evaluation &amp; Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 Model Evaluation &amp; Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-evaluation-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Evaluation Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regression-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regression Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classification-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classification Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overfitting-vs-underfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overfitting vs Underfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-bias-variance-tradeoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bias-Variance Tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#business-specific-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Business-Specific Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-misconceptions_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-python-ecosystem-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Python Ecosystem Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 Python Ecosystem Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jupyter-notebooks-and-google-colab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jupyter Notebooks and Google Colab
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marimo-notebooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        marimo Notebooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixi-package-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pixi Package Manager
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#polars-essentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        polars Essentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic-eda-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic EDA Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualization-with-matplotlibseaborn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualization with matplotlib/seaborn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-computing-and-cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Computing and CUDA
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-1-foundations-of-machine-learning">Module 1: Foundations of Machine Learning<a class="headerlink" href="#module-1-foundations-of-machine-learning" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>This foundational module establishes everything you'll use throughout the course. The vocabulary, the concepts, the data preparation skills, the evaluation methodology—all of it forms the bedrock of your machine learning practice.</p>
+<p>By the end of this module, you'll have a conceptual framework for understanding what machine learning actually is, how to prepare data for it, and critically, how to know whether your models are actually working. That last part—evaluation—is where most business ML projects go wrong, so we'll spend significant time there.</p>
+<p>Evaluation failures typically stem from three categories: <strong>data leakage</strong> (test set information inadvertently influences training), <strong>metric mismatch</strong> (optimizing for the wrong measure), and <strong>insufficient validation rigor</strong> (relying on a single train/test split). Teams focus on building models without equal rigor on proving they work—evaluation methodology should receive as much scrutiny as model architecture.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permanent link">&para;</a></h2>
+<p>By the end of this module, you should be able to:</p>
+<ol>
+<li><strong>Differentiate</strong> between AI, Machine Learning, Data Science, and related fields</li>
+<li><strong>Classify</strong> business problems into appropriate ML task categories (supervised, unsupervised, reinforcement)</li>
+<li><strong>Construct</strong> data preparation pipelines that prevent data leakage</li>
+<li><strong>Select</strong> appropriate evaluation metrics based on business context</li>
+<li><strong>Diagnose</strong> overfitting and underfitting using the bias-variance framework</li>
+</ol>
+<hr />
+<h2 id="11-introduction-historical-context">1.1 Introduction &amp; Historical Context<a class="headerlink" href="#11-introduction-historical-context" title="Permanent link">&para;</a></h2>
+<h3 id="the-aimldata-science-landscape">The AI/ML/Data Science Landscape<a class="headerlink" href="#the-aimldata-science-landscape" title="Permanent link">&para;</a></h3>
+<p>Understanding how these concepts relate to each other matters because these terms are thrown around loosely in industry, and you need to cut through the hype.</p>
+<p><img alt="ML Hierarchy" src="../../assets/module1/ml_hierarchy.png" /></p>
+<p>At the outermost level, we have <strong>Computer Science</strong>—the study of computation, information, and automation. More precisely, computer science is concerned with the theory, design, and application of algorithms: step-by-step procedures for solving problems and processing information.</p>
+<p>Within that sits <strong>Artificial Intelligence</strong>—machines that exhibit intelligent behavior. The term was coined in 1956, but the foundations go back further—Alan Turing's 1950 paper "Computing Machinery and Intelligence" proposed the Turing test: can a machine's responses be indistinguishable from a human's? AI is a broad umbrella that includes rule-based systems, expert systems, and machine learning.</p>
+<p>Inside AI, we have <strong>Machine Learning</strong>—systems that learn from data without being explicitly programmed. This is our focus for the course. The key distinction is <em>learning from data</em>. Instead of a human writing rules, the system discovers patterns from examples.</p>
+<p>And inside ML, we have <strong>Deep Learning</strong>—machine learning using neural networks with many layers. Deep learning has driven most of the recent AI breakthroughs, but it's just one approach within ML.</p>
+<p><strong>Data Science</strong> sits alongside and overlaps with all of these. Data Science is about extracting insights from data—it combines statistics, domain expertise, and programming. A data scientist might use ML, or might use traditional statistical methods, or might just create visualizations. It's about the goal (insights from data), not the method.</p>
+<p>In practice, these boundaries are fuzzy and a single project often spans multiple domains. A customer churn project might involve data science (exploratory analysis), machine learning (predictive model), and software engineering (deployment). The skills transfer across domains: wrangling data, building models, evaluating rigorously, and communicating effectively.</p>
+<h3 id="key-definitions">Key Definitions<a class="headerlink" href="#key-definitions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Artificial Intelligence</strong></td>
+<td>Machines that exhibit intelligence (broad umbrella)</td>
+</tr>
+<tr>
+<td><strong>Machine Learning</strong></td>
+<td>Systems that learn from data without being explicitly programmed</td>
+</tr>
+<tr>
+<td><strong>Deep Learning</strong></td>
+<td>ML using neural networks with many layers</td>
+</tr>
+<tr>
+<td><strong>Data Science</strong></td>
+<td>Extracting insights from data (may or may not use ML)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important nuance</strong>: These terms are used loosely in industry. Job postings for "AI Engineer" and "ML Engineer" and "Data Scientist" often describe the same role. Help yourself by understanding what people actually mean, not just what they say. When evaluating roles, look at specific tools (SQL, Python, TensorFlow), deliverables (reports, dashboards, deployed models), and team structure rather than job titles.</p>
+<h3 id="historical-timeline">Historical Timeline<a class="headerlink" href="#historical-timeline" title="Permanent link">&para;</a></h3>
+<p>Understanding where ML came from helps you understand why it works the way it does—and why we've seen cycles of hype and disappointment.</p>
+<h4 id="early-years">Early Years<a class="headerlink" href="#early-years" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Milestone</th>
+<th>Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1847</td>
+<td>Gradient descent published (Cauchy)</td>
+<td>The optimization algorithm that powers nearly all modern ML</td>
+</tr>
+<tr>
+<td>1950</td>
+<td>Turing Test proposed</td>
+<td>Defined the question "Can machines think?"</td>
+</tr>
+<tr>
+<td>1957</td>
+<td>Perceptron invented</td>
+<td>First neural network, sparked initial optimism</td>
+</tr>
+<tr>
+<td>1969</td>
+<td>Minsky &amp; Papert's "Perceptrons"</td>
+<td>Showed limitations, contributed to AI Winter</td>
+</tr>
+<tr>
+<td>1980s</td>
+<td>Expert Systems boom</td>
+<td>Rule-based AI, eventually hit scalability limits</td>
+</tr>
+<tr>
+<td>1984</td>
+<td>CART published</td>
+<td>Foundation for all tree-based methods</td>
+</tr>
+<tr>
+<td>1986</td>
+<td>Backpropagation popularized</td>
+<td>Enabled training multi-layer networks</td>
+</tr>
+<tr>
+<td>1997</td>
+<td>Deep Blue beats Kasparov</td>
+<td>Specialized AI success, but not learning</td>
+</tr>
+</tbody>
+</table>
+<h4 id="modern-era">Modern Era<a class="headerlink" href="#modern-era" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Milestone</th>
+<th>Significance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2001</td>
+<td>Random Forests published</td>
+<td>Go-to algorithm for tabular data</td>
+</tr>
+<tr>
+<td>2006</td>
+<td>Deep learning revival; CUDA released</td>
+<td>New training techniques and GPU computing</td>
+</tr>
+<tr>
+<td>2012</td>
+<td>AlexNet wins ImageNet</td>
+<td>Deep learning breakthrough, GPU training</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>XGBoost released</td>
+<td>Dominates Kaggle, still state-of-the-art for tabular data</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>AlphaGo beats Lee Sedol</td>
+<td>Reinforcement learning milestone</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>"Attention Is All You Need"</td>
+<td>Transformer architecture, foundation for GPT/BERT</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>BERT released</td>
+<td>Transfer learning comes to NLP</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>GPT-3</td>
+<td>Scaling produces emergent capabilities</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>ChatGPT released</td>
+<td>Large language models go mainstream</td>
+</tr>
+</tbody>
+</table>
+<p>AI Winters were caused by overpromising followed by underdelivering—researchers making bold claims to secure funding, then hitting fundamental limitations. The lesson is to be realistic about what current technology can and cannot do.</p>
+<p><strong>The key insight for business</strong>: Most AI projects fail due to poor problem definition, not technical limitations. Getting the problem right matters more than getting the algorithm right. Poor problem definition manifests as vague objectives ("use AI to improve customer experience"), wrong target variables (predicting email responses when the business needs conversions), or misaligned success metrics (optimizing call duration when customer satisfaction is the goal). Before writing any code, get crystal clear on: What exactly are we predicting? How will predictions be used? What decisions will change?</p>
+<h3 id="ml-task-categories">ML Task Categories<a class="headerlink" href="#ml-task-categories" title="Permanent link">&para;</a></h3>
+<p><img alt="ML Task Categories" src="../../assets/module1/ml_task_categories.png" /></p>
+<p>Machine Learning branches into three main categories:</p>
+<p><strong>Supervised Learning</strong>: You have labeled data, and you want to predict labels for new data. The "supervision" comes from the labels—they tell the algorithm what the right answer is.
+- <strong>Regression</strong>: Predicting continuous values (numbers)
+  - Examples: Sales forecasting, price prediction, demand estimation
+- <strong>Classification</strong>: Predicting categories (discrete labels)
+  - Examples: Spam detection, customer churn, fraud detection</p>
+<p><strong>Unsupervised Learning</strong>: No labels. You're trying to find hidden structure in the data.
+- <strong>Clustering</strong>: Grouping similar items together
+  - Examples: Customer segmentation, document grouping, anomaly detection
+- <strong>Dimensionality Reduction</strong>: Compressing many features into fewer features
+  - Examples: Visualization, noise reduction, feature extraction</p>
+<p><strong>Reinforcement Learning</strong>: The algorithm learns optimal actions through trial and error, receiving rewards or penalties for its choices.
+- Examples: Game playing, robotics, recommendation systems
+- Brief overview only—not a focus of this course</p>
+<p>The choice between regression and classification depends on what decision the prediction enables. If the business needs a specific number ("How many units will we sell?"), that's regression. If it needs a category ("Will this customer churn?"), that's classification. Many problems could be framed either way—a common pattern is to build a regression model (predict probability) and threshold it for classification decisions, giving you both continuous scores for prioritization and discrete classes for action.</p>
+<h3 id="business-applications-by-industry">Business Applications by Industry<a class="headerlink" href="#business-applications-by-industry" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Industry</th>
+<th>Application</th>
+<th>ML Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retail</td>
+<td>Demand forecasting</td>
+<td>Regression</td>
+</tr>
+<tr>
+<td>Finance</td>
+<td>Fraud detection</td>
+<td>Classification</td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td>Customer segmentation</td>
+<td>Clustering</td>
+</tr>
+<tr>
+<td>Healthcare</td>
+<td>Disease diagnosis</td>
+<td>Classification</td>
+</tr>
+<tr>
+<td>Manufacturing</td>
+<td>Predictive maintenance</td>
+<td>Classification</td>
+</tr>
+<tr>
+<td>E-commerce</td>
+<td>Product recommendations</td>
+<td>Various</td>
+</tr>
+</tbody>
+</table>
+<p>Classification appears frequently in business because we often need to make decisions: approve or deny, flag or pass, target or ignore. Pedagogically, we learn regression first because it's simpler—you can visualize a line through points, and the loss function (MSE) is intuitive. Many core concepts (features, coefficients, overfitting, regularization) work identically in both settings, so learning them in the simpler regression context means you can focus on concepts rather than classification-specific complications.</p>
+<h3 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"AI and ML are the same thing"</td>
+<td>ML is a subset of AI. AI includes rule-based systems that don't learn from data.</td>
+</tr>
+<tr>
+<td>"ML will replace all human decision-making"</td>
+<td>ML augments human decisions. Many problems require human judgment, ethics, and contextual understanding.</td>
+</tr>
+<tr>
+<td>"Deep Learning is always better than traditional ML"</td>
+<td>Deep learning requires lots of data and compute. For tabular business data, traditional ML (XGBoost, Random Forest) often wins.</td>
+</tr>
+<tr>
+<td>"More data always leads to better models"</td>
+<td>Data quality matters more than quantity. Biased or noisy data leads to biased or noisy models.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How much data is "enough"?</strong> For classical ML, a common rule of thumb is 10-30 samples per feature for linear models. For deep learning, you typically need thousands to millions of samples, though transfer learning reduces this. The practical test: plot learning curves. If validation performance is still improving as you add data, you need more. If it's plateaued, more data won't help—you need better features or a different model.</p>
+<hr />
+<h2 id="12-data-preparation-feature-engineering">1.2 Data Preparation &amp; Feature Engineering<a class="headerlink" href="#12-data-preparation-feature-engineering" title="Permanent link">&para;</a></h2>
+<h3 id="the-golden-rule-garbage-in-garbage-out">The Golden Rule: Garbage In, Garbage Out<a class="headerlink" href="#the-golden-rule-garbage-in-garbage-out" title="Permanent link">&para;</a></h3>
+<p>Data preparation often takes 80% of project time but determines success or failure. This isn't glamorous work, but it's where projects succeed or fail.</p>
+<blockquote>
+<p>"The algorithm is not the hard part. Getting the data right is the hard part."</p>
+</blockquote>
+<p>Your job as a business analytics professional is often more about data preparation than algorithm selection. The algorithm is almost a commodity at this point—scikit-learn gives you excellent implementations of everything. What matters is what you feed it.</p>
+<p>Since algorithms are implemented for us, focus on higher-leverage skills: <strong>problem framing</strong> (translating vague business requests into well-defined ML problems), <strong>data intuition</strong> (recognizing quality issues and predictive features), <strong>evaluation rigor</strong> (proper validation setup), <strong>communication</strong> (explaining results to stakeholders), and <strong>debugging</strong> (diagnosing whether issues are data quality, feature engineering, or methodology). Libraries implement algorithms; they don't tell you which algorithm to use or whether your features make sense.</p>
+<h3 id="common-data-quality-issues">Common Data Quality Issues<a class="headerlink" href="#common-data-quality-issues" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Missing values</strong>: NaN, null, empty strings, placeholder values (-999, "N/A")</li>
+<li><strong>Duplicates</strong>: Exact duplicates or near-duplicates</li>
+<li><strong>Outliers</strong>: Extreme values (errors vs. legitimate rare events)</li>
+<li><strong>Inconsistent formatting</strong>: "USA" vs "United States" vs "US"</li>
+<li><strong>Data entry errors</strong>: Typos, wrong units, swapped fields</li>
+</ol>
+<h3 id="initial-data-exploration">Initial Data Exploration<a class="headerlink" href="#initial-data-exploration" title="Permanent link">&para;</a></h3>
+<p>Before you do anything else, explore your data:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">df</span><span class="o">.</span><span class="n">shape</span>              <span class="c1"># How big is this? (rows, columns)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">df</span><span class="o">.</span><span class="n">schema</span>             <span class="c1"># What are the data types?</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">df</span><span class="o">.</span><span class="n">null_count</span><span class="p">()</span>       <span class="c1"># Where are the missing values?</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>         <span class="c1"># Basic statistics</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">df</span><span class="o">.</span><span class="n">is_duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># Any duplicate rows?</span>
+</span></code></pre></div>
+<p>Always explore before modeling. Don't jump straight into building models without checking basic things like "are there missing values?"</p>
+<p>A reasonable heuristic is to spend 10-20% of your total project time on EDA before modeling. You've explored "enough" when you can answer: What are the data types and ranges? Where are missing values and what causes them? Are there obvious outliers? What is the target distribution? Which features correlate with the target? The goal is to catch major issues—I've seen projects waste weeks on sophisticated modeling only to discover the target was incorrectly defined. A few hours of EDA would have saved that time.</p>
+<h3 id="handling-missing-data">Handling Missing Data<a class="headerlink" href="#handling-missing-data" title="Permanent link">&para;</a></h3>
+<p><strong>Strategy 1: Deletion</strong>
+- Drop rows with any missing values
+- Simple, but you lose information and might introduce bias
+- When to use: Missing completely at random, small percentage missing</p>
+<p><strong>Strategy 2: Imputation</strong>
+- <strong>Mean/Median/Mode</strong>: Simple, but ignores relationships between variables
+- <strong>Forward/Backward fill</strong>: For time series—use the previous or next value
+- <strong>Model-based (k-NN)</strong>: Predict the missing value from other features</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleImputer</span><span class="p">,</span> <span class="n">KNNImputer</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Simple imputation</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">X_imputed</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># K-NN imputation (considers relationships)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">knn_imputer</span> <span class="o">=</span> <span class="n">KNNImputer</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">X_imputed</span> <span class="o">=</span> <span class="n">knn_imputer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="why-data-is-missing-matters">Why Data is Missing Matters<a class="headerlink" href="#why-data-is-missing-matters" title="Permanent link">&para;</a></h3>
+<p>The reason data is missing determines what you should do about it:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCAR</strong> (Missing Completely at Random)</td>
+<td>Missingness has nothing to do with any values</td>
+<td>Safe to delete</td>
+</tr>
+<tr>
+<td><strong>MAR</strong> (Missing at Random)</td>
+<td>Missingness is related to other observed variables</td>
+<td>Imputation can work</td>
+</tr>
+<tr>
+<td><strong>MNAR</strong> (Missing Not at Random)</td>
+<td>Missingness is related to the missing value itself</td>
+<td>Problematic—missingness is informative</td>
+</tr>
+</tbody>
+</table>
+<p>Example: If high-income people don't report their income, that's MNAR—you can't fully recover the missing information because it's biased.</p>
+<p>Diagnosing missingness type requires evidence and domain knowledge. For MCAR, compare distributions of other variables between rows with and without missing values—they should be similar if missingness is random. For MAR vs MNAR, build a model predicting whether a value is missing using other features; if it has predictive power, missingness is at least partially MAR. Domain knowledge is essential: ask why data might be missing and whether that reason relates to the missing value itself.</p>
+<h3 id="feature-scaling">Feature Scaling<a class="headerlink" href="#feature-scaling" title="Permanent link">&para;</a></h3>
+<p>Many algorithms are sensitive to the scale of features. If one feature ranges from 0-1 and another from 0-1,000,000, the larger feature will dominate.</p>
+<p><strong>Algorithms that need scaling</strong>:
+- Linear regression, SVM, k-NN, neural networks
+- Regularized methods (regularization only penalizes fairly when features are scaled)</p>
+<p><strong>Standardization (Z-score)</strong>:
+$<span class="arithmatex">\(x_{scaled} = \frac{x - \mu}{\sigma}\)</span>$
+- Centers at 0, standard deviation of 1
+- Preserves outliers
+- Use when: Algorithm assumes normally distributed data</p>
+<p><strong>Min-Max Normalization</strong>:
+$<span class="arithmatex">\(x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}}\)</span>$
+- Scales to [0, 1] range
+- Sensitive to outliers
+- Use when: Need bounded range (neural networks)</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">MinMaxScaler</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Standardization</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">X_test_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>  <span class="c1"># Use training parameters!</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Min-Max</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">minmax</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">minmax</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>When NOT to scale</strong>: Tree-based methods (Decision Trees, Random Forest, XGBoost) are scale-invariant! They make splits based on thresholds, not distances. Don't waste time scaling for tree-based models.</p>
+<p>If you're unsure which algorithm you'll use, wait until you've chosen one, or incorporate scaling into your pipeline so it's applied conditionally. Different algorithms prefer different scaling (neural networks work better with MinMax [0,1], while SVMs use standardization). The practical solution is sklearn Pipelines—create a pipeline where scaling is a step before the model, which also prevents data leakage during cross-validation.</p>
+<h3 id="outlier-detection">Outlier Detection<a class="headerlink" href="#outlier-detection" title="Permanent link">&para;</a></h3>
+<p>Methods for different data distributions:</p>
+<p><strong>For normally distributed data:</strong>
+- <strong>Z-score method</strong>: Points more than 3 standard deviations from the mean are outliers</p>
+<p><strong>For non-normal or unknown distributions:</strong>
+- <strong>IQR method</strong>: Outliers are below Q1 - 1.5×IQR or above Q3 + 1.5×IQR (what box plots use)
+- <strong>Modified Z-score</strong>: Uses median and MAD instead of mean and std—very robust
+- <strong>Isolation Forest</strong>: Tree-based method that works well in high dimensions</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">clf</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># Expect ~5% outliers</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">outliers</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Returns -1 for outliers</span>
+</span></code></pre></div>
+<p><strong>What to do with outliers</strong>: Investigate first! Are they data errors? Legitimate extreme values? Different populations? Options include: remove, cap/winsorize, transform (log), or use robust methods.</p>
+<p><strong>Critical distinction</strong>: Outliers in features vs. outliers as targets are completely different problems. If you're detecting fraud, fraudulent transactions ARE what you're trying to predict—they're your positive class, not outliers to remove. Never remove outliers blindly based on statistics alone. Investigate: are they errors, rare-but-legitimate events, or the signal you're looking for? For anomaly detection tasks, use algorithms designed to find outliers (Isolation Forest, One-Class SVM), don't remove them.</p>
+<h3 id="encoding-categorical-variables">Encoding Categorical Variables<a class="headerlink" href="#encoding-categorical-variables" title="Permanent link">&para;</a></h3>
+<p>ML algorithms need numbers, not strings. When you have categorical variables, you need to convert them.</p>
+<p><strong>One-Hot Encoding</strong>:
+- Creates binary column for each category
+- Use for: Nominal categories (no order), small number of categories
+- Watch out: High cardinality (many categories) creates many columns</p>
+<p><strong>Label Encoding</strong>:
+- Assigns integer to each category
+- Use for: Ordinal categories (low/medium/high)
+- Watch out: Implies ordering where none exists</p>
+<p><strong>Target Encoding</strong>:
+- Replace category with mean of target variable for that category
+- Use for: High cardinality categories (ZIP codes, product SKUs)
+- Watch out: Data leakage! Must use cross-validation</p>
+<p>Target encoding causes leakage because when you calculate the mean target value for a category, you're using information from rows you'll later predict—each row's outcome influences its own encoded feature value. The severity scales with category size (worse for rare categories). The solution is cross-validation-style encoding: for each row, calculate the category mean using only OTHER rows. Libraries like <code>category_encoders</code> implement this properly.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">LabelEncoder</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># One-hot encoding</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">X_encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">[[</span><span class="s1">&#39;category_column&#39;</span><span class="p">]])</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># With polars (simpler for exploration)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">X_encoded</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dummies</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_column&#39;</span><span class="p">])</span>
+</span></code></pre></div>
+<h3 id="the-cardinal-rule-preventing-data-leakage">The Cardinal Rule: Preventing Data Leakage<a class="headerlink" href="#the-cardinal-rule-preventing-data-leakage" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Never let information from the test set influence training!</strong></p>
+</blockquote>
+<p>This is called <strong>data leakage</strong>, and it will give you overly optimistic results that don't hold up in production.</p>
+<p><strong>Common leakage examples:</strong>
+1. <strong>Scaling before splitting</strong>: Scaler sees test data statistics
+2. <strong>Feature selection on all data</strong>: Test data influences feature choice
+3. <strong>Target encoding without proper CV</strong>: Test data target values leak
+4. <strong>Time series: future predicts past</strong>: Future information used for past predictions</p>
+<p><strong>The correct workflow:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1. Split data FIRST
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>   └─→ Training set | Test set
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>2. Fit preprocessing on TRAINING only
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>   └─→ scaler.fit_transform(X_train)
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>3. Transform test using training parameters
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>   └─→ scaler.transform(X_test)
+</span></code></pre></div>
+<p><strong>Handling extrapolation</strong> (test data with values outside training range): For standardization, values get z-scores beyond the training range—most models handle this gracefully. For MinMax scaling, values might exceed [0,1], consider clipping. For one-hot encoding, new categories are problematic—set <code>handle_unknown='ignore'</code> to assign zeros. Check whether training data covers the expected production range and monitor for out-of-distribution inputs.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Step 1: Split FIRST</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="p">)</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># Step 2: Fit on training ONLY</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># Step 3: Transform test using training parameters</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">X_test_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>  <span class="c1"># NOT fit_transform!</span>
+</span></code></pre></div>
+<p><strong>Understanding fit, transform, and fit_transform:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it does</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fit()</code></td>
+<td>Learns parameters from data (e.g., mean, std)</td>
+<td>When you only need to learn, not transform</td>
+</tr>
+<tr>
+<td><code>transform()</code></td>
+<td>Applies learned parameters to transform data</td>
+<td>On test data (using parameters learned from train)</td>
+</tr>
+<tr>
+<td><code>fit_transform()</code></td>
+<td>Does both in one step</td>
+<td>On training data (learn + transform together)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"More features always improve models"</td>
+<td>Too many features can cause overfitting. Feature selection is often necessary.</td>
+</tr>
+<tr>
+<td>"Just drop all rows with missing values"</td>
+<td>This can introduce bias and waste data. Imputation is often better.</td>
+</tr>
+<tr>
+<td>"Always standardize your features"</td>
+<td>Tree-based models don't need scaling. Know your algorithm!</td>
+</tr>
+<tr>
+<td>"One-hot encoding is always best"</td>
+<td>High-cardinality features may need target encoding or embeddings.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Embeddings</strong> (covered in detail in Module 6) are learned dense vector representations for high-cardinality categories. Instead of one-hot encoding (millions of columns for product IDs) or target encoding (loses information), each category gets a small vector of continuous values learned during training. The model figures out which categories are "similar" based on their relationship to the target.</p>
+<hr />
+<h2 id="13-model-evaluation-validation">1.3 Model Evaluation &amp; Validation<a class="headerlink" href="#13-model-evaluation-validation" title="Permanent link">&para;</a></h2>
+<h3 id="why-evaluation-matters">Why Evaluation Matters<a class="headerlink" href="#why-evaluation-matters" title="Permanent link">&para;</a></h3>
+<p>How do we know if a model is actually good? This seems straightforward, but it's actually subtle:
+- Good on <em>what metric</em>? Different metrics capture different aspects of performance.
+- Good compared to <em>what baseline</em>? 85% accuracy might be great or terrible depending on context.
+- Will it work on <em>new, unseen data</em>? Performance on training data is meaningless if it doesn't generalize.</p>
+<p>Always compare to a <strong>meaningful baseline</strong>: for regression, predict the mean (any positive R² beats this); for classification, predict the majority class (90% accuracy from always predicting the majority in a 90/10 dataset). In time series, "predict yesterday's value" is a common baseline. If your model doesn't substantially beat these simple baselines, either the problem is harder than expected or something is wrong with your setup.</p>
+<h3 id="regression-metrics">Regression Metrics<a class="headerlink" href="#regression-metrics" title="Permanent link">&para;</a></h3>
+<p><strong>Mean Squared Error (MSE)</strong>:
+$<span class="arithmatex">\(MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2\)</span>$
+- Penalizes large errors heavily (squared)
+- Units are squared (hard to interpret)</p>
+<p><strong>Root Mean Squared Error (RMSE)</strong>:
+$<span class="arithmatex">\(RMSE = \sqrt{MSE}\)</span>$
+- Same units as target variable (interpretable)
+- Most common regression metric
+- "On average, our predictions are off by $X"</p>
+<p><strong>Mean Absolute Error (MAE)</strong>:
+$<span class="arithmatex">\(MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|\)</span>$
+- Less sensitive to outliers than RMSE
+- Linear penalty</p>
+<p><strong>R² (Coefficient of Determination)</strong>:
+$<span class="arithmatex">\(R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\)</span>$
+- Proportion of variance explained
+- 1 = perfect, 0 = no better than mean prediction
+- Can be negative if model is worse than mean!</p>
+<p><strong>Mean Absolute Percentage Error (MAPE)</strong>:
+$<span class="arithmatex">\(MAPE = \frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i - \hat{y}_i}{y_i}\right|\)</span>$
+- Scale-independent (percentage)
+- Easy for stakeholders: "predictions are off by 5% on average"
+- Undefined when y = 0</p>
+<p><strong>Which to use?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Use When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RMSE</td>
+<td>Default choice, care about large errors</td>
+</tr>
+<tr>
+<td>MAE</td>
+<td>Outliers in target, want robustness</td>
+</tr>
+<tr>
+<td>R²</td>
+<td>Comparing models, explaining to stakeholders</td>
+</tr>
+<tr>
+<td>MAPE</td>
+<td>Need percentage interpretation, values not near zero</td>
+</tr>
+</tbody>
+</table>
+<p><strong>For stakeholders</strong>, translate metrics to business language: RMSE becomes "predictions are off by $15,000 on average"; MAPE becomes "predictions are typically within 5%"; R² becomes "our model captures 75% of the predictive signal." Best practice: connect to business outcomes—"we'll avoid $200K in overstock costs annually." Stakeholders care about business impact, not statistical properties.</p>
+<h3 id="classification-metrics">Classification Metrics<a class="headerlink" href="#classification-metrics" title="Permanent link">&para;</a></h3>
+<p>Everything starts with the <strong>confusion matrix</strong>:</p>
+<p><img alt="Confusion Matrix" src="../../assets/module1/confusion_matrix.png" /></p>
+<ul>
+<li><strong>TP (True Positive)</strong>: Predicted positive, actually positive. Correct.</li>
+<li><strong>TN (True Negative)</strong>: Predicted negative, actually negative. Correct.</li>
+<li><strong>FP (False Positive)</strong>: Predicted positive, actually negative. False alarm. Type I error.</li>
+<li><strong>FN (False Negative)</strong>: Predicted negative, actually positive. Missed it. Type II error.</li>
+</ul>
+<p><strong>Accuracy</strong>:
+$<span class="arithmatex">\(Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\)</span>$
+- Proportion of correct predictions
+- <strong>Misleading with imbalanced classes!</strong> A model predicting "not fraud" for everything gets 99% accuracy if 99% of transactions are legitimate—but it catches zero fraud.</p>
+<p><strong>Precision</strong>:
+$<span class="arithmatex">\(Precision = \frac{TP}{TP + FP}\)</span>$
+- "Of those we predicted positive, how many were actually positive?"
+- High precision = few false alarms</p>
+<p><strong>Recall (Sensitivity)</strong>:
+$<span class="arithmatex">\(Recall = \frac{TP}{TP + FN}\)</span>$
+- "Of actual positives, how many did we catch?"
+- High recall = few missed positives</p>
+<p><strong>F1 Score</strong>:
+$<span class="arithmatex">\(F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}\)</span>$
+- Harmonic mean of precision and recall
+- Use when you need to balance both</p>
+<p>The harmonic mean penalizes extreme imbalances more than the arithmetic mean. With precision=0.99 and recall=0.01, the arithmetic mean is 0.50 (suggesting "medium" performance), but F1 is just 0.02—correctly reflecting the model is nearly useless. A model can't compensate for terrible recall with great precision; F1 remains low. If you care more about one metric (e.g., recall for medical diagnosis), optimize that directly.</p>
+<p><strong>AUC-ROC</strong>:
+- Area Under the ROC Curve
+- Measures ranking ability across all thresholds
+- 0.5 = random, 1.0 = perfect</p>
+<p>The ROC curve plots True Positive Rate vs. False Positive Rate at different classification thresholds. The diagonal line represents random guessing; a perfect model hugs the top-left corner. AUC=0.8 means if you randomly pick one positive and one negative example, there's an 80% chance the model scores the positive higher—independent of the threshold you'll use in production.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">classification_report</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">)</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># All-in-one report</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</span></code></pre></div>
+<h3 id="cross-validation">Cross-Validation<a class="headerlink" href="#cross-validation" title="Permanent link">&para;</a></h3>
+<p>A single train/test split can be lucky or unlucky. Cross-validation gives us:
+- More reliable performance estimate
+- Confidence interval (mean ± standard deviation)
+- Uses all data for both training and validation</p>
+<p><strong>K-Fold Cross-Validation</strong>:</p>
+<p><img alt="K-Fold Cross-Validation" src="../../assets/module1/kfold_cv.png" /></p>
+<ol>
+<li>Split data into K folds</li>
+<li>Train on K-1 folds, validate on remaining fold</li>
+<li>Repeat K times, each fold as validation once</li>
+<li>Average the results</li>
+</ol>
+<p><strong>Stratified K-Fold</strong>: Essential for imbalanced data—maintains class distribution in each fold. Without stratification, regular K-Fold can create folds with very different class distributions, causing unreliable estimates (high variance CV scores) and training on unrealistic distributions. Use <code>StratifiedKFold</code> by default for classification—it never hurts.</p>
+<p><strong>Time Series Split</strong>: Respects temporal ordering—train on past, validate on future. Shuffling time series creates <strong>temporal leakage</strong>—using future information to predict the past, which is impossible in production. Models can report 90% accuracy with shuffled validation and 55% with proper temporal validation. Use <code>TimeSeriesSplit</code> to mimic production conditions.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">cross_val_score</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">StratifiedKFold</span><span class="p">,</span> <span class="n">TimeSeriesSplit</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># Basic K-Fold</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean: </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (+/- </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="c1"># Stratified for classification</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1"># Time series</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="n">tscv</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">tscv</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="overfitting-vs-underfitting">Overfitting vs Underfitting<a class="headerlink" href="#overfitting-vs-underfitting" title="Permanent link">&para;</a></h3>
+<p><img alt="Overfitting vs Underfitting" src="../../assets/module1/overfitting_underfitting.png" /></p>
+<p><strong>Underfitting (High Bias)</strong>:
+- Training error HIGH, Test error HIGH
+- Model too simple to capture patterns
+- Solutions: More features, more complex model, less regularization</p>
+<p><strong>Overfitting (High Variance)</strong>:
+- Training error LOW, Test error HIGH
+- Model memorizes training data including noise
+- Solutions: More data, simpler model, regularization, early stopping</p>
+<p><strong>Diagnostic pattern</strong>: Look at the gap between training and test error. Both high = underfitting. Training low but test high = overfitting.</p>
+<p>If both training and test error are low, that's the goal—but it doesn't guarantee perfection. Still check for: data leakage (too good to be true?), non-representative test sets, wrong metrics (high accuracy but terrible minority class performance), or overfitting to the test set from repeated model selection. Monitor performance after deployment for concept drift.</p>
+<h3 id="the-bias-variance-tradeoff">The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Permanent link">&para;</a></h3>
+<p><strong>Total Error = Bias² + Variance + Irreducible Noise</strong></p>
+<p><strong>Bias</strong> is systematic error—the model's tendency to miss patterns. High bias means underfitting. A linear model trying to fit a curved relationship has high bias.</p>
+<p><strong>Variance</strong> is sensitivity to training data—how much the model changes with different training samples. High variance means overfitting. A very deep decision tree has high variance.</p>
+<p><strong>The tradeoff</strong>: Reducing bias usually increases variance (more complex model). Reducing variance usually increases bias (simpler model). The goal is to find the sweet spot.</p>
+<p>There are ways to reduce both simultaneously: <strong>more data</strong> lets you fit complex models without overfitting; <strong>ensemble methods</strong> like Random Forests reduce variance while boosting reduces bias; <strong>better features</strong> make patterns easier to learn. Irreducible noise sets a floor on total error, and at any given data size there is still a tradeoff—these techniques shift the curve inward but don't eliminate it.</p>
+<p><strong>The Dart-Throwing Analogy</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Bias</th>
+<th>Variance</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High bias, low variance</td>
+<td>Off-center</td>
+<td>Clustered together</td>
+<td>Consistent but wrong</td>
+</tr>
+<tr>
+<td>Low bias, high variance</td>
+<td>Centered on average</td>
+<td>Scattered everywhere</td>
+<td>Right on average but inconsistent</td>
+</tr>
+<tr>
+<td><strong>Ideal</strong></td>
+<td><strong>Centered</strong></td>
+<td><strong>Clustered</strong></td>
+<td><strong>Accurate and precise</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="business-specific-evaluation">Business-Specific Evaluation<a class="headerlink" href="#business-specific-evaluation" title="Permanent link">&para;</a></h3>
+<p><strong>Not all errors cost the same!</strong></p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>False Positive Cost</th>
+<th>False Negative Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spam filter</td>
+<td>Important email missed</td>
+<td>Spam in inbox</td>
+</tr>
+<tr>
+<td>Medical diagnosis</td>
+<td>Unnecessary treatment</td>
+<td>Missed disease</td>
+</tr>
+<tr>
+<td>Fraud detection</td>
+<td>Investigation cost</td>
+<td>Fraud loss</td>
+</tr>
+<tr>
+<td>Manufacturing QC</td>
+<td>Discarding good product</td>
+<td>Shipping defect</td>
+</tr>
+</tbody>
+</table>
+<p>For spam, a false positive (real email marked as spam) is much worse than a false negative. Optimize for precision.</p>
+<p>For medical diagnosis, a false negative (missed disease) is much worse. Optimize for recall.</p>
+<p><strong>Choose metrics that reflect business costs.</strong> Accuracy is misleading because it treats all errors as equal when they rarely are.</p>
+<p>To quantify costs, work backwards from business outcomes: (1) identify the action taken for each prediction (predicted churn → retention offer), (2) quantify costs for each outcome (false positive blocks a $200 customer, false negative lets $500 fraud through), (3) build a cost matrix multiplying confusion matrix cells by costs, (4) optimize threshold for minimum total cost. Start with rough estimates, get stakeholder buy-in, and refine over time—approximate cost quantification beats implicitly assuming all errors cost the same.</p>
+<h3 id="common-misconceptions_2">Common Misconceptions<a class="headerlink" href="#common-misconceptions_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Higher R² always means better model"</td>
+<td>Can overfit to get high R². Test set R² is what matters. R² can be negative!</td>
+</tr>
+<tr>
+<td>"Accuracy is the best metric for classification"</td>
+<td>Misleading for imbalanced classes. Use precision/recall/F1/AUC instead.</td>
+</tr>
+<tr>
+<td>"More complex models are always better"</td>
+<td>Complexity increases variance. Simpler models often generalize better.</td>
+</tr>
+<tr>
+<td>"Cross-validation eliminates the need for a test set"</td>
+<td>CV estimates performance but you should still have a final holdout test set.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="14-python-ecosystem-setup">1.4 Python Ecosystem Setup<a class="headerlink" href="#14-python-ecosystem-setup" title="Permanent link">&para;</a></h2>
+<h3 id="jupyter-notebooks-and-google-colab">Jupyter Notebooks and Google Colab<a class="headerlink" href="#jupyter-notebooks-and-google-colab" title="Permanent link">&para;</a></h3>
+<p><strong>Jupyter Notebooks</strong>:
+- Interactive computing environment
+- Mix code, output, and documentation
+- Great for exploration and teaching</p>
+<p><strong>Google Colab advantages</strong>:
+- No setup required
+- Free GPU access
+- Easy sharing
+- Pre-installed packages</p>
+<p><strong>Best practices</strong>:
+- Use markdown cells for documentation
+- Keep cells focused (one logical step per cell)
+- Restart and run all before sharing
+- Use consistent naming conventions</p>
+<p>"Restart and Run All" prevents hidden state issues: cells run out of order, deleted cells leaving ghost variables, or imports removed but modules still loaded. If it fails, your notebook has hidden dependencies. If it succeeds, anyone can reproduce your results. Do this before every commit or share.</p>
+<h3 id="marimo-notebooks">marimo Notebooks<a class="headerlink" href="#marimo-notebooks" title="Permanent link">&para;</a></h3>
+<p><strong>marimo</strong> is a next-generation Python notebook that solves many of Jupyter's pain points. Unlike Jupyter's manual cell execution, marimo notebooks are <strong>reactive</strong>—when you change a variable, all cells that depend on it automatically re-execute. This eliminates the hidden state problems that plague Jupyter notebooks.</p>
+<p><strong>Key differences from Jupyter:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Jupyter</th>
+<th>marimo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Execution</td>
+<td>Manual cell runs</td>
+<td>Reactive (auto-updates)</td>
+</tr>
+<tr>
+<td>File format</td>
+<td>JSON (.ipynb)</td>
+<td>Pure Python (.py)</td>
+</tr>
+<tr>
+<td>Reproducibility</td>
+<td>State can diverge from code</td>
+<td>Always reproducible</td>
+</tr>
+<tr>
+<td>Version control</td>
+<td>Difficult diffs</td>
+<td>Clean git diffs</td>
+</tr>
+<tr>
+<td>Cell ordering</td>
+<td>Can run out of order</td>
+<td>Execution order enforced</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to use each:</strong>
+- <strong>Jupyter/Colab</strong>: Quick exploration, collaboration with non-technical stakeholders, free GPU access (Colab)
+- <strong>marimo</strong>: Production notebooks, version control, reproducibility, teaching environments where you want guaranteed consistency</p>
+<p>In this course, we use marimo for most notebooks because the reactive execution model prevents the "run cells out of order" bugs that commonly confuse students. The pure Python format also means you can use standard development tools like linters and formatters.</p>
+<h3 id="pixi-package-manager">pixi Package Manager<a class="headerlink" href="#pixi-package-manager" title="Permanent link">&para;</a></h3>
+<p><strong>pixi</strong> is a modern package manager that handles Python environments with speed and reproducibility. It uses the same package repository as conda but with faster dependency resolution and a cleaner project structure.</p>
+<p><strong>Why pixi for this course?</strong>
+- <strong>Fast</strong>: Resolves dependencies in seconds, not minutes
+- <strong>Reproducible</strong>: Lock files ensure everyone has identical environments
+- <strong>Cross-platform</strong>: Same configuration works on Windows, Mac, and Linux
+- <strong>Simple</strong>: One configuration file (<code>pixi.toml</code>) defines your entire project</p>
+<p><strong>Installation:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># macOS/Linux</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://pixi.sh/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Windows (PowerShell)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>iwr<span class="w"> </span>-useb<span class="w"> </span>https://pixi.sh/install.ps1<span class="w"> </span><span class="p">|</span><span class="w"> </span>iex
+</span></code></pre></div>
+<p>After installation, restart your terminal and verify with <code>pixi --version</code>.</p>
+<p><strong>Project structure:</strong></p>
+<p>A pixi project is defined by a <code>pixi.toml</code> file:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[project]</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ban501-module1&quot;</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.1.0&quot;</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;conda-forge&quot;</span><span class="p">]</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">platforms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;linux-64&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;osx-arm64&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;win-64&quot;</span><span class="p">]</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">[dependencies]</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="n">python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.11&quot;</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="n">polars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=1.0&quot;</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">scikit-learn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=1.5&quot;</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="n">matplotlib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.8&quot;</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="n">seaborn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=0.13&quot;</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="n">marimo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=0.9&quot;</span>
+</span></code></pre></div>
+<p><strong>Common commands:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pixi install</code></td>
+<td>Install all dependencies from pixi.toml</td>
+</tr>
+<tr>
+<td><code>pixi add polars</code></td>
+<td>Add a new dependency</td>
+</tr>
+<tr>
+<td><code>pixi run python script.py</code></td>
+<td>Run Python in the project environment</td>
+</tr>
+<tr>
+<td><code>pixi run marimo edit notebook.py</code></td>
+<td>Open marimo notebook in project environment</td>
+</tr>
+<tr>
+<td><code>pixi shell</code></td>
+<td>Activate the environment in your shell</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Typical workflow:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Clone or create a project</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">cd</span><span class="w"> </span>my-project
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Install dependencies (creates/updates lock file)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>pixi<span class="w"> </span>install
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Run your code</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>pixi<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>analysis.py
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1"># Or activate the environment for interactive work</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>pixi<span class="w"> </span>shell
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>python
+</span></code></pre></div>
+<h3 id="polars-essentials">polars Essentials<a class="headerlink" href="#polars-essentials" title="Permanent link">&para;</a></h3>
+<p>Core operations you need to know:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Reading data</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">)</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># Basic exploration</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>           <span class="c1"># First 5 rows</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">df</span><span class="o">.</span><span class="n">schema</span>           <span class="c1"># Data types (column name -&gt; dtype mapping)</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>       <span class="c1"># Statistical summary</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="n">df</span><span class="o">.</span><span class="n">shape</span>            <span class="c1"># (rows, columns)</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="c1"># Selection</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;column&#39;</span><span class="p">)</span>              <span class="c1"># Single column</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">])</span>      <span class="c1"># Multiple columns</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="n">df</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                        <span class="c1"># Single row by index</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="n">df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>                          <span class="c1"># Slice rows</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="c1"># Filtering</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;income&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50000</span><span class="p">))</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="c1"># Aggregation</span>
+</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="n">df</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="n">df</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span>
+</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;sales&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;customers&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</span><span id="__span-12-28"><a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a><span class="p">])</span>
+</span><span id="__span-12-29"><a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>
+</span><span id="__span-12-30"><a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a><span class="c1"># Handling missing values</span>
+</span><span id="__span-12-31"><a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a><span class="n">df</span><span class="o">.</span><span class="n">null_count</span><span class="p">()</span>                    <span class="c1"># Count nulls per column</span>
+</span><span id="__span-12-32"><a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a><span class="n">df</span><span class="o">.</span><span class="n">drop_nulls</span><span class="p">()</span>                    <span class="c1"># Drop rows with any nulls</span>
+</span><span id="__span-12-33"><a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a><span class="n">df</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                    <span class="c1"># Fill with constant</span>
+</span><span id="__span-12-34"><a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a><span class="n">df</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>      <span class="c1"># Fill with mean</span>
+</span></code></pre></div>
+<h3 id="basic-eda-workflow">Basic EDA Workflow<a class="headerlink" href="#basic-eda-workflow" title="Permanent link">&para;</a></h3>
+<p><strong>Standard exploration sequence</strong>:</p>
+<ol>
+<li><strong>Load and inspect</strong>: Shape, dtypes, head/tail. Check for obvious issues.</li>
+<li><strong>Missing values</strong>: Count per column, visualize missingness patterns.</li>
+<li><strong>Univariate analysis</strong>: Distributions of each feature, identify outliers.</li>
+<li><strong>Bivariate analysis</strong>: Correlations, feature vs. target relationships.</li>
+<li><strong>Document findings</strong>: Key insights, data quality issues, feature engineering ideas.</li>
+</ol>
+<p>Write EDA documentation for your future self six months from now—you'll have forgotten everything. Minimum viable documentation: what questions were you answering? What did you find? What decisions did you make based on findings? What concerns remain? Document conclusions and decisions, not every chart. For formal projects, a separate EDA report for stakeholders should tell a story; the working notebook is for reproducibility.</p>
+<h3 id="visualization-with-matplotlibseaborn">Visualization with matplotlib/seaborn<a class="headerlink" href="#visualization-with-matplotlibseaborn" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Distribution</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;column&#39;</span><span class="p">],</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Distribution of Column&#39;</span><span class="p">)</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># Correlation heatmap</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Correlation Matrix&#39;</span><span class="p">)</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="c1"># Scatter plot with hue</span>
+</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;feature1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;feature2&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>
+</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="c1"># Box plot for outliers</span>
+</span><span id="__span-13-20"><a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+</span><span id="__span-13-21"><a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>
+</span><span id="__span-13-22"><a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="c1"># Pair plot (for small number of features)</span>
+</span><span id="__span-13-23"><a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Visualization principles</strong>:
+- Always label axes
+- Use appropriate chart types
+- Consider colorblind-friendly palettes
+- Don't clutter—one message per chart</p>
+<h3 id="gpu-computing-and-cuda">GPU Computing and CUDA<a class="headerlink" href="#gpu-computing-and-cuda" title="Permanent link">&para;</a></h3>
+<p>In Section 1.1, we mentioned that NVIDIA released CUDA in 2006 and that AlexNet's 2012 ImageNet victory was enabled by GPU training. Understanding why GPUs matter for machine learning is essential context for the deep learning modules later in this course.</p>
+<p><strong>Why GPUs matter for ML:</strong></p>
+<p>CPUs (Central Processing Units) are designed for sequential tasks—they have a few powerful cores that excel at complex operations one at a time. GPUs (Graphics Processing Units) take the opposite approach: thousands of simpler cores that perform many calculations simultaneously.</p>
+<p>Neural network training involves the same operation (multiply-accumulate) applied to millions of numbers. A CPU processes these one at a time; a GPU processes thousands in parallel. This is why training that takes weeks on a CPU can finish in hours on a GPU.</p>
+<p><strong>CUDA and the deep learning revolution:</strong></p>
+<p>CUDA (Compute Unified Device Architecture) is NVIDIA's programming interface that lets general software—not just graphics—run on GPUs. Before CUDA, using GPUs for non-graphics tasks required awkward workarounds. CUDA made GPU computing accessible to researchers, and deep learning took off.</p>
+<p>The 2012 AlexNet breakthrough wasn't just about a better algorithm—the same architecture trained on CPUs would have taken months. GPU training made rapid experimentation possible, accelerating the entire field.</p>
+<p><strong>Practical considerations:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Hardware Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tabular data (small-medium datasets)</td>
+<td>CPU sufficient</td>
+</tr>
+<tr>
+<td>Traditional ML (Random Forest, XGBoost)</td>
+<td>CPU sufficient</td>
+</tr>
+<tr>
+<td>Deep learning training</td>
+<td>GPU recommended</td>
+</tr>
+<tr>
+<td>Large-scale inference</td>
+<td>GPU beneficial</td>
+</tr>
+<tr>
+<td>Image/video processing</td>
+<td>GPU recommended</td>
+</tr>
+</tbody>
+</table>
+<p>For the early modules of this course (regression, classification, ensemble methods), you won't need GPU access—these algorithms run well on CPUs. When we reach the neural network modules (6-8), GPU access becomes valuable.</p>
+<p><strong>Accessing GPUs:</strong></p>
+<ul>
+<li><strong>Google Colab</strong>: Free tier includes limited GPU access—select "Runtime &gt; Change runtime type &gt; GPU"</li>
+<li><strong>Local GPU</strong>: Requires an NVIDIA GPU and CUDA toolkit installation</li>
+<li><strong>Cloud platforms</strong>: AWS, GCP, and Azure offer GPU instances for rent</li>
+</ul>
+<p>For this course, Colab's free tier is sufficient for the deep learning exercises. If you have a local NVIDIA GPU, you can configure pixi to use CUDA-enabled packages, but this is optional.</p>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>A company says they're using "AI" for their chatbot. Is this AI? Machine Learning? Both? Neither? How would you find out?</p>
+</li>
+<li>
+<p>You have a dataset where 30% of income values are missing. The missingness correlates with age (older people less likely to report). What imputation strategy would you use?</p>
+</li>
+<li>
+<p>A colleague scales the entire dataset before splitting into train/test. Why is this a problem? How would it affect your model evaluation?</p>
+</li>
+<li>
+<p>Your manager asks: "Is 85% accuracy good?" How would you respond?</p>
+</li>
+<li>
+<p>A model has R² = 0.95 on training data and R² = 0.60 on test data. What's happening? What would you do?</p>
+</li>
+<li>
+<p>Which metric would you optimize for a medical diagnosis model where missing a disease (false negative) is much worse than a false alarm?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Given a dataset description, identify whether each column needs scaling, encoding, or neither.</p>
+</li>
+<li>
+<p>Calculate precision, recall, and F1 from a confusion matrix.</p>
+</li>
+<li>
+<p>Interpret R² = 0.75 in business terms.</p>
+</li>
+<li>
+<p>Identify potential data leakage in a described ML pipeline.</p>
+</li>
+<li>
+<p>For each business problem, recommend an appropriate evaluation metric and justify:</p>
+</li>
+<li>Predicting next month's revenue</li>
+<li>Identifying customers likely to cancel</li>
+<li>Grouping products that are often bought together</li>
+</ol>
+<hr />
+<h2 id="chapter-summary">Chapter Summary<a class="headerlink" href="#chapter-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Six key takeaways from Module 1:</strong></p>
+<ol>
+<li>
+<p><strong>ML learns patterns from data</strong>—it's a subset of AI, and it overlaps with Data Science. Don't conflate these terms.</p>
+</li>
+<li>
+<p><strong>Match problem to task type</strong>—regression for continuous values, classification for categories, clustering for grouping.</p>
+</li>
+<li>
+<p><strong>Data prep is critical</strong>—handle missing values, scale features (when appropriate), encode categoricals. This is 80% of the work.</p>
+</li>
+<li>
+<p><strong>Prevent data leakage</strong>—split first, fit on train, transform test. This is the cardinal rule.</p>
+</li>
+<li>
+<p><strong>Evaluate appropriately</strong>—choose metrics that reflect business costs. Accuracy is often the wrong choice.</p>
+</li>
+<li>
+<p><strong>Diagnose model issues</strong>—use the bias-variance framework. High test error + low train error = overfitting.</p>
+</li>
+</ol>
+<hr />
+<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>In Module 2, we'll dive into <strong>Regression Methods</strong>:
+- Linear regression fundamentals
+- Regularization (Lasso, Ridge)
+- Polynomial features
+- Model interpretation</p>
+<p>You'll apply everything from Module 1:
+- Data preparation pipelines
+- Train-test splits
+- RMSE, MAE, R² evaluation
+- Cross-validation</p>
+<p>The concepts we've established in this module are the foundation. Module 2 starts building on that foundation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

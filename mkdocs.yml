@@ -1,0 +1,80 @@
+site_name: BAN 501 Course Companion
+site_description: Predictive Modeling - Course Companion
+site_author: Nick Freeman
+site_url: https://nkfreeman-teaching.github.io/BAN-501-course-companion/
+
+repo_url: https://github.com/nkfreeman-teaching/BAN-501-course-companion
+repo_name: nkfreeman-teaching/BAN-501-course-companion
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Modules:
+    - "1. Foundations of ML": modules/01-foundations.md
+    - "2. Regression": modules/02-regression.md
+    - "3. Classification": modules/03-classification.md
+    - "4. Ensemble Methods": modules/04-ensemble-methods.md
+    - "5. Unsupervised Learning": modules/05-unsupervised.md
+    - "6. Neural Networks": modules/06-neural-networks.md
+    - "7. Computer Vision": modules/07-computer-vision.md
+    - "8. NLP": modules/08-nlp.md
+    - "9. Interpretability": modules/09-interpretability.md
+    - "10. Ethics & Deployment": modules/10-ethics-deployment.md
+  - Appendices:
+    - "Neural Networks as Universal Approximators": appendices/universal-approximators.md
+    - "CNN Architecture": appendices/cnn-architecture.md
+    - "Transformer Architecture": appendices/transformer-architecture.md
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
