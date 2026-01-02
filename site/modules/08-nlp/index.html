@@ -1841,8 +1841,8 @@ Distinctive words → high weight</p>
 - <strong>CBOW</strong>: Given context words, predict the target word
 - Result: 100-300 dimensional vectors per word</p>
 <p><strong>The key insight</strong>: The embedding layer weights ARE the word vectors. Words appearing in similar contexts get similar embeddings.</p>
-<p><strong>Famous example:</strong>
-$<span class="arithmatex">\(king - man + woman \approx queen\)</span>$</p>
+<p><strong>Famous example:</strong></p>
+<div class="arithmatex">\[king - man + woman \approx queen\]</div>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">gensim.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Word2Vec</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">model</span> <span class="o">=</span> <span class="n">Word2Vec</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="n">vector_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1978,8 +1978,8 @@ $<span class="arithmatex">\(king - man + woman \approx queen\)</span>$</p>
 <h3 id="positional-encoding">Positional Encoding<a class="headerlink" href="#positional-encoding" title="Permanent link">&para;</a></h3>
 <p><strong>Problem</strong>: Attention is permutation-invariant. It doesn't know word order!</p>
 <p><strong>Solution</strong>: Add position information to embeddings.</p>
-<div class="arithmatex">\[PE_{pos,2i} = \sin(pos / 10000^{2i/d})$$
-$$PE_{pos,2i+1} = \cos(pos / 10000^{2i/d})\]</div>
+<div class="arithmatex">\[PE_{pos,2i} = \sin(pos / 10000^{2i/d})\]</div>
+<div class="arithmatex">\[PE_{pos,2i+1} = \cos(pos / 10000^{2i/d})\]</div>
 <p>Where:
 - <span class="arithmatex">\(pos\)</span> = position in sequence (0, 1, 2, ...)
 - <span class="arithmatex">\(d\)</span> = embedding dimension

@@ -131,6 +131,7 @@ $$\frac{\partial MSE}{\partial \beta_1} = -\frac{2}{n}\sum(y_i - \hat{y}_i) \cdo
 **Update rules:**
 
 $$\beta_0 \leftarrow \beta_0 - \alpha \cdot \frac{\partial MSE}{\partial \beta_0}$$
+
 $$\beta_1 \leftarrow \beta_1 - \alpha \cdot \frac{\partial MSE}{\partial \beta_1}$$
 
 Where $\alpha$ is the **learning rate**—how big a step we take each iteration.
@@ -209,6 +210,7 @@ print(results.summary())
 **Key statistics in the output:**
 
 **R² (Coefficient of Determination):**
+
 $$R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
 
 R² tells you what proportion of variance your model explains. R² = 0.75 means 75% explained, 25% unexplained.

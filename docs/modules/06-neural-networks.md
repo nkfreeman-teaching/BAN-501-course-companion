@@ -120,30 +120,38 @@ In practice, deep networks represent the same functions more efficiently than wi
 **3. Activation functions**: Non-linear transformations
 
 The computation at each neuron:
+
 $$output = activation(Wx + b)$$
 
 ### Activation Functions
 
 **ReLU (Rectified Linear Unit)** — most common:
+
 $$\text{ReLU}(x) = \max(0, x)$$
+
 - Simple: negative → 0, positive → pass through
 - Default choice for hidden layers
 - Helps with vanishing gradients
 
 **Sigmoid**:
+
 $$\sigma(x) = \frac{1}{1 + e^{-x}}$$
+
 - Output between 0 and 1
 - Good for binary output layer
 - Suffers from vanishing gradients in deep networks
 
 **Softmax** (for multi-class):
+
 $$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$$
+
 - Outputs sum to 1 (probabilities)
 - Used in final layer for classification
 
 ### Why Non-linear Activations?
 
 Without non-linearity:
+
 $$Layer_2(Layer_1(x)) = W_2(W_1 x) = (W_2 W_1)x = Wx$$
 
 **Multiple linear layers = one linear layer!**
@@ -155,6 +163,7 @@ No matter how many linear layers you stack, the result is still linear. Non-line
 ### Parameter Counting
 
 **For a fully connected layer:**
+
 $$Parameters = (input \times output) + output = weights + biases$$
 
 **Example**: Network with layers [784, 256, 128, 10]
@@ -186,12 +195,15 @@ def count_parameters(model):
 ### Loss Functions
 
 **Regression — Mean Squared Error (MSE):**
+
 $$L = \frac{1}{n}\sum(y_i - \hat{y}_i)^2$$
 
 **Binary Classification — Binary Cross-Entropy:**
+
 $$L = -\frac{1}{n}\sum[y\log(\hat{y}) + (1-y)\log(1-\hat{y})]$$
 
 **Multi-class — Cross-Entropy:**
+
 $$L = -\frac{1}{n}\sum_{i}\sum_{c} y_{ic}\log(\hat{y}_{ic})$$
 
 **Why cross-entropy?** The log function severely penalizes confident wrong predictions:
@@ -224,11 +236,15 @@ One line computes gradients. One line updates weights.
 ### Optimization Algorithms
 
 **SGD (Stochastic Gradient Descent)**:
+
 $$W \leftarrow W - \alpha \cdot \nabla L$$
+
 Same as Module 2. Simple but can be slow.
 
 **SGD + Momentum**:
+
 $$v \leftarrow \beta v + \nabla L$$
+
 $$W \leftarrow W - \alpha \cdot v$$
 
 Accumulates velocity in consistent directions. Like a ball rolling downhill.

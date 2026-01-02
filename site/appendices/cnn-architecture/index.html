@@ -1750,8 +1750,8 @@
 </span></code></pre></div>
 <p><strong>That's a 50,000× reduction!</strong></p>
 <p><strong>What This Enables: Translation Equivariance</strong></p>
-<p>If you shift the input, the output shifts by the same amount:
-$<span class="arithmatex">\(f(\text{shift}(x)) = \text{shift}(f(x))\)</span>$</p>
+<p>If you shift the input, the output shifts by the same amount:</p>
+<div class="arithmatex">\[f(\text{shift}(x)) = \text{shift}(f(x))\]</div>
 <p>A cat detector fires whether the cat is at (10, 10) or (200, 200).</p>
 <h3 id="principle-3-hierarchical-feature-learning">Principle 3: Hierarchical Feature Learning<a class="headerlink" href="#principle-3-hierarchical-feature-learning" title="Permanent link">&para;</a></h3>
 <p><strong>The insight</strong>: Complex features are built from simpler ones.</p>
@@ -2006,8 +2006,8 @@ $<span class="arithmatex">\(f(\text{shift}(x)) = \text{shift}(f(x))\)</span>$</p
 <p>The filter slides across all valid positions to fill the 6×6 output.</p>
 <h3 id="output-size-formula">Output Size Formula<a class="headerlink" href="#output-size-formula" title="Permanent link">&para;</a></h3>
 <div class="arithmatex">\[\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_size} + 2 \times \text{padding}}{\text{stride}} \right\rfloor + 1\]</div>
-<p>For our example:
-$<span class="arithmatex">\(\frac{8 - 3 + 2 \times 0}{1} + 1 = 6\)</span>$</p>
+<p>For our example:</p>
+<div class="arithmatex">\[\frac{8 - 3 + 2 \times 0}{1} + 1 = 6\]</div>
 <hr />
 <h2 id="annotated-nnconv2d-walkthrough">Annotated nn.Conv2d Walkthrough<a class="headerlink" href="#annotated-nnconv2d-walkthrough" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>

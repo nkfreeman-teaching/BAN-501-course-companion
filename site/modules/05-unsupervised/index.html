@@ -1592,8 +1592,8 @@
 3. <strong>Assign</strong>: Each point to nearest centroid
 4. <strong>Update</strong>: Move centroids to mean of assigned points
 5. <strong>Repeat</strong> until centroids stop moving</p>
-<p><strong>The objective:</strong>
-$<span class="arithmatex">\(\text{minimize } \sum_{i=1}^{K}\sum_{x \in C_i} ||x - \mu_i||^2\)</span>$</p>
+<p><strong>The objective:</strong></p>
+<div class="arithmatex">\[\text{minimize } \sum_{i=1}^{K}\sum_{x \in C_i} ||x - \mu_i||^2\]</div>
 <p>Where <span class="arithmatex">\(\mu_i\)</span> is the centroid of cluster <span class="arithmatex">\(C_i\)</span>. Minimize total distance from points to their centroids.</p>
 <p><strong>Strengths:</strong>
 - Fast and scalable—works on millions of points

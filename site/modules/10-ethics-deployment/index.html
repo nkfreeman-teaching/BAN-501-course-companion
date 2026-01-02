@@ -1851,21 +1851,27 @@
 <p><strong>Choosing between fairness criteria</strong>: This is an ethical decision, not technical—it shouldn't be made solely by data scientists. The data scientist's role is to make tradeoffs transparent ("if we optimize for A, here's what happens to X and Y"), not to unilaterally decide. These decisions should involve domain experts, affected communities, legal experts, and ethicists. Document the decision, reasoning, and who was involved.</p>
 <h3 id="fairness-metrics">Fairness Metrics<a class="headerlink" href="#fairness-metrics" title="Permanent link">&para;</a></h3>
 <p>There are multiple mathematical definitions of fairness:</p>
-<p><strong>Demographic Parity</strong> (Statistical Parity):
-$<span class="arithmatex">\(P(\hat{Y}=1|A=0) = P(\hat{Y}=1|A=1)\)</span>$
-- Equal positive prediction rates across groups
-- If 30% of men get approved, 30% of women should get approved
-- <strong>Limitation</strong>: Ignores actual qualification rates</p>
-<p><strong>Equalized Odds</strong>:
-$<span class="arithmatex">\(P(\hat{Y}=1|Y=1, A=0) = P(\hat{Y}=1|Y=1, A=1)\)</span>$
-$<span class="arithmatex">\(P(\hat{Y}=1|Y=0, A=0) = P(\hat{Y}=1|Y=0, A=1)\)</span>$
-- Equal true positive rates AND equal false positive rates across groups
-- If you're qualified, you should have equal chance of being accepted regardless of group
-- If you're unqualified, you should have equal chance of being rejected</p>
-<p><strong>Predictive Parity</strong>:
-$<span class="arithmatex">\(P(Y=1|\hat{Y}=1, A=0) = P(Y=1|\hat{Y}=1, A=1)\)</span>$
-- Equal precision across groups
-- If the model says "yes," the probability of actually being qualified should be the same across groups</p>
+<p><strong>Demographic Parity</strong> (Statistical Parity):</p>
+<div class="arithmatex">\[P(\hat{Y}=1|A=0) = P(\hat{Y}=1|A=1)\]</div>
+<ul>
+<li>Equal positive prediction rates across groups</li>
+<li>If 30% of men get approved, 30% of women should get approved</li>
+<li><strong>Limitation</strong>: Ignores actual qualification rates</li>
+</ul>
+<p><strong>Equalized Odds</strong>:</p>
+<div class="arithmatex">\[P(\hat{Y}=1|Y=1, A=0) = P(\hat{Y}=1|Y=1, A=1)\]</div>
+<div class="arithmatex">\[P(\hat{Y}=1|Y=0, A=0) = P(\hat{Y}=1|Y=0, A=1)\]</div>
+<ul>
+<li>Equal true positive rates AND equal false positive rates across groups</li>
+<li>If you're qualified, you should have equal chance of being accepted regardless of group</li>
+<li>If you're unqualified, you should have equal chance of being rejected</li>
+</ul>
+<p><strong>Predictive Parity</strong>:</p>
+<div class="arithmatex">\[P(Y=1|\hat{Y}=1, A=0) = P(Y=1|\hat{Y}=1, A=1)\]</div>
+<ul>
+<li>Equal precision across groups</li>
+<li>If the model says "yes," the probability of actually being qualified should be the same across groups</li>
+</ul>
 <h3 id="the-impossibility-theorem">The Impossibility Theorem<a class="headerlink" href="#the-impossibility-theorem" title="Permanent link">&para;</a></h3>
 <p><strong>You cannot satisfy all fairness criteria simultaneously</strong> (except in special cases).</p>
 <p>This isn't a technical limitation—it's mathematically proven. If groups have different base rates (different proportions of positive outcomes), you have to choose which fairness criterion matters most.</p>

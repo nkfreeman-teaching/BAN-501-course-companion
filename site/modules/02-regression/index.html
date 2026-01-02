@@ -1831,8 +1831,8 @@
 <div class="arithmatex">\[\frac{\partial MSE}{\partial \beta_0} = -\frac{2}{n}\sum(y_i - \hat{y}_i)\]</div>
 <div class="arithmatex">\[\frac{\partial MSE}{\partial \beta_1} = -\frac{2}{n}\sum(y_i - \hat{y}_i) \cdot x_i\]</div>
 <p><strong>Update rules:</strong></p>
-<div class="arithmatex">\[\beta_0 \leftarrow \beta_0 - \alpha \cdot \frac{\partial MSE}{\partial \beta_0}$$
-$$\beta_1 \leftarrow \beta_1 - \alpha \cdot \frac{\partial MSE}{\partial \beta_1}\]</div>
+<div class="arithmatex">\[\beta_0 \leftarrow \beta_0 - \alpha \cdot \frac{\partial MSE}{\partial \beta_0}\]</div>
+<div class="arithmatex">\[\beta_1 \leftarrow \beta_1 - \alpha \cdot \frac{\partial MSE}{\partial \beta_1}\]</div>
 <p>Where <span class="arithmatex">\(\alpha\)</span> is the <strong>learning rate</strong>—how big a step we take each iteration.</p>
 <p><strong>Convergence</strong> means parameters have stabilized—further iterations don't meaningfully improve the solution. Common stopping criteria: loss change below threshold (1e-6), small gradient magnitude, or maximum iterations. Use a combination. For linear regression, the loss surface is convex with one global minimum; for neural networks, you'll find a local minimum (usually good enough). Monitor the loss curve—oscillating or increasing loss suggests the learning rate is too high.</p>
 <p><strong>Implementation:</strong></p>
@@ -1910,8 +1910,8 @@ $$\beta_1 \leftarrow \beta_1 - \alpha \cdot \frac{\partial MSE}{\partial \beta_1
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 </span></code></pre></div>
 <p><strong>Key statistics in the output:</strong></p>
-<p><strong>R² (Coefficient of Determination):</strong>
-$<span class="arithmatex">\(R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\)</span>$</p>
+<p><strong>R² (Coefficient of Determination):</strong></p>
+<div class="arithmatex">\[R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\]</div>
 <p>R² tells you what proportion of variance your model explains. R² = 0.75 means 75% explained, 25% unexplained.</p>
 <p><strong>p-values for coefficients:</strong>
 - Tests: "Is this coefficient different from zero?"

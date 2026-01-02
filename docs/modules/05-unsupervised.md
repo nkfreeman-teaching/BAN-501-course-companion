@@ -75,6 +75,7 @@ Even unsupervised algorithms fit our three-component framework:
 5. **Repeat** until centroids stop moving
 
 **The objective:**
+
 $$\text{minimize } \sum_{i=1}^{K}\sum_{x \in C_i} ||x - \mu_i||^2$$
 
 Where $\mu_i$ is the centroid of cluster $C_i$. Minimize total distance from points to their centroids.

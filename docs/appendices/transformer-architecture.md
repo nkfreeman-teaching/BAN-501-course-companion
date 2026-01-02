@@ -149,6 +149,7 @@ The attention mechanism only cares about *what* tokens are present and their rel
 **Sinusoidal Positional Encoding**
 
 $$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d_{model}}}\right)$$
+
 $$PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{model}}}\right)$$
 
 **Why sine and cosine?**

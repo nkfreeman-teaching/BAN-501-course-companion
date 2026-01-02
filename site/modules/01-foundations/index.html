@@ -2209,16 +2209,20 @@
 <p><strong>Algorithms that need scaling</strong>:
 - Linear regression, SVM, k-NN, neural networks
 - Regularized methods (regularization only penalizes fairly when features are scaled)</p>
-<p><strong>Standardization (Z-score)</strong>:
-$<span class="arithmatex">\(x_{scaled} = \frac{x - \mu}{\sigma}\)</span>$
-- Centers at 0, standard deviation of 1
-- Preserves outliers
-- Use when: Algorithm assumes normally distributed data</p>
-<p><strong>Min-Max Normalization</strong>:
-$<span class="arithmatex">\(x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}}\)</span>$
-- Scales to [0, 1] range
-- Sensitive to outliers
-- Use when: Need bounded range (neural networks)</p>
+<p><strong>Standardization (Z-score)</strong>:</p>
+<div class="arithmatex">\[x_{scaled} = \frac{x - \mu}{\sigma}\]</div>
+<ul>
+<li>Centers at 0, standard deviation of 1</li>
+<li>Preserves outliers</li>
+<li>Use when: Algorithm assumes normally distributed data</li>
+</ul>
+<p><strong>Min-Max Normalization</strong>:</p>
+<div class="arithmatex">\[x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}}\]</div>
+<ul>
+<li>Scales to [0, 1] range</li>
+<li>Sensitive to outliers</li>
+<li>Use when: Need bounded range (neural networks)</li>
+</ul>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">MinMaxScaler</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Standardization</span>
@@ -2370,29 +2374,39 @@ $<span class="arithmatex">\(x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}}\)
 - Will it work on <em>new, unseen data</em>? Performance on training data is meaningless if it doesn't generalize.</p>
 <p>Always compare to a <strong>meaningful baseline</strong>: for regression, predict the mean (any positive R² beats this); for classification, predict the majority class (90% accuracy from always predicting the majority in a 90/10 dataset). In time series, "predict yesterday's value" is a common baseline. If your model doesn't substantially beat these simple baselines, either the problem is harder than expected or something is wrong with your setup.</p>
 <h3 id="regression-metrics">Regression Metrics<a class="headerlink" href="#regression-metrics" title="Permanent link">&para;</a></h3>
-<p><strong>Mean Squared Error (MSE)</strong>:
-$<span class="arithmatex">\(MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2\)</span>$
-- Penalizes large errors heavily (squared)
-- Units are squared (hard to interpret)</p>
-<p><strong>Root Mean Squared Error (RMSE)</strong>:
-$<span class="arithmatex">\(RMSE = \sqrt{MSE}\)</span>$
-- Same units as target variable (interpretable)
-- Most common regression metric
-- "On average, our predictions are off by $X"</p>
-<p><strong>Mean Absolute Error (MAE)</strong>:
-$<span class="arithmatex">\(MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|\)</span>$
-- Less sensitive to outliers than RMSE
-- Linear penalty</p>
-<p><strong>R² (Coefficient of Determination)</strong>:
-$<span class="arithmatex">\(R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\)</span>$
-- Proportion of variance explained
-- 1 = perfect, 0 = no better than mean prediction
-- Can be negative if model is worse than mean!</p>
-<p><strong>Mean Absolute Percentage Error (MAPE)</strong>:
-$<span class="arithmatex">\(MAPE = \frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i - \hat{y}_i}{y_i}\right|\)</span>$
-- Scale-independent (percentage)
-- Easy for stakeholders: "predictions are off by 5% on average"
-- Undefined when y = 0</p>
+<p><strong>Mean Squared Error (MSE)</strong>:</p>
+<div class="arithmatex">\[MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2\]</div>
+<ul>
+<li>Penalizes large errors heavily (squared)</li>
+<li>Units are squared (hard to interpret)</li>
+</ul>
+<p><strong>Root Mean Squared Error (RMSE)</strong>:</p>
+<div class="arithmatex">\[RMSE = \sqrt{MSE}\]</div>
+<ul>
+<li>Same units as target variable (interpretable)</li>
+<li>Most common regression metric</li>
+<li>"On average, our predictions are off by $X"</li>
+</ul>
+<p><strong>Mean Absolute Error (MAE)</strong>:</p>
+<div class="arithmatex">\[MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|\]</div>
+<ul>
+<li>Less sensitive to outliers than RMSE</li>
+<li>Linear penalty</li>
+</ul>
+<p><strong>R² (Coefficient of Determination)</strong>:</p>
+<div class="arithmatex">\[R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}\]</div>
+<ul>
+<li>Proportion of variance explained</li>
+<li>1 = perfect, 0 = no better than mean prediction</li>
+<li>Can be negative if model is worse than mean!</li>
+</ul>
+<p><strong>Mean Absolute Percentage Error (MAPE)</strong>:</p>
+<div class="arithmatex">\[MAPE = \frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i - \hat{y}_i}{y_i}\right|\]</div>
+<ul>
+<li>Scale-independent (percentage)</li>
+<li>Easy for stakeholders: "predictions are off by 5% on average"</li>
+<li>Undefined when y = 0</li>
+</ul>
 <p><strong>Which to use?</strong></p>
 <table>
 <thead>
@@ -2430,22 +2444,30 @@ $<span class="arithmatex">\(MAPE = \frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i 
 <li><strong>FP (False Positive)</strong>: Predicted positive, actually negative. False alarm. Type I error.</li>
 <li><strong>FN (False Negative)</strong>: Predicted negative, actually positive. Missed it. Type II error.</li>
 </ul>
-<p><strong>Accuracy</strong>:
-$<span class="arithmatex">\(Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\)</span>$
-- Proportion of correct predictions
-- <strong>Misleading with imbalanced classes!</strong> A model predicting "not fraud" for everything gets 99% accuracy if 99% of transactions are legitimate—but it catches zero fraud.</p>
-<p><strong>Precision</strong>:
-$<span class="arithmatex">\(Precision = \frac{TP}{TP + FP}\)</span>$
-- "Of those we predicted positive, how many were actually positive?"
-- High precision = few false alarms</p>
-<p><strong>Recall (Sensitivity)</strong>:
-$<span class="arithmatex">\(Recall = \frac{TP}{TP + FN}\)</span>$
-- "Of actual positives, how many did we catch?"
-- High recall = few missed positives</p>
-<p><strong>F1 Score</strong>:
-$<span class="arithmatex">\(F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}\)</span>$
-- Harmonic mean of precision and recall
-- Use when you need to balance both</p>
+<p><strong>Accuracy</strong>:</p>
+<div class="arithmatex">\[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]</div>
+<ul>
+<li>Proportion of correct predictions</li>
+<li><strong>Misleading with imbalanced classes!</strong> A model predicting "not fraud" for everything gets 99% accuracy if 99% of transactions are legitimate—but it catches zero fraud.</li>
+</ul>
+<p><strong>Precision</strong>:</p>
+<div class="arithmatex">\[Precision = \frac{TP}{TP + FP}\]</div>
+<ul>
+<li>"Of those we predicted positive, how many were actually positive?"</li>
+<li>High precision = few false alarms</li>
+</ul>
+<p><strong>Recall (Sensitivity)</strong>:</p>
+<div class="arithmatex">\[Recall = \frac{TP}{TP + FN}\]</div>
+<ul>
+<li>"Of actual positives, how many did we catch?"</li>
+<li>High recall = few missed positives</li>
+</ul>
+<p><strong>F1 Score</strong>:</p>
+<div class="arithmatex">\[F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}\]</div>
+<ul>
+<li>Harmonic mean of precision and recall</li>
+<li>Use when you need to balance both</li>
+</ul>
 <p>The harmonic mean penalizes extreme imbalances more than the arithmetic mean. With precision=0.99 and recall=0.01, the arithmetic mean is 0.50 (suggesting "medium" performance), but F1 is just 0.02—correctly reflecting the model is nearly useless. A model can't compensate for terrible recall with great precision; F1 remains low. If you care more about one metric (e.g., recall for medical diagnosis), optimize that directly.</p>
 <p><strong>AUC-ROC</strong>:
 - Area Under the ROC Curve

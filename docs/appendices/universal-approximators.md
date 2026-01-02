@@ -200,6 +200,7 @@ Decision tree output:
 ### Neural Network Approximation
 
 A ReLU neuron creates a "bent line":
+
 $$\text{ReLU}(x) = \max(0, x)$$
 
 ![ReLU Function](../assets/deep_dive/relu_function.png)
@@ -231,6 +232,7 @@ def train_step_approximator(n_hidden):
 A single ReLU is a ramp: $\max(0, x)$
 
 Two ReLUs can make a bump:
+
 $$f(x) = \text{ReLU}(x) - \text{ReLU}(x - 1)$$
 
 ![ReLU Bump](../assets/deep_dive/relu_bump.png)

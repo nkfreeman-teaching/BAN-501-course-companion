@@ -90,20 +90,27 @@ This shows that identical accuracy can hide profoundly different impacts on diff
 There are multiple mathematical definitions of fairness:
 
 **Demographic Parity** (Statistical Parity):
+
 $$P(\hat{Y}=1|A=0) = P(\hat{Y}=1|A=1)$$
+
 - Equal positive prediction rates across groups
 - If 30% of men get approved, 30% of women should get approved
 - **Limitation**: Ignores actual qualification rates
 
 **Equalized Odds**:
+
 $$P(\hat{Y}=1|Y=1, A=0) = P(\hat{Y}=1|Y=1, A=1)$$
+
 $$P(\hat{Y}=1|Y=0, A=0) = P(\hat{Y}=1|Y=0, A=1)$$
+
 - Equal true positive rates AND equal false positive rates across groups
 - If you're qualified, you should have equal chance of being accepted regardless of group
 - If you're unqualified, you should have equal chance of being rejected
 
 **Predictive Parity**:
+
 $$P(Y=1|\hat{Y}=1, A=0) = P(Y=1|\hat{Y}=1, A=1)$$
+
 - Equal precision across groups
 - If the model says "yes," the probability of actually being qualified should be the same across groups
 

@@ -218,6 +218,7 @@ The tree picks the feature and threshold that best separates classes (maximally 
 ### Splitting Criteria
 
 **Gini Impurity** (scikit-learn default):
+
 $$Gini = 1 - \sum_{i=1}^{C} p_i^2$$
 
 Where $p_i$ is the proportion of class $i$ in the node.
@@ -226,6 +227,7 @@ Where $p_i$ is the proportion of class $i$ in the node.
 - Gini = 0.5: Maximum impurity for binary (50-50)
 
 **Entropy**:
+
 $$Entropy = -\sum_{i=1}^{C} p_i \log_2(p_i)$$
 
 Usually produces similar results. Gini is slightly faster (no logarithms).
@@ -358,12 +360,15 @@ To understand importance with correlated features: use domain knowledge (which i
 ### Better Metrics
 
 **Precision**: Of those we flagged as positive, how many actually were?
+
 $$Precision = \frac{TP}{TP + FP}$$
 
 **Recall**: Of actual positives, how many did we catch?
+
 $$Recall = \frac{TP}{TP + FN}$$
 
 **F1 Score**: Harmonic mean balancing both
+
 $$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
 
 **Why harmonic mean?** It punishes extreme imbalance:

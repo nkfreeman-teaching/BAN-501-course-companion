@@ -1894,8 +1894,8 @@
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>       (hard step at threshold)
 </span></code></pre></div>
 <h3 id="neural-network-approximation">Neural Network Approximation<a class="headerlink" href="#neural-network-approximation" title="Permanent link">&para;</a></h3>
-<p>A ReLU neuron creates a "bent line":
-$<span class="arithmatex">\(\text{ReLU}(x) = \max(0, x)\)</span>$</p>
+<p>A ReLU neuron creates a "bent line":</p>
+<div class="arithmatex">\[\text{ReLU}(x) = \max(0, x)\]</div>
 <p><img alt="ReLU Function" src="../../assets/deep_dive/relu_function.png" /></p>
 <p>Combining ReLUs can approximate steps:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">train_step_approximator</span><span class="p">(</span><span class="n">n_hidden</span><span class="p">):</span>
@@ -1917,8 +1917,8 @@ $<span class="arithmatex">\(\text{ReLU}(x) = \max(0, x)\)</span>$</p>
 <p><strong>Observation</strong>: More neurons → sharper approximation of the step.</p>
 <h3 id="why-relu-combinations-work">Why ReLU Combinations Work<a class="headerlink" href="#why-relu-combinations-work" title="Permanent link">&para;</a></h3>
 <p>A single ReLU is a ramp: <span class="arithmatex">\(\max(0, x)\)</span></p>
-<p>Two ReLUs can make a bump:
-$<span class="arithmatex">\(f(x) = \text{ReLU}(x) - \text{ReLU}(x - 1)\)</span>$</p>
+<p>Two ReLUs can make a bump:</p>
+<div class="arithmatex">\[f(x) = \text{ReLU}(x) - \text{ReLU}(x - 1)\]</div>
 <p><img alt="ReLU Bump" src="../../assets/deep_dive/relu_bump.png" /></p>
 <p>Many bumps at different positions → approximate any shape.</p>
 <h3 id="key-insight_2">Key Insight<a class="headerlink" href="#key-insight_2" title="Permanent link">&para;</a></h3>

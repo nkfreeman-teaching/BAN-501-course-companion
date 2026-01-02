@@ -1833,8 +1833,8 @@
 - "Bites man dog"</p>
 <p>The attention mechanism only cares about <em>what</em> tokens are present and their relationships, not <em>where</em> they appear.</p>
 <p><strong>Sinusoidal Positional Encoding</strong></p>
-<div class="arithmatex">\[PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d_{model}}}\right)$$
-$$PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{model}}}\right)\]</div>
+<div class="arithmatex">\[PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d_{model}}}\right)\]</div>
+<div class="arithmatex">\[PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{model}}}\right)\]</div>
 <p><strong>Why sine and cosine?</strong></p>
 <ol>
 <li><strong>Bounded range</strong>: Values stay in [-1, 1], preventing position from dominating</li>
@@ -1955,7 +1955,6 @@ $$PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{model}}}\right)\]</div>
 <h3 id="dimension-flow-diagram">Dimension Flow Diagram<a class="headerlink" href="#dimension-flow-diagram" title="Permanent link">&para;</a></h3>
 <p><img alt="Attention Dimension Flow" src="../../assets/deep_dive/attention_flow-1.png" /></p>
 <p><img alt="Attention Dimension Flow" src="../../assets/deep_dive/attention_flow-2.png" /></p>
-<p><img alt="Attention Dimension Flow" src="../../assets/deep_dive/attention_flow-1.png" /></p>
 <hr />
 <h2 id="from-scratch-pytorch-implementation">From-Scratch PyTorch Implementation<a class="headerlink" href="#from-scratch-pytorch-implementation" title="Permanent link">&para;</a></h2>
 <h3 id="self-attention-module">Self-Attention Module<a class="headerlink" href="#self-attention-module" title="Permanent link">&para;</a></h3>

@@ -126,6 +126,7 @@ Parameters: 3 × 3 × 3 + 1 (bias) = 28 parameters (per filter)
 **What This Enables: Translation Equivariance**
 
 If you shift the input, the output shifts by the same amount:
+
 $$f(\text{shift}(x)) = \text{shift}(f(x))$$
 
 A cat detector fires whether the cat is at (10, 10) or (200, 200).
@@ -308,6 +309,7 @@ The filter slides across all valid positions to fill the 6×6 output.
 $$\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_size} + 2 \times \text{padding}}{\text{stride}} \right\rfloor + 1$$
 
 For our example:
+
 $$\frac{8 - 3 + 2 \times 0}{1} + 1 = 6$$
 
 ---

@@ -109,6 +109,7 @@ X = tfidf.fit_transform(corpus)
 **The key insight**: The embedding layer weights ARE the word vectors. Words appearing in similar contexts get similar embeddings.
 
 **Famous example:**
+
 $$king - man + woman \approx queen$$
 
 ```python
@@ -292,6 +293,7 @@ Eight heads, each with 64 dimensions, capturing different relationships.
 **Solution**: Add position information to embeddings.
 
 $$PE_{pos,2i} = \sin(pos / 10000^{2i/d})$$
+
 $$PE_{pos,2i+1} = \cos(pos / 10000^{2i/d})$$
 
 Where:

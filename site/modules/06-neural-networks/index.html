@@ -1833,32 +1833,38 @@
 <p><strong>1. Weights (W)</strong>: Learnable parameters connecting neurons
 <strong>2. Biases (b)</strong>: Learnable offset per neuron
 <strong>3. Activation functions</strong>: Non-linear transformations</p>
-<p>The computation at each neuron:
-$<span class="arithmatex">\(output = activation(Wx + b)\)</span>$</p>
+<p>The computation at each neuron:</p>
+<div class="arithmatex">\[output = activation(Wx + b)\]</div>
 <h3 id="activation-functions">Activation Functions<a class="headerlink" href="#activation-functions" title="Permanent link">&para;</a></h3>
-<p><strong>ReLU (Rectified Linear Unit)</strong> — most common:
-$<span class="arithmatex">\(\text{ReLU}(x) = \max(0, x)\)</span>$
-- Simple: negative → 0, positive → pass through
-- Default choice for hidden layers
-- Helps with vanishing gradients</p>
-<p><strong>Sigmoid</strong>:
-$<span class="arithmatex">\(\sigma(x) = \frac{1}{1 + e^{-x}}\)</span>$
-- Output between 0 and 1
-- Good for binary output layer
-- Suffers from vanishing gradients in deep networks</p>
-<p><strong>Softmax</strong> (for multi-class):
-$<span class="arithmatex">\(\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}\)</span>$
-- Outputs sum to 1 (probabilities)
-- Used in final layer for classification</p>
+<p><strong>ReLU (Rectified Linear Unit)</strong> — most common:</p>
+<div class="arithmatex">\[\text{ReLU}(x) = \max(0, x)\]</div>
+<ul>
+<li>Simple: negative → 0, positive → pass through</li>
+<li>Default choice for hidden layers</li>
+<li>Helps with vanishing gradients</li>
+</ul>
+<p><strong>Sigmoid</strong>:</p>
+<div class="arithmatex">\[\sigma(x) = \frac{1}{1 + e^{-x}}\]</div>
+<ul>
+<li>Output between 0 and 1</li>
+<li>Good for binary output layer</li>
+<li>Suffers from vanishing gradients in deep networks</li>
+</ul>
+<p><strong>Softmax</strong> (for multi-class):</p>
+<div class="arithmatex">\[\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}\]</div>
+<ul>
+<li>Outputs sum to 1 (probabilities)</li>
+<li>Used in final layer for classification</li>
+</ul>
 <h3 id="why-non-linear-activations">Why Non-linear Activations?<a class="headerlink" href="#why-non-linear-activations" title="Permanent link">&para;</a></h3>
-<p>Without non-linearity:
-$<span class="arithmatex">\(Layer_2(Layer_1(x)) = W_2(W_1 x) = (W_2 W_1)x = Wx\)</span>$</p>
+<p>Without non-linearity:</p>
+<div class="arithmatex">\[Layer_2(Layer_1(x)) = W_2(W_1 x) = (W_2 W_1)x = Wx\]</div>
 <p><strong>Multiple linear layers = one linear layer!</strong></p>
 <p>No matter how many linear layers you stack, the result is still linear. Non-linear activations allow each layer to transform representations in ways linear functions can't.</p>
 <p><strong>Why ReLU works</strong>: (1) <strong>Vanishing gradient solution</strong>—sigmoid's gradient approaches zero for large inputs; ReLU has gradient 1 for positives, letting gradients pass through unchanged. (2) <strong>Computational efficiency</strong>—just max(0,x), orders of magnitude faster than sigmoid. (3) <strong>Sparse activation</strong>—50% of neurons may be "dead" for any input, improving efficiency. Despite being piecewise linear, stacking many ReLUs can approximate any continuous function.</p>
 <h3 id="parameter-counting">Parameter Counting<a class="headerlink" href="#parameter-counting" title="Permanent link">&para;</a></h3>
-<p><strong>For a fully connected layer:</strong>
-$<span class="arithmatex">\(Parameters = (input \times output) + output = weights + biases\)</span>$</p>
+<p><strong>For a fully connected layer:</strong></p>
+<div class="arithmatex">\[Parameters = (input \times output) + output = weights + biases\]</div>
 <p><strong>Example</strong>: Network with layers [784, 256, 128, 10]
 - Layer 1: 784×256 + 256 = 200,960
 - Layer 2: 256×128 + 128 = 32,896
@@ -1898,12 +1904,12 @@ $<span class="arithmatex">\(Parameters = (input \times output) + output = weight
 <hr />
 <h2 id="62-training-neural-networks">6.2 Training Neural Networks<a class="headerlink" href="#62-training-neural-networks" title="Permanent link">&para;</a></h2>
 <h3 id="loss-functions">Loss Functions<a class="headerlink" href="#loss-functions" title="Permanent link">&para;</a></h3>
-<p><strong>Regression — Mean Squared Error (MSE):</strong>
-$<span class="arithmatex">\(L = \frac{1}{n}\sum(y_i - \hat{y}_i)^2\)</span>$</p>
-<p><strong>Binary Classification — Binary Cross-Entropy:</strong>
-$<span class="arithmatex">\(L = -\frac{1}{n}\sum[y\log(\hat{y}) + (1-y)\log(1-\hat{y})]\)</span>$</p>
-<p><strong>Multi-class — Cross-Entropy:</strong>
-$<span class="arithmatex">\(L = -\frac{1}{n}\sum_{i}\sum_{c} y_{ic}\log(\hat{y}_{ic})\)</span>$</p>
+<p><strong>Regression — Mean Squared Error (MSE):</strong></p>
+<div class="arithmatex">\[L = \frac{1}{n}\sum(y_i - \hat{y}_i)^2\]</div>
+<p><strong>Binary Classification — Binary Cross-Entropy:</strong></p>
+<div class="arithmatex">\[L = -\frac{1}{n}\sum[y\log(\hat{y}) + (1-y)\log(1-\hat{y})]\]</div>
+<p><strong>Multi-class — Cross-Entropy:</strong></p>
+<div class="arithmatex">\[L = -\frac{1}{n}\sum_{i}\sum_{c} y_{ic}\log(\hat{y}_{ic})\]</div>
 <p><strong>Why cross-entropy?</strong> The log function severely penalizes confident wrong predictions:
 - <span class="arithmatex">\(\log(1) = 0\)</span> — no penalty for correct confidence
 - <span class="arithmatex">\(\log(0.5) \approx -0.69\)</span> — moderate penalty
@@ -1924,12 +1930,12 @@ $<span class="arithmatex">\(L = -\frac{1}{n}\sum_{i}\sum_{c} y_{ic}\log(\hat{y}_
 </span></code></pre></div>
 <p>One line computes gradients. One line updates weights.</p>
 <h3 id="optimization-algorithms">Optimization Algorithms<a class="headerlink" href="#optimization-algorithms" title="Permanent link">&para;</a></h3>
-<p><strong>SGD (Stochastic Gradient Descent)</strong>:
-$<span class="arithmatex">\(W \leftarrow W - \alpha \cdot \nabla L\)</span>$
-Same as Module 2. Simple but can be slow.</p>
-<p><strong>SGD + Momentum</strong>:
-$<span class="arithmatex">\(v \leftarrow \beta v + \nabla L\)</span>$
-$<span class="arithmatex">\(W \leftarrow W - \alpha \cdot v\)</span>$</p>
+<p><strong>SGD (Stochastic Gradient Descent)</strong>:</p>
+<div class="arithmatex">\[W \leftarrow W - \alpha \cdot \nabla L\]</div>
+<p>Same as Module 2. Simple but can be slow.</p>
+<p><strong>SGD + Momentum</strong>:</p>
+<div class="arithmatex">\[v \leftarrow \beta v + \nabla L\]</div>
+<div class="arithmatex">\[W \leftarrow W - \alpha \cdot v\]</div>
 <p>Accumulates velocity in consistent directions. Like a ball rolling downhill.</p>
 <p><strong>Adam (Adaptive Moment Estimation)</strong> — most popular:
 - Combines momentum with adaptive learning rates

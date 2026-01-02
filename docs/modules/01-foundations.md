@@ -223,13 +223,17 @@ Many algorithms are sensitive to the scale of features. If one feature ranges fr
 - Regularized methods (regularization only penalizes fairly when features are scaled)
 
 **Standardization (Z-score)**:
+
 $$x_{scaled} = \frac{x - \mu}{\sigma}$$
+
 - Centers at 0, standard deviation of 1
 - Preserves outliers
 - Use when: Algorithm assumes normally distributed data
 
 **Min-Max Normalization**:
+
 $$x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}}$$
+
 - Scales to [0, 1] range
 - Sensitive to outliers
 - Use when: Need bounded range (neural networks)
@@ -384,29 +388,39 @@ Always compare to a **meaningful baseline**: for regression, predict the mean (a
 ### Regression Metrics
 
 **Mean Squared Error (MSE)**:
+
 $$MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
 - Penalizes large errors heavily (squared)
 - Units are squared (hard to interpret)
 
 **Root Mean Squared Error (RMSE)**:
+
 $$RMSE = \sqrt{MSE}$$
+
 - Same units as target variable (interpretable)
 - Most common regression metric
 - "On average, our predictions are off by $X"
 
 **Mean Absolute Error (MAE)**:
+
 $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
+
 - Less sensitive to outliers than RMSE
 - Linear penalty
 
 **R² (Coefficient of Determination)**:
+
 $$R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
+
 - Proportion of variance explained
 - 1 = perfect, 0 = no better than mean prediction
 - Can be negative if model is worse than mean!
 
 **Mean Absolute Percentage Error (MAPE)**:
+
 $$MAPE = \frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i - \hat{y}_i}{y_i}\right|$$
+
 - Scale-independent (percentage)
 - Easy for stakeholders: "predictions are off by 5% on average"
 - Undefined when y = 0
@@ -434,22 +448,30 @@ Everything starts with the **confusion matrix**:
 - **FN (False Negative)**: Predicted negative, actually positive. Missed it. Type II error.
 
 **Accuracy**:
+
 $$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
+
 - Proportion of correct predictions
 - **Misleading with imbalanced classes!** A model predicting "not fraud" for everything gets 99% accuracy if 99% of transactions are legitimate—but it catches zero fraud.
 
 **Precision**:
+
 $$Precision = \frac{TP}{TP + FP}$$
+
 - "Of those we predicted positive, how many were actually positive?"
 - High precision = few false alarms
 
 **Recall (Sensitivity)**:
+
 $$Recall = \frac{TP}{TP + FN}$$
+
 - "Of actual positives, how many did we catch?"
 - High recall = few missed positives
 
 **F1 Score**:
+
 $$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
+
 - Harmonic mean of precision and recall
 - Use when you need to balance both
 

@@ -80,13 +80,43 @@ def transform_image_paths(content: str) -> str:
     return content
 
 
+def transform_display_math(content: str) -> str:
+    """
+    Ensure blank lines around display math blocks for proper arithmatex parsing.
+
+    pymdownx.arithmatex requires blank lines around $$ blocks to recognize them
+    as display math (block-level). Without blank lines, it treats them as inline
+    math, resulting in literal $ characters appearing in the output.
+
+    Transforms:
+        text
+        $$equation$$
+        more text
+
+    To:
+        text
+
+        $$equation$$
+
+        more text
+    """
+    # Add blank line before $$ if preceded by non-blank line
+    content = re.sub(r"(\S)\n(\$\$)", r"\1\n\n\2", content)
+
+    # Add blank line after closing $$ if followed by non-blank line
+    content = re.sub(r"(\$\$)\n(\S)", r"\1\n\n\2", content)
+
+    return content
+
+
 def process_markdown_file(
     source_path: Path,
     dest_path: Path,
 ) -> None:
-    """Read a markdown file, transform image paths, and write to destination."""
+    """Read a markdown file, apply transformations, and write to destination."""
     content = source_path.read_text(encoding="utf-8")
     transformed = transform_image_paths(content)
+    transformed = transform_display_math(transformed)
 
     dest_path.parent.mkdir(parents=True, exist_ok=True)
     dest_path.write_text(transformed, encoding="utf-8")
@@ -307,6 +337,9 @@ def generate_mathjax_js() -> str:
 };
 
 document$.subscribe(() => {
+  MathJax.startup.output.clearCache()
+  MathJax.typesetClear()
+  MathJax.texReset()
   MathJax.typesetPromise()
 })
 """
