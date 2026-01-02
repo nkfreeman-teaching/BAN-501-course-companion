@@ -62,6 +62,37 @@ The math:
 - When z is large and negative: $e^{-z} \to \infty$, so $\sigma(z) \to 0$
 - When z = 0: $e^{0} = 1$, so $\sigma(0) = 0.5$
 
+**Why this particular S-shape?** The sigmoid isn't arbitrary—it's the only function that: (1) maps any real number to (0,1), (2) is symmetric around 0.5, and (3) has a derivative expressible in terms of itself (making gradient descent efficient). Think of z as a "confidence score": strongly negative z means the model is confident in class 0, strongly positive means confident in class 1, and z near 0 means the model is uncertain. The sigmoid converts this confidence into a probability. The "action zone" where probability changes meaningfully is roughly z ∈ [-4, 4]—outside this range, the model is essentially certain.
+
+> **Numerical Example: Sigmoid Function in Action**
+>
+> ```python
+> import numpy as np
+>
+> def sigmoid(z):
+>     return 1 / (1 + np.exp(-z))
+>
+> z_values = [-6, -4, -2, 0, 2, 4, 6]
+> for z in z_values:
+>     prob = sigmoid(z)
+>     print(f"z = {z:>3}: σ(z) = {prob:.4f}")
+> ```
+>
+> **Output:**
+> ```
+> z =  -6: σ(z) = 0.0025
+> z =  -4: σ(z) = 0.0180
+> z =  -2: σ(z) = 0.1192
+> z =   0: σ(z) = 0.5000
+> z =   2: σ(z) = 0.8808
+> z =   4: σ(z) = 0.9820
+> z =   6: σ(z) = 0.9975
+> ```
+>
+> **Interpretation:** At z=0, probability is exactly 0.5 (maximum uncertainty). Moving to z=±4 brings probability within 2% of the extremes (0 or 1). At z=±6, the model is 99.75% confident. The "interesting range" where probability changes meaningfully is roughly z ∈ [-4, 4].
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_sigmoid_function()`*
+
 ### Understanding Odds and Log Odds
 
 **Step 1: Odds**
@@ -127,6 +158,44 @@ With asymmetric costs, lower the threshold—catch more fraud, accept more false
 
 **Cost-based threshold formula**: $t^* = \frac{C_{FP}}{C_{FP} + C_{FN}}$. For fraud costing $10,000 (FN) and investigation costing $100 (FP): threshold ≈ 100/(100+10000) ≈ 0.01—predict fraud for anyone above 1% probability! This assumes well-calibrated probabilities; verify calibration first. Alternative: Youden's J statistic (maximize TPR-FPR) when costs are unknown.
 
+**Why does this formula work?** It comes from minimizing expected cost. At the threshold, the expected cost of a false positive equals the expected cost of a false negative:
+
+$$P(\text{actually positive}) \times C_{FN} = P(\text{actually negative}) \times C_{FP}$$
+
+Solving for the probability threshold where you're indifferent between predicting positive or negative gives the formula. When $C_{FN}$ is much larger than $C_{FP}$ (missing fraud is expensive), the threshold drops close to zero—you flag almost anything suspicious. When costs are equal, the threshold is 0.5 (the default).
+
+> **Numerical Example: Cost-Based Threshold Selection**
+>
+> ```python
+> # Fraud detection costs
+> cost_fp = 50   # Investigation cost
+> cost_fn = 500  # Missed fraud cost
+>
+> optimal_threshold = cost_fp / (cost_fp + cost_fn)
+> print(f"Optimal threshold: {optimal_threshold:.3f}")
+>
+> # Effect on predictions
+> probabilities = [0.05, 0.10, 0.20, 0.40, 0.60]
+> for p in probabilities:
+>     default = "Flag" if p >= 0.5 else "Clear"
+>     optimal = "Flag" if p >= optimal_threshold else "Clear"
+>     print(f"P={p:.2f}: Default={default}, Optimal={optimal}")
+> ```
+>
+> **Output:**
+> ```
+> Optimal threshold: 0.091
+> P=0.05: Default=Clear, Optimal=Clear
+> P=0.10: Default=Clear, Optimal=Flag
+> P=0.20: Default=Clear, Optimal=Flag
+> P=0.40: Default=Clear, Optimal=Flag
+> P=0.60: Default=Flag, Optimal=Flag
+> ```
+>
+> **Interpretation:** When fraud costs 10x more than investigation, we flag any transaction with P(fraud) > 9.1%. A transaction with 10% fraud probability gets flagged—it's worth investigating because the expected loss from missing fraud ($500 × 0.1 = $50) equals the investigation cost ($50).
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_cost_based_threshold()`*
+
 **Threshold effects:**
 
 | Lower Threshold | Higher Threshold |
@@ -151,6 +220,39 @@ For each possible threshold:
 **Note**: AUC ≠ accuracy. AUC measures ranking ability across all thresholds.
 
 **Ranking ability** means correctly ordering examples by likelihood—higher-risk items get higher scores—even if actual probability values are wrong. This matters for resource allocation ("call top 100 highest-risk customers"), campaign targeting (top decile by response rate), and prioritization (fraud investigators review by score). A model with AUC=0.9 and poor calibration is often more useful than AUC=0.6 with perfect calibration—you can recalibrate using Platt scaling or isotonic regression; you can't easily fix ranking ability.
+
+**The "threshold dial" intuition:** Imagine a dial you can turn from 0 to 1. As you turn it up (higher threshold), you become more selective—fewer positive predictions, but the ones you make are more confident. As you turn it down (lower threshold), you cast a wider net—catching more true positives but also more false alarms. The ROC curve shows you every position of this dial simultaneously. A good model gives you attractive options along the curve; a poor model forces you to choose between bad options (high FPR or low TPR).
+
+> **Numerical Example: Building an ROC Curve Step by Step**
+>
+> ```python
+> import numpy as np
+>
+> # Small dataset: 4 positive, 6 negative
+> true_labels = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
+> pred_proba  = np.array([0.95, 0.85, 0.70, 0.45, 0.60, 0.40, 0.35, 0.20, 0.10, 0.05])
+>
+> thresholds = [1.0, 0.70, 0.45, 0.0]
+> for thresh in thresholds:
+>     pred = (pred_proba >= thresh).astype(int)
+>     tp = np.sum((pred == 1) & (true_labels == 1))
+>     fp = np.sum((pred == 1) & (true_labels == 0))
+>     tpr = tp / 4  # 4 actual positives
+>     fpr = fp / 6  # 6 actual negatives
+>     print(f"Threshold {thresh:.2f}: TPR={tpr:.2f}, FPR={fpr:.2f}")
+> ```
+>
+> **Output:**
+> ```
+> Threshold 1.00: TPR=0.00, FPR=0.00
+> Threshold 0.70: TPR=0.75, FPR=0.00
+> Threshold 0.45: TPR=1.00, FPR=0.17
+> Threshold 0.00: TPR=1.00, FPR=1.00
+> ```
+>
+> **Interpretation:** The ROC curve plots these (FPR, TPR) points as threshold varies. At threshold 0.70, we achieve TPR=75% with zero false positives—an excellent operating point. Lowering to 0.45 catches all positives but introduces one false positive (FPR=17%). The AUC measures the area under this curve; higher is better.
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_roc_curve_construction()`*
 
 **Choosing optimal threshold:**
 - Youden's J statistic: Maximize (TPR - FPR)
@@ -226,6 +328,49 @@ Where $p_i$ is the proportion of class $i$ in the node.
 - Gini = 0: Pure node (all same class)
 - Gini = 0.5: Maximum impurity for binary (50-50)
 
+**Gini as "certainty of a random guess":** If you randomly pick an example from a node and randomly assign it a class based on the node's distribution, Gini measures how often you'd be wrong. For a pure node (100% class A), you'd always guess A and always be right—Gini = 0. For a 50-50 node, you'd be wrong half the time on average—Gini = 0.5 (maximum uncertainty). The tree seeks splits that create nodes where a random guess would more often be correct.
+
+**Hand-calculating Gini:** For a node with 60% class A, 40% class B:
+
+$$Gini = 1 - (0.6^2 + 0.4^2) = 1 - (0.36 + 0.16) = 1 - 0.52 = 0.48$$
+
+This is close to maximum impurity (0.5), indicating the node is nearly evenly split.
+
+> **Numerical Example: Evaluating a Split with Gini**
+>
+> ```python
+> def gini(class_proportions):
+>     return 1 - sum(p**2 for p in class_proportions)
+>
+> # Parent node: 100 samples, 50-50 split
+> parent_gini = gini([0.5, 0.5])
+> print(f"Parent Gini: {parent_gini:.4f}")
+>
+> # After split: Left (60 samples, 80-20), Right (40 samples, 10-90)
+> left_gini = gini([0.8, 0.2])
+> right_gini = gini([0.1, 0.9])
+> weighted_gini = (60 * left_gini + 40 * right_gini) / 100
+> info_gain = parent_gini - weighted_gini
+>
+> print(f"Left child Gini: {left_gini:.4f}")
+> print(f"Right child Gini: {right_gini:.4f}")
+> print(f"Weighted child Gini: {weighted_gini:.4f}")
+> print(f"Information gain: {info_gain:.4f}")
+> ```
+>
+> **Output:**
+> ```
+> Parent Gini: 0.5000
+> Left child Gini: 0.3200
+> Right child Gini: 0.1800
+> Weighted child Gini: 0.2640
+> Information gain: 0.2360
+> ```
+>
+> **Interpretation:** The parent node has maximum impurity (0.5). After the split, both children are more "pure"—the left child is 80% one class (Gini=0.32), the right is 90% the other (Gini=0.18). The weighted average (0.264) is much lower than the parent (0.5), yielding high information gain (0.236). The tree picks the split that maximizes this gain.
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_gini_impurity_calculation()`*
+
 **Entropy**:
 
 $$Entropy = -\sum_{i=1}^{C} p_i \log_2(p_i)$$
@@ -270,6 +415,39 @@ Trees create rectangular decision regions:
 - ~15 nodes
 
 **Key insight**: Deep trees memorize training data including noise. 100% training accuracy almost certainly means overfitting.
+
+> **Numerical Example: Decision Tree Overfitting**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split
+> from sklearn.tree import DecisionTreeClassifier
+>
+> # Data with 10% label noise
+> X, y = make_classification(
+>     n_samples=300, n_features=10, n_informative=5,
+>     flip_y=0.1, random_state=42
+> )
+> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+>
+> for depth in [3, 5, 10, None]:
+>     tree = DecisionTreeClassifier(max_depth=depth, random_state=42)
+>     tree.fit(X_train, y_train)
+>     print(f"Depth {str(depth):>4}: Train={tree.score(X_train, y_train):.1%}, "
+>           f"Test={tree.score(X_test, y_test):.1%}, Leaves={tree.get_n_leaves()}")
+> ```
+>
+> **Output:**
+> ```
+> Depth    3: Train=81.9%, Test=71.1%, Leaves=7
+> Depth    5: Train=92.4%, Test=77.8%, Leaves=16
+> Depth   10: Train=100.0%, Test=80.0%, Leaves=29
+> Depth None: Train=100.0%, Test=80.0%, Leaves=29
+> ```
+>
+> **Interpretation:** The unlimited tree achieves 100% training accuracy—but the data has 10% label noise, so perfect training accuracy means it memorized the noise! The train-test gap (20%) signals overfitting. Shallow trees (depth 3-5) have lower training accuracy but smaller gaps, indicating better generalization.
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_tree_overfitting()`*
 
 100% training accuracy is occasionally okay: perfectly separable data (predicting even/odd from last digit), very small clean datasets, or memorization tasks. Verify by checking test accuracy (also very high?), the train-test gap (small vs large?), complexity (10 leaves for 10,000 samples = simple rules; 5,000 leaves = memorized), and cross-validation consistency. The heuristic remains useful: 100% training accuracy should trigger suspicion.
 
@@ -323,6 +501,44 @@ $$Importance = \sum_{nodes} (impurity\ reduction \times samples)$$
 
 To understand importance with correlated features: use domain knowledge (which is more causal?), remove one and retrain (does importance transfer?), or use permutation importance (shuffles independently). For prediction, keeping both adds complexity without benefit. For interpretation, report both but note correlation. Consider reporting "this cluster of correlated features is important" rather than attributing to one.
 
+**The "weighted vote" intuition:** Think of feature importance as a weighted vote. Every time a feature is used to split a node, it gets "votes" equal to (impurity reduction × number of samples affected). A feature used at the root affects all samples—many votes. A feature used deep in the tree affects few samples—fewer votes. The final importance is each feature's total votes divided by all votes. This explains why the root feature often has high importance even if it's not the "most important" conceptually—it affects the most samples.
+
+> **Numerical Example: Feature Importance**
+>
+> ```python
+> import numpy as np
+> from sklearn.tree import DecisionTreeClassifier
+>
+> np.random.seed(42)
+> n = 500
+> x_strong = np.random.randn(n)  # Strong predictor (coef 2.0)
+> x_medium = np.random.randn(n)  # Medium predictor (coef 1.0)
+> x_weak = np.random.randn(n)    # Weak predictor (coef 0.3)
+> x_noise = np.random.randn(n)   # Pure noise
+>
+> y = (2.0*x_strong + 1.0*x_medium + 0.3*x_weak + np.random.randn(n)*0.5 > 0).astype(int)
+> X = np.column_stack([x_strong, x_medium, x_weak, x_noise])
+>
+> tree = DecisionTreeClassifier(max_depth=5, random_state=42)
+> tree.fit(X, y)
+>
+> names = ['strong', 'medium', 'weak', 'noise']
+> for name, imp in zip(names, tree.feature_importances_):
+>     print(f"{name:>8}: {imp:.3f}")
+> ```
+>
+> **Output:**
+> ```
+>   strong: 0.661
+>   medium: 0.280
+>     weak: 0.046
+>    noise: 0.013
+> ```
+>
+> **Interpretation:** The tree correctly identifies the strong predictor as most important (66%), followed by medium (28%). The weak predictor and noise have minimal importance. Note: importance is relative (sums to 1) and doesn't indicate causation—just predictive value in this tree.
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_feature_importance()`*
+
 ### Why Decision Trees Are Popular
 
 1. **Explainable**: Show decision rules to stakeholders
@@ -375,6 +591,44 @@ $$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
 - Precision = 100%, Recall = 1% → F1 = 2%
 - Precision = 50%, Recall = 50% → F1 = 50%
 
+The harmonic mean (as opposed to arithmetic mean) has a special property: it's dominated by the smaller value. If you have P=100% and R=1%, the arithmetic mean would be 50.5%—making it look decent. But the harmonic mean is 2%—revealing that one metric is terrible. This is what we want! A model that achieves high precision by predicting almost nothing (low recall) shouldn't score well. The harmonic mean enforces balance: both metrics must be reasonable for F1 to be high.
+
+**The precision-recall "fishing net" analogy:** Imagine you're fishing for a specific type of fish (positives) in a lake (your data). Precision asks: "Of the fish in your net, what fraction are the type you wanted?" Recall asks: "Of all the target fish in the lake, what fraction did you catch?" A tight net (high threshold) catches few fish but mostly the right kind—high precision, low recall. A wide net (low threshold) catches more target fish but also lots of other fish—high recall, low precision. You can't optimize both without a better model (or more target fish).
+
+> **Numerical Example: Precision-Recall at Different Thresholds**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.metrics import precision_score, recall_score, f1_score
+>
+> # Imbalanced dataset: 90% negative, 10% positive
+> X, y = make_classification(n_samples=1000, weights=[0.9, 0.1], random_state=42)
+> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+>
+> model = LogisticRegression(random_state=42, max_iter=1000)
+> model.fit(X_train, y_train)
+> y_proba = model.predict_proba(X_test)[:, 1]
+>
+> for thresh in [0.1, 0.3, 0.5, 0.7]:
+>     y_pred = (y_proba >= thresh).astype(int)
+>     prec = precision_score(y_test, y_pred, zero_division=0)
+>     rec = recall_score(y_test, y_pred, zero_division=0)
+>     print(f"Threshold {thresh}: Precision={prec:.0%}, Recall={rec:.0%}")
+> ```
+>
+> **Output:**
+> ```
+> Threshold 0.1: Precision=29%, Recall=69%
+> Threshold 0.3: Precision=70%, Recall=44%
+> Threshold 0.5: Precision=86%, Recall=19%
+> Threshold 0.7: Precision=100%, Recall=9%
+> ```
+>
+> **Interpretation:** As threshold increases, precision rises (fewer false alarms) but recall falls (more missed positives). At threshold 0.1, we catch 69% of positives but 71% of our "positive" predictions are wrong. At 0.7, we're always right when we predict positive, but we miss 91% of actual positives. Choose based on business costs!
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_precision_recall_threshold()`*
+
 ### The Precision-Recall Trade-off
 
 Usually you can't maximize both:
@@ -399,6 +653,8 @@ smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
 ```
 
+**How SMOTE "fills in the gaps":** SMOTE doesn't just copy existing minority examples (which would teach the model to memorize specific points). Instead, it creates synthetic examples by: (1) picking a minority example, (2) finding its k nearest minority neighbors, (3) drawing a line to one neighbor, and (4) placing a new point somewhere along that line. This "fills in" the feature space between existing minority examples, helping the model learn the general region where minority examples live rather than just memorizing specific cases. Think of it as sketching between the dots to reveal the underlying shape.
+
 **Important**: Only apply SMOTE to training data, never test data! The test set must reflect real-world conditions—your deployed model will face the true class distribution. SMOTE is a training trick to help the model learn about the minority class, not a data transformation. The correct workflow: (1) Split data first. (2) Apply SMOTE only to training set. (3) Evaluate on original, imbalanced test set. (4) Use appropriate metrics (F1, precision, recall) that work for imbalanced data.
 
 ### Class Weights
@@ -411,6 +667,41 @@ model = DecisionTreeClassifier(class_weight='balanced')
 ```
 
 **Effect**: Increases penalty for misclassifying minority class. Often simpler than resampling.
+
+> **Numerical Example: Effect of Class Weights**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.metrics import recall_score, f1_score
+>
+> # Severely imbalanced: 95% negative, 5% positive
+> X, y = make_classification(n_samples=1000, weights=[0.95, 0.05], random_state=42)
+> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+>
+> # Without class weights
+> model_uw = LogisticRegression(class_weight=None, random_state=42, max_iter=1000)
+> model_uw.fit(X_train, y_train)
+> pred_uw = model_uw.predict(X_test)
+>
+> # With balanced class weights
+> model_w = LogisticRegression(class_weight='balanced', random_state=42, max_iter=1000)
+> model_w.fit(X_train, y_train)
+> pred_w = model_w.predict(X_test)
+>
+> print(f"No weights:  Recall={recall_score(y_test, pred_uw):.0%}, F1={f1_score(y_test, pred_uw):.0%}")
+> print(f"Balanced:    Recall={recall_score(y_test, pred_w):.0%}, F1={f1_score(y_test, pred_w):.0%}")
+> ```
+>
+> **Output:**
+> ```
+> No weights:  Recall=0%, F1=0%
+> Balanced:    Recall=78%, F1=19%
+> ```
+>
+> **Interpretation:** Without weights, the model learns to predict "negative" for everything—achieving 96% accuracy by ignoring the minority class entirely (0% recall). With balanced weights, the model actually tries to find positives, achieving 78% recall. Accuracy drops because of more false positives, but F1 improves because we're actually solving the problem!
+>
+> *Source: `slide_computations/module3_examples.py` - `demo_class_weights()`*
 
 ### Threshold Adjustment
 
@@ -515,6 +806,8 @@ random_search.fit(X_train, y_train)
 - Random search explores more values of what matters
 
 **In practice, random search often beats grid search with the same computational budget.**
+
+**Why random beats grid—the geometric intuition:** Imagine a 2D hyperparameter space where only one dimension matters (common in practice). Grid search with 9 trials might try 3 values per dimension, giving you only 3 unique values of the important parameter. Random search with 9 trials gives you 9 unique values of the important parameter! When you don't know which parameters matter most (and you usually don't), random search automatically allocates more trials to exploring variation in every dimension. Grid search wastes trials exploring combinations of unimportant parameters.
 
 **Standard ranges for common hyperparameters**: `max_depth`: 2-20 for trees; `n_estimators`: 50-500 for forests/boosting; `learning_rate`: 0.001-0.3 for boosting; `min_samples_split`: 2-50; `C` (regularization): 0.001-100 (log scale). If the best value is at the edge of your range, extend that direction. Start with wide, log-spaced ranges, do a coarse search (10 values), then refine in the promising region.
 

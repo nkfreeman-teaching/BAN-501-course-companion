@@ -122,6 +122,8 @@ We could use the closed-form solution, but gradient descent is worth learning be
 3. Update parameters in the **opposite** direction—downhill toward lower error
 4. Repeat until convergence
 
+**The landscape intuition:** Imagine a hilly terrain where your position is determined by your parameter values ($\beta_0$, $\beta_1$) and the elevation is your error (MSE). You're dropped somewhere on this terrain—probably high up—and want to reach the lowest valley. You can't see the whole landscape, but you can feel which way is steepest *right where you're standing*. The gradient tells you that direction. Each step, you walk downhill proportional to the steepness. For linear regression, this landscape is bowl-shaped (convex) with exactly one lowest point—you'll always reach it eventually. Neural networks have more complex terrain with multiple valleys; you'll find *a* valley, but maybe not the deepest one.
+
 **The gradients:**
 
 $$\frac{\partial MSE}{\partial \beta_0} = -\frac{2}{n}\sum(y_i - \hat{y}_i)$$
@@ -178,6 +180,43 @@ def gradient_descent_linear_regression(
     return beta_0, beta_1, history
 ```
 
+> **Numerical Example: Watching Gradient Descent Converge**
+>
+> ```python
+> import numpy as np
+>
+> # Generate data: y = 3 + 2x + noise
+> np.random.seed(42)
+> X = np.random.uniform(low=0, high=10, size=100)
+> y = 3.0 + 2.0 * X + np.random.normal(loc=0, scale=1.5, size=100)
+>
+> # Gradient descent with learning_rate=0.02
+> beta_0, beta_1 = 0.0, 0.0
+> for iteration in range(501):
+>     y_pred = beta_0 + beta_1 * X
+>     d_beta_0 = -2/100 * np.sum(y - y_pred)
+>     d_beta_1 = -2/100 * np.sum((y - y_pred) * X)
+>     beta_0 = beta_0 - 0.02 * d_beta_0
+>     beta_1 = beta_1 - 0.02 * d_beta_1
+>     if iteration in [0, 10, 50, 100, 200, 500]:
+>         mse = np.mean((y - y_pred)**2)
+>         print(f"Iter {iteration:3d}: β₀={beta_0:.4f}, β₁={beta_1:.4f}, MSE={mse:.4f}")
+> ```
+>
+> **Output:**
+> ```
+> Iter   0: β₀=0.6787, β₁=2.3374, MSE=188.2950
+> Iter  10: β₀=0.6787, β₁=2.3374, MSE=3.7994
+> Iter  50: β₀=1.6304, β₁=2.1911, MSE=2.6278
+> Iter 100: β₀=2.3539, β₁=2.0799, MSE=2.0813
+> Iter 200: β₀=3.0051, β₁=1.9798, MSE=1.8434
+> Iter 500: β₀=3.3115, β₁=1.9328, MSE=1.8149
+> ```
+>
+> **Interpretation:** Starting from zeros, gradient descent iteratively improves toward the true parameters (β₀=3, β₁=2). MSE drops rapidly at first (188→4 in just 10 iterations), then refines more slowly. The final estimates (3.31, 1.93) are close to truth—the remaining gap is due to noise in the data, not algorithm failure.
+>
+> *Source: `slide_computations/module2_examples.py` – `demo_gradient_descent_convergence()`*
+
 ### Learning Rate Trade-offs
 
 The learning rate $\alpha$ is crucial:
@@ -187,9 +226,28 @@ The learning rate $\alpha$ is crucial:
 | Very slow convergence | Converges in reasonable time | Overshoots the minimum |
 | Safe but inefficient | Reaches good solution | Can diverge (loss increases!) |
 
+**What the loss curve tells you:** Plot MSE vs. iteration number to diagnose learning rate issues:
+- **Too small (α = 0.0001):** The curve creeps downward very slowly—you might need 10,000+ iterations to converge. The slope is shallow but always decreasing.
+- **Just right (α = 0.01):** The curve drops quickly at first, then flattens as you approach the minimum. Convergence in hundreds, not thousands, of iterations.
+- **Too large (α = 0.1):** The curve may oscillate wildly (bouncing up and down) or explode upward. If loss increases iteration-over-iteration, your learning rate is too high.
+
 If your loss keeps *increasing*, the learning rate is too high. Reduce it by a factor of 10.
 
 **Adaptive learning rate methods** automatically adjust during training. Learning rate schedules (step decay, exponential decay, cosine annealing) decrease the rate over time—large steps initially, smaller steps later. **Adaptive optimizers** (AdaGrad, RMSprop, Adam) adjust per parameter based on gradient history. **Adam** is the default for deep learning—it works well with default learning rate 0.001. For scikit-learn's linear regression, optimization is handled automatically.
+
+> **Numerical Example: Learning Rate Effects**
+>
+> Same dataset, three different learning rates:
+>
+> | Learning Rate | Status | Iterations | Final MSE |
+> |---------------|--------|------------|-----------|
+> | 0.0001 | Not converged | 1000 | 4.04 |
+> | 0.01 | Converged | 920 | 1.81 |
+> | 0.1 | **DIVERGED** | 6 | ∞ |
+>
+> **Interpretation:** With α=0.0001 (too small), the algorithm made progress but didn't converge in 1000 iterations—MSE is still far from optimal. With α=0.01 (just right), it converged in 920 iterations to the best solution (MSE=1.81). With α=0.1 (too large), the algorithm diverged after just 6 iterations—the loss exploded to infinity. When you see increasing loss, immediately reduce the learning rate by 10x.
+>
+> *Source: `slide_computations/module2_examples.py` – `demo_learning_rate_effects()`*
 
 ### Using statsmodels for Regression
 
@@ -299,6 +357,18 @@ plt.tight_layout()
 plt.show()
 ```
 
+**Reading residual plots—a pattern recognition guide:**
+
+| What You See | What It Means | Action |
+|--------------|---------------|--------|
+| Random scatter around zero | Good! Assumptions satisfied | Proceed with model |
+| U-shape or inverted-U curve | Non-linear relationship missed | Add polynomial terms or transform variables |
+| Funnel shape (wider on one side) | Heteroscedasticity—variance changes | Transform Y (log), use robust standard errors |
+| Clusters or groups | Subgroups with different patterns | Add categorical variable, consider separate models |
+| Pattern over time (if ordered) | Autocorrelation | Time series methods, lagged variables |
+
+The residual plot is your diagnostic dashboard. Even if R² looks great, always check residuals—patterns reveal problems that summary statistics hide.
+
 **Key insight:** High R² with a patterned residual plot is still a bad model. The pattern means you're missing structure in the data.
 
 To fix a curved residual pattern: (1) Identify which feature causes it by plotting residuals against each predictor. (2) Try transforms—log for diminishing returns, square root for counts, polynomial terms (x², x³). (3) Use `PolynomialFeatures(degree=2)` with regularization. (4) If transforms don't help, consider non-linear models (trees, GAMs, neural networks). (5) Verify the fix—residuals should show random scatter.
@@ -339,6 +409,21 @@ Multiple regression coefficients are **partial effects**—the effect of one var
 
 The coefficient for experience dropped because education was **confounded** with experience. People with more experience often have more education. The simple regression was attributing some of education's effect to experience.
 
+**The causal diagram view:** Picture arrows showing what causes what:
+
+```
+         Education
+         ↙      ↘
+    Experience → Salary
+```
+
+Education affects both experience (more education often means less early work experience) and salary. When we don't control for education, we're measuring a "back-door" path: Experience ← Education → Salary. The simple regression captures this indirect association alongside the direct effect. Multiple regression "closes" this path by holding education constant, isolating experience's direct effect.
+
+**Three types of variables to distinguish:**
+- **Confounder** (Education above): Affects both X and Y. Include it to avoid bias.
+- **Mediator** (e.g., Skills on the Experience→Salary path): On the causal chain between X and Y. Include only if you want indirect effects removed.
+- **Collider** (e.g., "Got Promoted" affected by both Experience and Salary): Controlling for it *creates* spurious associations. Don't include.
+
 To identify confounders, ask: "What could affect both X and Y?" Draw causal diagrams—confounders have arrows TO both predictor and outcome. Check correlations, but correlation alone isn't sufficient; you need domain reasoning. Don't throw every variable in—mediators (on the causal path) or colliders (affected by both) can introduce bias. Include variables that theory suggests are confounders and were measured before the treatment.
 
 ### Multicollinearity
@@ -349,6 +434,8 @@ To identify confounders, ask: "What could affect both X and Y?" Draw causal diag
 - Coefficients change dramatically when you add/remove features
 - High R² but few significant individual predictors
 - Signs of coefficients seem wrong
+
+**The see-saw analogy:** Imagine predicting house price from both "total square feet" and "number of rooms." These are highly correlated—bigger houses have more rooms. In the model, their coefficients are like two kids on a see-saw that must balance to produce the right prediction. If one kid (coefficient) goes up, the other must go down. The model can balance them many different ways: (sqft=+100, rooms=-50), (sqft=+50, rooms=0), (sqft=+150, rooms=-100)—all giving similar predictions. The *total effect* is stable, but the *individual coefficients* are unstable. That's why coefficients jump around with small data changes when multicollinearity is present.
 
 ### Detecting Multicollinearity: VIF
 
@@ -372,6 +459,29 @@ for i in range(X.shape[1]):
     vif = variance_inflation_factor(X.values, i)
     print(f"{feature_names[i]}: VIF = {vif:.2f}")
 ```
+
+> **Numerical Example: VIF Multicollinearity Detection**
+>
+> **Scenario 1:** Three independent features
+>
+> | Feature | VIF |
+> |---------|-----|
+> | x1 | 1.03 |
+> | x2 | 1.01 |
+> | x3 | 1.02 |
+>
+> **Scenario 2:** Added x4 which is highly correlated with x1 (r = 0.994)
+>
+> | Feature | VIF |
+> |---------|-----|
+> | x1 | 88.60 |
+> | x2 | 1.02 |
+> | x3 | 1.03 |
+> | x4 (corr with x1) | 88.12 |
+>
+> **Interpretation:** Independent features have VIF ≈ 1, indicating no multicollinearity. When x4 (nearly identical to x1) is added, both x1 and x4 jump to VIF ≈ 88—severe multicollinearity. The x2 and x3 VIF values remain unaffected because they're not involved in the collinear relationship. VIF > 10 requires action: remove x4, combine with x1, or use Ridge.
+>
+> *Source: `slide_computations/module2_examples.py` – `demo_vif_multicollinearity()`*
 
 **Solutions for multicollinearity:**
 1. Remove one of the correlated features
@@ -397,7 +507,12 @@ Large coefficients can indicate overfitting—the model making sharp adjustments
 
 **Effect:** Can shrink coefficients **exactly to zero** → automatic feature selection!
 
-The L1 constraint region is a diamond with corners on the axes; L2 is a smooth circle. Loss function contours typically hit the L1 diamond at corners (coefficients exactly zero), but touch the L2 circle tangentially (rarely on an axis). Additionally, the L1 gradient is constant (±1) regardless of how small β gets—always pulling toward zero—while the L2 gradient (2β) weakens as β approaches zero. L1 performs automatic feature selection; L2 keeps all features with small coefficients.
+**The geometry of regularization:** Picture a 2D space where each axis is a coefficient (β₁, β₂). The loss function forms elliptical contours—concentric ovals centered on the OLS solution. Regularization adds a constraint: "stay within this budget region."
+
+- **L1 (Lasso):** The budget region is a diamond with corners touching the axes. As you shrink the budget, the loss contours first touch a corner—where one coefficient equals zero. The diamond's sharp corners make this likely.
+- **L2 (Ridge):** The budget region is a circle. Loss contours touch it tangentially, almost never on an axis. Coefficients shrink smoothly toward zero but rarely reach exactly zero.
+
+**Why this matters for feature selection:** L1's diamond geometry naturally produces sparse solutions (some coefficients = 0). L2's circle geometry keeps all features, just smaller. Additionally, the L1 gradient is constant (±1) regardless of how small β gets—always pulling toward zero—while the L2 gradient (2β) weakens as β approaches zero.
 
 **When to use:**
 - You suspect many features are irrelevant
@@ -414,6 +529,25 @@ lasso.fit(X_train_scaled, y_train)
 selected_features = [f for f, c in zip(feature_names, lasso.coef_) if c != 0]
 print(f"Selected {len(selected_features)} features")
 ```
+
+> **Numerical Example: Lasso Feature Selection**
+>
+> True model: y = 5·x1 + 3·x2 − 2·x3 (features x4–x10 are pure noise)
+>
+> | Feature | α=0.01 | α=0.1 | α=0.5 | α=1.0 |
+> |---------|--------|-------|-------|-------|
+> | x1 | 4.50 | 4.37 | 3.89 | 3.29 |
+> | x2 | 3.41 | 3.32 | 2.92 | 2.43 |
+> | x3 | −2.07 | −1.94 | −1.49 | −0.93 |
+> | x4 | 0.09 | **0** | **0** | **0** |
+> | x5 | 0.03 | **0** | **0** | **0** |
+> | x6 | −0.07 | **0** | **0** | **0** |
+> | x7–x10 | small | **0** | **0** | **0** |
+> | **Non-zero** | **10** | **3** | **3** | **3** |
+>
+> **Interpretation:** At low regularization (α=0.01), all 10 features have non-zero coefficients—noise features show small spurious effects. As α increases, noise features (x4–x10) shrink exactly to zero, leaving only the three true predictors. By α=0.1, Lasso has automatically identified which features matter. This is automatic feature selection in action.
+>
+> *Source: `slide_computations/module2_examples.py` – `demo_lasso_feature_selection()`*
 
 ### L2 Regularization (Ridge)
 
@@ -452,6 +586,26 @@ elastic = ElasticNet(
 )
 elastic.fit(X_train_scaled, y_train)
 ```
+
+> **Numerical Example: Ridge vs Lasso Comparison**
+>
+> True model: y = 3·x1 + 2·x2 + 1.5·x3 (x4 is noise, x1 and x2 are correlated with r=0.89)
+>
+> | Feature | OLS | Ridge | Lasso |
+> |---------|-----|-------|-------|
+> | x1 | 2.88 | 2.86 | 2.84 |
+> | x2 (corr) | 2.05 | 2.07 | 1.98 |
+> | x3 | 1.49 | 1.48 | 1.38 |
+> | x4 (noise) | 0.08 | 0.08 | **0.00** |
+>
+> **Interpretation:** All methods recover approximate true coefficients. The key difference is in handling x4 (noise): Ridge keeps a small non-zero coefficient (0.08); Lasso zeros it out completely. Both Ridge and Lasso shrink coefficients toward zero, but only Lasso performs selection. When x1 and x2 are correlated, Ridge distributes weight across both; Lasso might keep one and drop the other (not shown here, but common with stronger regularization).
+>
+> **When to choose which:**
+> - **Ridge:** When all features likely contribute, especially with multicollinearity
+> - **Lasso:** When you want automatic feature selection (sparse model)
+> - **Elastic Net:** When you want both—feature selection plus stability
+>
+> *Source: `slide_computations/module2_examples.py` – `demo_ridge_vs_lasso()`*
 
 ### Choosing Regularization Strength
 

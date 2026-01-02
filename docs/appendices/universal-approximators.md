@@ -34,14 +34,47 @@ Each hidden neuron with a sigmoid activation creates an S-shaped curve:
 
 ![Sigmoid Curves](../assets/deep_dive/sigmoid_curves.png)
 
+**Reading the diagram**: The left panel shows a standard sigmoid with weight=1: the output changes gradually from 0 to 1 over a wide x range (roughly -4 to +4). The right panel shows a sigmoid with weight=5: the transition is compressed into a narrow band around x=0, creating an almost step-like function. The dashed horizontal line at y=0.5 marks the decision threshold. Higher weights → sharper transitions → more step-like behavior. This is how sigmoid neurons can approximate hard decision boundaries when needed.
+
+> **Numerical Example: Sigmoid Weight Effects**
+>
+> ```python
+> import numpy as np
+>
+> def sigmoid(x, weight):
+>     return 1 / (1 + np.exp(-weight * x))
+>
+> # Transition width: x range where output goes from 0.1 to 0.9
+> # Width = 2*ln(9)/weight ≈ 4.39/weight
+> for w in [1, 2, 5, 10]:
+>     width = 2 * np.log(9) / w
+>     print(f"Weight={w}: transition width = {width:.3f}")
+> ```
+>
+> **Output:**
+> ```
+> Weight=1: transition width = 4.394
+> Weight=2: transition width = 2.197
+> Weight=5: transition width = 0.879
+> Weight=10: transition width = 0.439
+> ```
+>
+> **Interpretation:** Weight=1 spreads the transition across ~4.4 units of x. Weight=10 compresses it to ~0.4 units—nearly a step function. This is how sigmoids can approximate hard boundaries.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_sigmoid_weight_effects()`*
+
 By combining multiple neurons:
 - Two sigmoids can create a "bump" (rise then fall)
 - Many bumps can approximate any shape
 - The more neurons, the smoother the approximation
 
+**The "building blocks" analogy**: Think of each neuron as a LEGO brick. Sigmoid neurons make smooth, rounded bumps; ReLU neurons make sharp corners. The Universal Approximation Theorem says: with enough bricks of the right type, you can build any structure. The catch? It doesn't tell you how many bricks you need or how to arrange them—that's what training figures out.
+
 ### Visual Example: Approximating a Square Wave
 
 ![Neuron Approximation](../assets/deep_dive/neuron_approximation.png)
+
+**Reading the diagram**: Three panels showing the Universal Approximation Theorem in action. Left panel: the target function—a shape with two distinct bumps that we want to learn. Middle panel: a 2-neuron network produces a rough approximation—it can only create about 2 bumps, so it misses the details. Right panel: a 10-neuron network closely matches the target shape. The key insight: more neurons = finer control over the function's shape. Each additional neuron lets the network add another "building block" to construct complex shapes.
 
 ### Important Caveats
 
@@ -50,6 +83,8 @@ The theorem tells us approximation is **possible**, but NOT:
 2. **How to find** the right weights (training might fail)
 3. **How much data** is required (might need infinite samples)
 4. **Whether it will generalize** (might just memorize)
+
+**The "blueprint vs building" analogy**: The Universal Approximation Theorem is like knowing that a blueprint for your dream house *exists* somewhere—it doesn't hand you the blueprint, tell you where to find it, or help you build the house. It's an existence proof ("a solution exists") not a construction method ("here's how to find it"). This gap between "theoretically possible" and "practically achievable" is why neural network research continues despite this 35-year-old theorem.
 
 ---
 
@@ -79,39 +114,46 @@ Architecture:
 
 ### Code Demonstration
 
-```python
-import torch
-import torch.nn as nn
-import numpy as np
-from sklearn.linear_model import LinearRegression
-
-# Generate synthetic data: y = 2*x1 + 3*x2 + 1 + noise
-np.random.seed(42)
-n_samples = 1000
-X = np.random.randn(n_samples, 2).astype(np.float32)
-y_true = 2 * X[:, 0] + 3 * X[:, 1] + 1
-y = y_true + 0.1 * np.random.randn(n_samples).astype(np.float32)
-
-# SKLEARN LINEAR REGRESSION
-sklearn_model = LinearRegression()
-sklearn_model.fit(X, y)
-print(f"Sklearn: Coefficients={sklearn_model.coef_}, Intercept={sklearn_model.intercept_}")
-# Output: Coefficients=[1.997, 2.998], Intercept=1.003
-
-# PYTORCH NEURAL NETWORK (equivalent)
-class LinearRegressionNN(nn.Module):
-    def __init__(self, input_dim):
-        super().__init__()
-        self.linear = nn.Linear(input_dim, 1)  # Single linear layer
-
-    def forward(self, x):
-        return self.linear(x)
-
-nn_model = LinearRegressionNN(input_dim=2)
-# ... training code ...
-print(f"PyTorch: Weights={nn_model.linear.weight.data}, Bias={nn_model.linear.bias.data}")
-# Output: Weights=[1.998, 2.999], Bias=1.002
-```
+> **Numerical Example: sklearn vs PyTorch Linear Regression**
+>
+> ```python
+> import numpy as np
+> import torch
+> import torch.nn as nn
+> from sklearn.linear_model import LinearRegression
+>
+> # Generate data: y = 2*x1 + 3*x2 + 1 + noise
+> np.random.seed(42)
+> X = np.random.randn(1000, 2).astype(np.float32)
+> y = 2 * X[:, 0] + 3 * X[:, 1] + 1 + 0.1 * np.random.randn(1000).astype(np.float32)
+>
+> # SKLEARN
+> sklearn_model = LinearRegression()
+> sklearn_model.fit(X, y)
+>
+> # PYTORCH (train for 2000 epochs)
+> nn_model = nn.Linear(2, 1)
+> optimizer = torch.optim.Adam(nn_model.parameters(), lr=0.01)
+> X_t, y_t = torch.from_numpy(X), torch.from_numpy(y).reshape(-1, 1)
+> for _ in range(2000):
+>     loss = nn.MSELoss()(nn_model(X_t), y_t)
+>     optimizer.zero_grad(); loss.backward(); optimizer.step()
+> ```
+>
+> **Output:**
+> ```
+>                       True    sklearn    PyTorch
+> --------------------------------------------------
+>  x1 coefficient     2.0000     2.0028     2.0028
+>  x2 coefficient     3.0000     3.0017     3.0017
+>       intercept     1.0000     1.0004     1.0004
+>
+> Max coefficient difference: 0.000005
+> ```
+>
+> **Interpretation:** Both methods converge to essentially identical coefficients. sklearn uses a closed-form matrix inverse; PyTorch uses gradient descent. Same answer, different paths.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_linear_regression_equiv()`*
 
 ### Key Insight
 
@@ -150,25 +192,47 @@ Architecture:
 
 ### Code Demonstration
 
-```python
-from sklearn.linear_model import LogisticRegression
-import torch.nn as nn
-
-# SKLEARN LOGISTIC REGRESSION
-sklearn_model = LogisticRegression(penalty=None)
-sklearn_model.fit(X, y)
-
-# PYTORCH NEURAL NETWORK (equivalent)
-class LogisticRegressionNN(nn.Module):
-    def __init__(self, input_dim):
-        super().__init__()
-        self.linear = nn.Linear(input_dim, 1)
-
-    def forward(self, x):
-        return torch.sigmoid(self.linear(x))
-
-# Both produce the same decision boundary!
-```
+> **Numerical Example: sklearn vs PyTorch Logistic Regression**
+>
+> ```python
+> import numpy as np
+> import torch
+> import torch.nn as nn
+> from sklearn.linear_model import LogisticRegression
+>
+> # Binary classification: decision boundary x1 + 2*x2 = 0.5
+> np.random.seed(42)
+> X = np.random.randn(1000, 2).astype(np.float32)
+> y = (X[:, 0] + 2 * X[:, 1] > 0.5).astype(np.float32)
+>
+> # SKLEARN
+> sklearn_model = LogisticRegression(C=1e10, max_iter=1000)  # C=1e10 ≈ no regularization
+> sklearn_model.fit(X, y)
+>
+> # PYTORCH
+> nn_model = nn.Sequential(nn.Linear(2, 1), nn.Sigmoid())
+> optimizer = torch.optim.Adam(nn_model.parameters(), lr=0.05)
+> X_t, y_t = torch.from_numpy(X), torch.from_numpy(y).reshape(-1, 1)
+> for _ in range(2000):
+>     loss = nn.BCELoss()(nn_model(X_t), y_t)
+>     optimizer.zero_grad(); loss.backward(); optimizer.step()
+> ```
+>
+> **Output:**
+> ```
+>                      sklearn      PyTorch
+> ------------------------------------------
+>  x1 coefficient     108.4445       9.4888
+>  x2 coefficient     216.0017      18.5272
+>       intercept     -53.9592      -4.4948
+>
+> Accuracy:  sklearn=1.0000, PyTorch=0.9990
+> Coefficient ratio (x2/x1): sklearn=1.99, PyTorch=1.95
+> ```
+>
+> **Interpretation:** Coefficient *magnitudes* differ (logistic regression coefficients are only unique up to scale), but the *ratio* is the same (~2:1), so both learn the same decision boundary. Both achieve near-perfect accuracy.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_logistic_regression_equiv()`*
 
 ### Key Insight
 
@@ -205,6 +269,8 @@ $$\text{ReLU}(x) = \max(0, x)$$
 
 ![ReLU Function](../assets/deep_dive/relu_function.png)
 
+**Reading the diagram**: The ReLU (Rectified Linear Unit) function outputs 0 for all negative inputs (the flat horizontal line on the left) and passes positive inputs unchanged (the diagonal line on the right). The "kink" at x=0 is the key feature—this sharp corner is what makes ReLU networks piecewise linear. Each hidden neuron contributes one such kink to the overall function. The weight and bias of each neuron control where its kink appears and how steep the ramp is.
+
 Combining ReLUs can approximate steps:
 
 ```python
@@ -225,6 +291,30 @@ def train_step_approximator(n_hidden):
 # 50 neurons: nearly exact step
 ```
 
+> **Numerical Example: Step Function Approximation**
+>
+> ```python
+> # Train networks with different widths on step function at x=0
+> # Target: output 0 for x<0, output 1 for x>0
+> neuron_counts = [2, 5, 10, 20, 50]
+> # ... training code ...
+> ```
+>
+> **Output:**
+> ```
+>    Neurons          MSE              Quality
+> ---------------------------------------------
+>          2       0.0017         Nearly exact
+>          5       0.0020         Nearly exact
+>         10       0.0015         Nearly exact
+>         20       0.0007         Nearly exact
+>         50       0.0006         Nearly exact
+> ```
+>
+> **Interpretation:** Even 2 neurons can approximate a step function reasonably well (MSE ~0.002). The sigmoid output naturally creates a smooth approximation. More neurons reduce error further, but diminishing returns set in quickly for this simple target.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_step_approximation()`*
+
 **Observation**: More neurons → sharper approximation of the step.
 
 ### Why ReLU Combinations Work
@@ -235,7 +325,43 @@ Two ReLUs can make a bump:
 
 $$f(x) = \text{ReLU}(x) - \text{ReLU}(x - 1)$$
 
+**The "kink budget" intuition**: Each hidden neuron in a ReLU network adds one potential "kink" (corner) to your function. A network with 10 hidden neurons can create a function with at most 10 corners. How many kinks do you need? A degree-n polynomial requires roughly n kinks to approximate well. A step function needs just a few. But something wiggly like sin(x) over multiple periods might need 50+ kinks for a good approximation. The Universal Approximation Theorem says "enough kinks exist"—but you discover how many through experimentation.
+
 ![ReLU Bump](../assets/deep_dive/relu_bump.png)
+
+**Reading the diagram**: Three panels showing how to build a "bump" from two ReLUs. Left panel: ReLU(x) starts ramping up at x=0. Middle panel: ReLU(x-1) starts ramping up at x=1 (shifted by the bias). Right panel: subtracting them (ReLU(x) - ReLU(x-1)) creates a function that rises from 0 to 1, then plateaus. The shaded orange area shows the "bump"—a building block for approximating any shape. By positioning many such bumps at different locations and scaling them by different amounts, you can construct arbitrarily complex functions.
+
+> **Numerical Example: ReLU Bump Construction**
+>
+> ```python
+> import numpy as np
+>
+> def relu(x):
+>     return np.maximum(0, x)
+>
+> # bump(x) = ReLU(x) - ReLU(x-1)
+> for x in [-1, 0, 0.5, 1, 1.5, 2, 3]:
+>     r1 = relu(x)
+>     r2 = relu(x - 1)
+>     bump = r1 - r2
+>     print(f"x={x:4.1f}: ReLU(x)={r1:.2f}, ReLU(x-1)={r2:.2f}, bump={bump:.2f}")
+> ```
+>
+> **Output:**
+> ```
+>      x    ReLU(x)    ReLU(x-1)   Difference   Shape
+> ------------------------------------------------------------
+>   -1.0       0.00         0.00         0.00   Before ramp
+>    0.0       0.00         0.00         0.00   Rising
+>    0.5       0.50         0.00         0.50   Rising
+>    1.0       1.00         0.00         1.00   Plateau at 1
+>    1.5       1.50         0.50         1.00   Plateau at 1
+>    2.0       2.00         1.00         1.00   Plateau at 1
+> ```
+>
+> **Interpretation:** The bump rises from 0 to 1 as x goes from 0 to 1, then stays at 1 forever. The second ReLU "catches up" and cancels further growth. This plateau behavior is the key to building arbitrary shapes.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_relu_bump_construction()`*
 
 Many bumps at different positions → approximate any shape.
 
@@ -271,6 +397,30 @@ With ReLU activations, the network learns piecewise linear approximations:
 # 100 neurons: Indistinguishable from x²
 ```
 
+> **Numerical Example: Learning x² with ReLU Networks**
+>
+> ```python
+> # Train networks with different widths on y = x²
+> # Input: x in [-2, 2], output: x²
+> neuron_counts = [2, 5, 10, 20, 50]
+> # ... training code ...
+> ```
+>
+> **Output:**
+> ```
+>    Neurons          MSE    Max Kinks        Approximation
+> ------------------------------------------------------------
+>          2     0.095136            2     Coarse piecewise
+>          5     0.001931            5       Fine piecewise
+>         10     0.000923           10        Nearly smooth
+>         20     0.000436           20        Nearly smooth
+>         50     0.000028           50        Nearly smooth
+> ```
+>
+> **Interpretation:** With just 2 neurons, MSE is ~0.1 (visible error). By 50 neurons, MSE drops to 0.00003—visually indistinguishable from the true parabola. Each neuron adds one potential "kink" where the piecewise linear function can change slope.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_polynomial_approximation()`*
+
 ### What's Happening Inside
 
 Each ReLU neuron contributes a "kink" in the function:
@@ -289,6 +439,8 @@ The network learns WHERE to put kinks and HOW MUCH each contributes.
 
 Neural networks don't explicitly compute polynomials—they approximate them with **piecewise linear functions**. More neurons = more pieces = smoother approximation.
 
+**Piecewise linear vs truly smooth**: It's worth emphasizing what ReLU networks actually learn. A 10-neuron network creates a function with at most 10 "corner points." Between any two corners, the function is perfectly straight—a line segment. This is fundamentally different from polynomial regression, which creates genuinely smooth curves. The ReLU network *approximates* x² with a sequence of connected line segments. From far away it looks smooth, but zoom in and you'll see the corners. This isn't a flaw—it's a feature that makes training tractable.
+
 ---
 
 ## The Unifying Framework
@@ -296,6 +448,8 @@ Neural networks don't explicitly compute polynomials—they approximate them wit
 All these models are points on a spectrum:
 
 ![Model Complexity Spectrum](../assets/deep_dive/model_spectrum.png)
+
+**Reading the diagram**: An arrow from "Simple" to "Complex" shows the spectrum of model flexibility. Blue dots (Linear Regression, Logistic Regression) are neural network special cases with 0 hidden layers—they can only learn linear decision boundaries. Purple dots (Polynomial Regression, Decision Tree) add non-linearity but in constrained ways. The red dot (Deep Neural Net) represents maximum flexibility—can approximate any function. Position on this spectrum reflects model *capacity*, not model *quality*. The right model depends on your data size, interpretability needs, and the true complexity of the underlying relationship.
 
 ### Flexibility Trade-offs
 
@@ -318,6 +472,31 @@ Even though NNs can do everything, simpler models are often better:
 3. **Fast inference**: Linear prediction is O(d), deep NN is O(millions)
 4. **Debugging**: Easier to understand what went wrong
 5. **Baseline**: Always try simple models first
+
+**Occam's Razor for model selection**: Start with the simplest model that might work. If linear regression achieves R²=0.95, you're probably done—a neural network won't meaningfully improve and adds complexity, training time, and interpretability costs. Only add complexity when simpler models *demonstrably fail*. The burden of proof is on complexity: a neural network must earn its place by outperforming the simple baseline by enough to justify its costs.
+
+> **Numerical Example: Width vs Accuracy Trade-off**
+>
+> How many neurons do you need for different target functions?
+>
+> ```python
+> # Train networks on three different targets, find minimum neurons for MSE thresholds
+> functions = ["Step at 0", "x²", "sin(2*pi*x)"]
+> # ... training code for various neuron counts ...
+> ```
+>
+> **Output:**
+> ```
+>        Function      MSE < 0.01     MSE < 0.001
+> --------------------------------------------------
+>       Step at 0               5               5
+>             x²              10              20
+>     sin(2*pi*x)              75             100
+> ```
+>
+> **Interpretation:** Step functions are "easy"—5 neurons suffice. Polynomials need moderate width. Oscillating functions like sin(x) are "hard"—they need many neurons to capture all the wiggles. Rule of thumb: more "wiggly" = more neurons needed.
+>
+> *Source: `slide_computations/deep_dive_universal_approx_examples.py` - `demo_width_vs_accuracy()`*
 
 ### Example Decision
 

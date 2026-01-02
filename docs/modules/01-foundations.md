@@ -30,6 +30,8 @@ Understanding how these concepts relate to each other matters because these term
 
 ![ML Hierarchy](../assets/module1/ml_hierarchy.png)
 
+**Reading the diagram**: The nested rectangles show that each inner field is a *subset* of the outer one—not a separate domain. Deep Learning sits inside Machine Learning, which sits inside Artificial Intelligence, which sits inside Computer Science. This means every deep learning system is also a machine learning system, but not every machine learning system uses deep learning. Similarly, every ML system is AI, but rule-based expert systems are AI without being ML. Keep this hierarchy in mind when you encounter these terms—they're often used interchangeably in marketing, but they have distinct technical meanings.
+
 At the outermost level, we have **Computer Science**—the study of computation, information, and automation. More precisely, computer science is concerned with the theory, design, and application of algorithms: step-by-step procedures for solving problems and processing information.
 
 Within that sits **Artificial Intelligence**—machines that exhibit intelligent behavior. The term was coined in 1956, but the foundations go back further—Alan Turing's 1950 paper "Computing Machinery and Intelligence" proposed the Turing test: can a machine's responses be indistinguishable from a human's? AI is a broad umbrella that includes rule-based systems, expert systems, and machine learning.
@@ -91,6 +93,10 @@ AI Winters were caused by overpromising followed by underdelivering—researcher
 ### ML Task Categories
 
 ![ML Task Categories](../assets/module1/ml_task_categories.png)
+
+**Reading the diagram**: This tree shows how ML problems are categorized based on *what kind of feedback the algorithm receives*. Start at the top (ML) and ask: "Do I have labeled examples showing the right answer?" If yes, go left to **Supervised** (blue)—the algorithm learns from correct answers. If no labels exist, go to **Unsupervised** (purple)—the algorithm finds structure on its own. The third branch, **Reinforcement** (orange), is different: the algorithm learns through trial-and-error feedback (rewards and penalties) rather than from a static dataset.
+
+Within supervised learning, the next question is: "Am I predicting a number or a category?" Numbers lead to **Regression**; categories lead to **Classification**. Within unsupervised, ask: "Am I grouping similar items (**Clustering**) or compressing features (**Dimensionality Reduction**)?"
 
 Machine Learning branches into three main categories:
 
@@ -210,13 +216,76 @@ The reason data is missing determines what you should do about it:
 | **MAR** (Missing at Random) | Missingness is related to other observed variables | Imputation can work |
 | **MNAR** (Missing Not at Random) | Missingness is related to the missing value itself | Problematic—missingness is informative |
 
-Example: If high-income people don't report their income, that's MNAR—you can't fully recover the missing information because it's biased.
+**Concrete example using the same dataset**: Imagine an employee survey asking about salary. Here's how each mechanism might cause missing salary data:
+
+- **MCAR**: The survey software randomly crashed for 5% of respondents before they reached the salary question. Missingness has nothing to do with salary, department, or any other variable—purely random technical failure. You can safely delete these rows or impute without bias.
+
+- **MAR**: The survey was optional, and employees in the Sales department (who tend to have higher salaries due to commissions) were more likely to skip the survey entirely because they were busy. Salary is missing, but the missingness is explained by *department* (which you observe). If you control for department, the missing salaries aren't systematically different from observed ones. Imputation works because you can use department to guide it.
+
+- **MNAR**: Employees with *very high* salaries (executives) and *very low* salaries (embarrassed about compensation) both skip the salary question. The missingness is directly related to the missing value itself—you can't predict who's missing based on other variables because the salary value itself determines the skip. Imputation will underestimate variance, pulling toward the middle. The missingness is informative—itself a signal.
+
+The key diagnostic question: "If I knew the missing value, would that help me predict *why* it's missing?" If yes, you likely have MNAR.
 
 Diagnosing missingness type requires evidence and domain knowledge. For MCAR, compare distributions of other variables between rows with and without missing values—they should be similar if missingness is random. For MAR vs MNAR, build a model predicting whether a value is missing using other features; if it has predictive power, missingness is at least partially MAR. Domain knowledge is essential: ask why data might be missing and whether that reason relates to the missing value itself.
 
 ### Feature Scaling
 
 Many algorithms are sensitive to the scale of features. If one feature ranges from 0-1 and another from 0-1,000,000, the larger feature will dominate.
+
+**The distance problem**: Imagine finding the nearest neighbor for a customer using age (20-70 years) and income ($30,000-$200,000). Two customers might differ by 5 years in age and $1,000 in income. Without scaling, the distance calculation treats these as:
+- Age difference: 5 units
+- Income difference: 1,000 units
+
+The income difference completely dominates—the algorithm essentially ignores age. A 50-year age difference (5 units) matters less than a $50 income difference (50 units). But intuitively, age and income should both influence "similarity."
+
+After standardization (converting to z-scores), both features are measured in "standard deviations from the mean." A 1-standard-deviation difference in age has the same weight as a 1-standard-deviation difference in income. Now the algorithm considers both features fairly.
+
+> **Numerical Example: Feature Scaling Impact on k-NN**
+>
+> ```python
+> import numpy as np
+> from sklearn.neighbors import KNeighborsClassifier
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.model_selection import train_test_split
+>
+> # Create synthetic data: Age (20-70) and Income ($30k-$200k)
+> np.random.seed(42)
+> n_samples = 200
+> age = np.random.uniform(low=20, high=70, size=n_samples)
+> income = np.random.uniform(low=30000, high=200000, size=n_samples)
+>
+> # Target: high income AND middle age (35-55) -> class 1
+> target = ((income > 80000) & (age > 35) & (age < 55)).astype(int)
+> X = np.column_stack([age, income])
+>
+> X_train, X_test, y_train, y_test = train_test_split(
+>     X, y=target, test_size=0.3, random_state=42
+> )
+>
+> # Without scaling
+> knn = KNeighborsClassifier(n_neighbors=5)
+> knn.fit(X_train, y_train)
+> print(f"Without scaling: {knn.score(X_test, y_test):.1%}")
+>
+> # With scaling
+> scaler = StandardScaler()
+> X_train_scaled = scaler.fit_transform(X_train)
+> X_test_scaled = scaler.transform(X_test)
+>
+> knn_scaled = KNeighborsClassifier(n_neighbors=5)
+> knn_scaled.fit(X_train_scaled, y_train)
+> print(f"With scaling: {knn_scaled.score(X_test_scaled, y_test):.1%}")
+> ```
+>
+> **Output:**
+> ```
+> Without scaling: 61.7%
+> With scaling: 91.7%
+> ```
+>
+> **Interpretation:** A 30 percentage point improvement from scaling alone. Without scaling, income differences (range: $170,000) completely dominate age differences (range: 50 years). The k-NN algorithm essentially ignores age when finding nearest neighbors, missing the actual pattern in the data.
+>
+> *Source: `slide_computations/module1_examples.py` - `demo_feature_scaling_impact()`*
 
 **Algorithms that need scaling**:
 - Linear regression, SVM, k-NN, neural networks
@@ -315,11 +384,79 @@ X_encoded = df.to_dummies(columns=['category_column'])
 
 This is called **data leakage**, and it will give you overly optimistic results that don't hold up in production.
 
+**Why leakage is so dangerous**: Imagine you scale your entire dataset before splitting. The scaler computes mean=50 and std=10 from all 1000 rows—including the 200 test rows. Now when you standardize the test data, each test value is positioned relative to statistics that *include itself*. The model indirectly "knows" something about test examples because they influenced preprocessing. In production, new data won't have this privilege—it gets scaled using only training statistics—so your test performance is artificially inflated.
+
+**The information flow problem**:
+```
+WRONG: Data → Scale ALL → Split → Train → Evaluate
+       ↑_______↓
+       Test data statistics leak into training
+
+RIGHT: Data → Split → Scale TRAIN → Train
+                    → Scale TEST (using train params) → Evaluate
+       No leakage: test data never influences anything before evaluation
+```
+
+Even small leaks compound. If your pipeline has scaling, then feature selection, then imputation—and each step uses all data—you have three sources of leakage. The resulting performance estimate can be wildly optimistic.
+
 **Common leakage examples:**
 1. **Scaling before splitting**: Scaler sees test data statistics
 2. **Feature selection on all data**: Test data influences feature choice
 3. **Target encoding without proper CV**: Test data target values leak
 4. **Time series: future predicts past**: Future information used for past predictions
+
+> **Numerical Example: Data Leakage Effect**
+>
+> ```python
+> import numpy as np
+> from sklearn.datasets import make_classification
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.model_selection import train_test_split
+>
+> # Small dataset where leakage effect is visible
+> wrong_accuracies, right_accuracies = [], []
+>
+> for trial in range(20):
+>     X, y = make_classification(
+>         n_samples=50, n_features=15, n_informative=5,
+>         n_redundant=3, random_state=trial
+>     )
+>
+>     # WRONG: Scale ALL data, then split
+>     scaler_wrong = StandardScaler()
+>     X_scaled = scaler_wrong.fit_transform(X)  # Leakage!
+>     X_tr, X_te, y_tr, y_te = train_test_split(
+>         X_scaled, y, test_size=0.3, random_state=trial
+>     )
+>     model = LogisticRegression(random_state=42, max_iter=1000)
+>     model.fit(X_tr, y_tr)
+>     wrong_accuracies.append(model.score(X_te, y_te))
+>
+>     # RIGHT: Split first, then scale
+>     X_tr, X_te, y_tr, y_te = train_test_split(
+>         X, y, test_size=0.3, random_state=trial
+>     )
+>     scaler_right = StandardScaler()
+>     X_tr_scaled = scaler_right.fit_transform(X_tr)
+>     X_te_scaled = scaler_right.transform(X_te)
+>     model = LogisticRegression(random_state=42, max_iter=1000)
+>     model.fit(X_tr_scaled, y_tr)
+>     right_accuracies.append(model.score(X_te_scaled, y_te))
+>
+> print(f"WRONG (scale all, then split): {np.mean(wrong_accuracies):.1%}")
+> print(f"RIGHT (split, then scale): {np.mean(right_accuracies):.1%}")
+> ```
+>
+> **Output:**
+> ```
+> WRONG (scale all, then split): 75.7%
+> RIGHT (split, then scale): 74.7%
+> ```
+>
+> **Interpretation:** On small datasets (n=50), scaling before splitting inflates accuracy by ~1%. This gap widens with more preprocessing steps, smaller data, or time series. The wrong approach reports better results than you'll see in production—a subtle but dangerous form of overfitting.
+>
+> *Source: `slide_computations/module1_examples.py` - `demo_data_leakage()`*
 
 **The correct workflow:**
 
@@ -354,6 +491,10 @@ X_test_scaled = scaler.transform(X_test)  # NOT fit_transform!
 ```
 
 **Understanding fit, transform, and fit_transform:**
+
+**The packing strategy analogy**: Think of a scaler like packing a suitcase. `fit()` is figuring out your packing strategy—measuring your clothes, deciding how to fold them. `transform()` is actually packing using that strategy. `fit_transform()` does both at once.
+
+For training data, you figure out the strategy *and* pack (`fit_transform`). For test data, you use the *same* strategy you already figured out—you don't re-measure (`transform` only). If you called `fit_transform` on test data, you'd be creating a new packing strategy based on test clothes, which defeats the purpose of consistent preprocessing.
 
 | Method | What it does | When to use |
 |--------|--------------|-------------|
@@ -442,6 +583,57 @@ Everything starts with the **confusion matrix**:
 
 ![Confusion Matrix](../assets/module1/confusion_matrix.png)
 
+**Reading the diagram**: This matrix shows results from a fraud detection model evaluated on 200 transactions. The rows represent *actual* outcomes (was it really fraud?), and the columns represent what the model *predicted*. Reading each cell:
+
+| Cell | Count | Meaning (Fraud Example) |
+|------|-------|-------------------------|
+| **TP = 85** | Top-left (dark) | Model said "fraud" and it was fraud. Caught it! |
+| **FN = 15** | Top-right (dark) | Model said "not fraud" but it was fraud. Missed it—costly. |
+| **FP = 10** | Bottom-left (white) | Model said "fraud" but it wasn't. False alarm—investigation wasted. |
+| **TN = 90** | Bottom-right (dark) | Model said "not fraud" and it wasn't. Correctly ignored. |
+
+From these numbers, we can calculate key metrics:
+- **Total actual fraud cases**: TP + FN = 85 + 15 = 100 (the top row)
+- **Total actual legitimate**: FP + TN = 10 + 90 = 100 (the bottom row)
+- **Precision**: TP / (TP + FP) = 85 / 95 = **89.5%** — "When we flag fraud, we're right 89.5% of the time"
+- **Recall**: TP / (TP + FN) = 85 / 100 = **85%** — "We catch 85% of actual fraud"
+- **Accuracy**: (TP + TN) / Total = 175 / 200 = **87.5%** — "Overall, 87.5% of predictions are correct"
+
+Notice the tradeoff: this model has high precision (few false alarms) but misses 15% of fraud cases. Whether that's acceptable depends on business costs—how much does missed fraud cost versus investigation costs?
+
+> **Numerical Example: Computing Metrics from Confusion Matrix Values**
+>
+> ```python
+> # Given confusion matrix values
+> TP, FN = 85, 15  # Top row: actual positives
+> FP, TN = 10, 90  # Bottom row: actual negatives
+>
+> # Calculate metrics
+> precision = TP / (TP + FP)
+> recall = TP / (TP + FN)
+> accuracy = (TP + TN) / (TP + FN + FP + TN)
+> f1 = 2 * (precision * recall) / (precision + recall)
+>
+> print(f"Precision: {precision:.1%}")
+> print(f"Recall:    {recall:.1%}")
+> print(f"Accuracy:  {accuracy:.1%}")
+> print(f"F1 Score:  {f1:.1%}")
+> ```
+>
+> **Output:**
+> ```
+> Precision: 89.5%
+> Recall:    85.0%
+> Accuracy:  87.5%
+> F1 Score:  87.2%
+> ```
+>
+> **Interpretation:** These calculations match our manual work above. In practice, use `sklearn.metrics.classification_report(y_test, y_pred)` to compute all metrics at once.
+>
+> *Source: `slide_computations/module1_examples.py` - `demo_confusion_matrix_metrics()`*
+
+The four cells have standard names:
+
 - **TP (True Positive)**: Predicted positive, actually positive. Correct.
 - **TN (True Negative)**: Predicted negative, actually negative. Correct.
 - **FP (False Positive)**: Predicted positive, actually negative. False alarm. Type I error.
@@ -468,6 +660,10 @@ $$Recall = \frac{TP}{TP + FN}$$
 - "Of actual positives, how many did we catch?"
 - High recall = few missed positives
 
+**The fishing net analogy**: Imagine you're fishing for a specific species. **Precision** is about your net's selectivity—of the fish you catch, what fraction are the species you want? A very fine mesh might catch everything (low precision, lots of unwanted fish), while a specialized trap catches only the target species (high precision). **Recall** is about your net's coverage—of all target fish in the lake, what fraction do you catch? A small net in one spot has low recall (misses most fish), while a massive net across the whole lake has high recall.
+
+The tradeoff: a tight, selective net (high precision) might miss target fish that don't fit perfectly (lower recall). A huge, loose net (high recall) catches everything but includes lots of bycatch (lower precision). You can't maximize both simultaneously—improving one typically hurts the other. Your business context determines which matters more.
+
 **F1 Score**:
 
 $$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
@@ -482,7 +678,18 @@ The harmonic mean penalizes extreme imbalances more than the arithmetic mean. Wi
 - Measures ranking ability across all thresholds
 - 0.5 = random, 1.0 = perfect
 
-The ROC curve plots True Positive Rate vs. False Positive Rate at different classification thresholds. The diagonal line represents random guessing; a perfect model hugs the top-left corner. AUC=0.8 means if you randomly pick one positive and one negative example, there's an 80% chance the model scores the positive higher—independent of the threshold you'll use in production.
+The ROC curve plots True Positive Rate vs. False Positive Rate at different classification thresholds. The diagonal line represents random guessing; a perfect model hugs the top-left corner.
+
+**The probability interpretation**: AUC has a clean probabilistic meaning—it's the probability that the model ranks a random positive example higher than a random negative example. If AUC=0.8, imagine pulling one fraud case and one legitimate transaction from your dataset. 80% of the time, the model assigns a higher fraud probability to the actual fraud case.
+
+This interpretation explains the benchmarks:
+- **AUC = 0.5**: The model ranks randomly. A coin flip would do equally well at separating positives from negatives.
+- **AUC = 0.7**: Decent discrimination. The model is learning something useful.
+- **AUC = 0.8+**: Good discrimination. For most business problems, this is solid.
+- **AUC = 0.9+**: Excellent. Either the problem is easy or you have very predictive features.
+- **AUC = 1.0**: Perfect separation. Every positive ranks above every negative. Often indicates data leakage—check your pipeline.
+
+AUC is threshold-independent, making it useful for comparing models before you've decided on a classification threshold. Once you choose a threshold, precision/recall become more directly interpretable for that operating point.
 
 ```python
 from sklearn.metrics import (
@@ -506,10 +713,62 @@ A single train/test split can be lucky or unlucky. Cross-validation gives us:
 
 ![K-Fold Cross-Validation](../assets/module1/kfold_cv.png)
 
-1. Split data into K folds
+**Reading the diagram**: Each row represents one "fold" or iteration. The orange block is the test set; blue blocks are training data. Notice how the orange block moves across columns—in Fold 1, the first 20% of data is held out for testing; in Fold 2, the second 20% is held out, and so on.
+
+**Why does rotating matter?** A single train/test split might be lucky (easy test examples) or unlucky (hard ones). By rotating through 5 different test sets, you evaluate your model on *every* data point exactly once. If your model scores 85%, 82%, 88%, 84%, 86% across the five folds, you report 85% ± 2.2%—both the average performance and how much it varies. High variance across folds suggests your model is sensitive to which data it sees, which is a warning sign.
+
+**The procedure:**
+
+1. Split data into K folds (K=5 shown)
 2. Train on K-1 folds, validate on remaining fold
 3. Repeat K times, each fold as validation once
 4. Average the results
+
+> **Numerical Example: Why Cross-Validation Beats Single Splits**
+>
+> ```python
+> import numpy as np
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+> from sklearn.linear_model import LogisticRegression
+>
+> X, y = make_classification(
+>     n_samples=200, n_features=10, n_informative=5, random_state=42
+> )
+>
+> # Run 50 different random single train/test splits
+> single_split_scores = []
+> for seed in range(50):
+>     X_train, X_test, y_train, y_test = train_test_split(
+>         X, y, test_size=0.2, random_state=seed
+>     )
+>     model = LogisticRegression(random_state=42, max_iter=1000)
+>     model.fit(X_train, y_train)
+>     single_split_scores.append(model.score(X_test, y_test))
+>
+> # Compare to 5-fold CV
+> cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+> model = LogisticRegression(random_state=42, max_iter=1000)
+> cv_scores = cross_val_score(model, X, y, cv=cv)
+>
+> print(f"50 random single splits:")
+> print(f"  Range: {min(single_split_scores):.1%} to {max(single_split_scores):.1%}")
+> print(f"  Mean: {np.mean(single_split_scores):.1%}")
+> print(f"\n5-fold CV: {cv_scores.mean():.1%} ± {cv_scores.std():.1%}")
+> ```
+>
+> **Output:**
+> ```
+> 50 random single splits:
+>   Range: 57.5% to 87.5%
+>   Mean: 73.1%
+>
+> 5-fold CV: 75.0% ± 6.3%
+> ```
+>
+> **Interpretation:** A single random split could report anywhere from 57.5% to 87.5%—a 30 percentage point range depending on luck. Cross-validation reports 75.0% ± 6.3%, giving both an estimate and a confidence interval. The CV mean is close to the true average across all possible splits.
+>
+> *Source: `slide_computations/module1_examples.py` - `demo_cv_variance_reduction()`*
 
 **Stratified K-Fold**: Essential for imbalanced data—maintains class distribution in each fold. Without stratification, regular K-Fold can create folds with very different class distributions, causing unreliable estimates (high variance CV scores) and training on unrealistic distributions. Use `StratifiedKFold` by default for classification—it never hurts.
 
@@ -536,6 +795,14 @@ scores = cross_val_score(model, X, y, cv=tscv)
 ### Overfitting vs Underfitting
 
 ![Overfitting vs Underfitting](../assets/module1/overfitting_underfitting.png)
+
+**Reading the diagram**: All three panels show the same data points (blue dots) with an obvious curved pattern. The difference is how each model attempts to fit that pattern:
+
+- **Left panel (red line)**: The underfitting model uses a straight line for curved data. It systematically misses the pattern—points at the peaks are far below the line, points at the valleys are far above it. The model is too simple to capture what's actually happening. This is **high bias**: the model has a built-in assumption (linearity) that doesn't match reality.
+
+- **Middle panel (green curve)**: The good fit captures the overall curved trend without chasing every individual point. Some points are above the curve, some below—that's fine, because those deviations are likely noise. This model will generalize well to new data.
+
+- **Right panel (orange jagged line)**: The overfitting model passes through (or very close to) every single training point. It treats noise as signal, contorting itself to explain random variation. On new data, those contortions will hurt—the model learned the training set's quirks, not the underlying pattern. This is **high variance**: the model would look completely different if trained on a different sample.
 
 **Underfitting (High Bias)**:
 - Training error HIGH, Test error HIGH

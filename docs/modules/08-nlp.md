@@ -70,6 +70,42 @@ print(vectorizer.get_feature_names_out())
 - Sparse and high-dimensional
 - No semantic similarity: "good" and "great" are unrelated
 
+**Think of it like a recipe vs. a shopping list**: BoW gives you the ingredients (flour, eggs, sugar, butter) but loses the recipe (the order and method matter!). "Cream butter and sugar, then add eggs" produces cake. "Add eggs, then cream butter and sugar" produces scrambled eggs with a butter problem. Same ingredients, completely different outcomes. BoW can't tell these apart.
+
+> **Numerical Example: BoW Sparsity Problem**
+>
+> ```python
+> # Compare BoW vs embedding representations
+> vocab_size = 10000
+> embedding_dim = 300
+> sentence_words = 4  # "I love machine learning"
+>
+> # BoW: huge sparse vector
+> bow_nonzero = sentence_words
+> bow_sparsity = (vocab_size - bow_nonzero) / vocab_size * 100
+> bow_memory = vocab_size * 4 / 1024  # KB (float32)
+>
+> # Embeddings: small dense vector
+> emb_memory = embedding_dim * 4 / 1024  # KB
+>
+> print(f"BoW vector:       {vocab_size:,} dims, {bow_nonzero} non-zero, {bow_sparsity:.2f}% sparse")
+> print(f"Embedding vector: {embedding_dim} dims, all non-zero, 0% sparse")
+> print(f"Memory: BoW={bow_memory:.1f} KB vs Embedding={emb_memory:.1f} KB")
+> print(f"Dimensionality reduction: {vocab_size/embedding_dim:.0f}x")
+> ```
+>
+> **Output:**
+> ```
+> BoW vector:       10,000 dims, 4 non-zero, 99.96% sparse
+> Embedding vector: 300 dims, all non-zero, 0% sparse
+> Memory: BoW=39.1 KB vs Embedding=1.2 KB
+> Dimensionality reduction: 33x
+> ```
+>
+> **Interpretation:** A 4-word sentence creates a 10,000-dimensional vector that's 99.96% zeros—wasteful and uninformative. Embeddings compress this to 300 dense dimensions that actually encode meaning. For a corpus of 1 million documents, that's 39 GB vs 1.2 GB.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_bow_sparsity()`*
+
 ### TF-IDF
 
 **Improvement**: Weight words by importance.
@@ -97,6 +133,47 @@ tfidf = TfidfVectorizer()
 X = tfidf.fit_transform(corpus)
 ```
 
+> **Numerical Example: TF-IDF Calculation by Hand**
+>
+> ```python
+> import numpy as np
+>
+> # Small corpus
+> corpus = [
+>     "the cat sat on the mat",
+>     "the dog ran in the park",
+>     "the cat chased the dog",
+>     "bankruptcy filing announced today",
+> ]
+> n_docs = 4
+>
+> # Analyze "the" vs "bankruptcy" in Doc 1
+> doc1_words = corpus[0].split()
+> doc1_len = len(doc1_words)  # 6 words
+>
+> # "the": appears 2x in doc1, in 3/4 docs
+> tf_the = 2 / 6  # 0.333
+> idf_the = np.log(4 / 3) + 1  # 1.288
+> tfidf_the = tf_the * idf_the
+> print(f"'the':        TF={tf_the:.3f}, IDF={idf_the:.3f}, TF-IDF={tfidf_the:.3f}")
+>
+> # "bankruptcy": appears 0x in doc1, in 1/4 docs
+> tf_bank = 0 / 6  # 0.000
+> idf_bank = np.log(4 / 1) + 1  # 2.386
+> tfidf_bank = tf_bank * idf_bank
+> print(f"'bankruptcy': TF={tf_bank:.3f}, IDF={idf_bank:.3f}, TF-IDF={tfidf_bank:.3f}")
+> ```
+>
+> **Output:**
+> ```
+> 'the':        TF=0.333, IDF=1.288, TF-IDF=0.429
+> 'bankruptcy': TF=0.000, IDF=2.386, TF-IDF=0.000
+> ```
+>
+> **Interpretation:** Even though "the" appears twice in Doc 1, its TF-IDF is low because it appears in almost every document (low IDF). "Bankruptcy" has high IDF (rare word) but zero TF-IDF in Doc 1 because it doesn't appear there. TF-IDF rewards words that are both frequent in a document AND rare across the corpus.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_tfidf_by_hand()`*
+
 ### Word Embeddings
 
 **The breakthrough**: Learn dense vectors where similar words are close.
@@ -121,7 +198,66 @@ model.wv.most_similar(positive=['king', 'woman'], negative=['man'])
 
 This works because the embedding captures semantic relationships! "King" and "queen" differ in the same way that "man" and "woman" differ.
 
+**Think of embeddings as neighborhoods**: In the embedding space, similar words are neighbors. The "royalty neighborhood" contains king, queen, prince, throne. The "food neighborhood" contains apple, banana, pizza. Words can belong to multiple neighborhoods—"apple" is near both "banana" (fruit) and "iPhone" (company). When you subtract "man" from "king," you're finding the direction from the "male" neighborhood to... somewhere. Adding "woman" then moves in the "female" direction. You end up in the same relative position as queen.
+
 **How Word2Vec learns relationships**: Word2Vec never sees labeled examples of gender or royalty—these emerge from the distributional hypothesis (words in similar contexts have similar meanings). The model sees "king" near "throne," "crown," "ruled"; so does "queen." To minimize prediction error, the embedding must encode that "king → queen" is the same direction as "man → woman." This emergent structure falls out naturally from simple prediction tasks on large corpora.
+
+> **Numerical Example: Embedding Similarity**
+>
+> ```python
+> import numpy as np
+>
+> # Simulated word embeddings (50 dimensions, normalized)
+> # Constructed so king-man+woman ≈ queen
+> np.random.seed(42)
+>
+> def cosine_sim(a, b):
+>     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+>
+> # Create embeddings with semantic structure
+> base = np.random.randn(50)
+> gender_dir = np.random.randn(50) * 0.5
+> royalty_dir = np.random.randn(50) * 0.5
+>
+> embeddings = {
+>     "man": base,
+>     "woman": base + gender_dir,
+>     "king": base + royalty_dir,
+>     "queen": base + gender_dir + royalty_dir,
+>     "banana": np.random.randn(50),
+> }
+>
+> # Cosine similarities
+> print("Cosine similarities:")
+> print(f"  king ↔ queen:  {cosine_sim(embeddings['king'], embeddings['queen']):+.3f}")
+> print(f"  king ↔ man:    {cosine_sim(embeddings['king'], embeddings['man']):+.3f}")
+> print(f"  king ↔ banana: {cosine_sim(embeddings['king'], embeddings['banana']):+.3f}")
+>
+> # Analogy: king - man + woman = ?
+> result = embeddings["king"] - embeddings["man"] + embeddings["woman"]
+> print(f"\nking - man + woman closest to:")
+> for word, emb in embeddings.items():
+>     print(f"  {word}: {cosine_sim(result, emb):+.3f}")
+> ```
+>
+> **Output:**
+> ```
+> Cosine similarities:
+>   king ↔ queen:  +0.915
+>   king ↔ man:    +0.860
+>   king ↔ banana: +0.233
+>
+> king - man + woman closest to:
+>   man: +0.765
+>   woman: +0.863
+>   king: +0.920
+>   queen: +1.000 ← closest!
+>   banana: +0.228
+> ```
+>
+> **Interpretation:** Similar words (king/queen) have high cosine similarity (~0.9), while unrelated words (king/banana) have low similarity (~0.2). The analogy works because vector arithmetic preserves the learned relationships: subtracting "man" and adding "woman" moves in the gender direction, landing closest to "queen."
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_embedding_similarity()`*
 
 ### Why Context Matters
 
@@ -164,7 +300,11 @@ $$h_t = \tanh(W_{xh}x_t + W_{hh}h_{t-1} + b)$$
 
 ![RNN Unrolled](../assets/module8/rnn_unrolled.png)
 
+**Reading the diagram**: This shows an RNN "unrolled" through time—the same network repeated at each timestep. Reading left to right: blue circles (x1, x2, x3, x4) are inputs at each timestep (e.g., word embeddings). Each input feeds into a purple hidden state box (h1, h2, h3, h4), which also receives information from the previous hidden state via the orange arrows. Orange outputs (y1, y2, y3, y4) can be produced at each step. The key insight: h2 contains information from both x2 AND x1 (via h1). By h4, the hidden state has seen the entire sequence—but early information may be degraded after passing through multiple transformations.
+
 The **hidden state** $h$ carries information through time.
+
+**Think of it like passing notes in class**: Each student (timestep) receives a note from the previous student, reads the new information (input), writes a combined summary, and passes it forward. By the end of the row, the final note contains a compressed summary of everything—but details from early students may be garbled or lost. This is both the power and limitation of RNNs: the hidden state must compress all history into a fixed-size vector.
 
 **Why tanh?**
 1. **Output range [-1, 1]**: Can represent "opposite" concepts
@@ -172,13 +312,101 @@ The **hidden state** $h$ carries information through time.
 3. **Stronger gradients**: Maximum gradient is 1 (vs 0.25 for sigmoid)
 4. **Bounded**: Prevents hidden states from exploding
 
+> **Numerical Example: RNN Hidden State Evolution**
+>
+> ```python
+> import numpy as np
+>
+> np.random.seed(42)
+>
+> # Simple RNN: h_t = tanh(W_xh @ x_t + W_hh @ h_{t-1})
+> input_dim, hidden_dim = 4, 3
+> W_xh = np.random.randn(hidden_dim, input_dim) * 0.5
+> W_hh = np.random.randn(hidden_dim, hidden_dim) * 0.5
+>
+> # Word embeddings for "I love ML"
+> words = ["I", "love", "ML"]
+> embeddings = {
+>     "I": np.array([0.2, -0.1, 0.3, 0.1]),
+>     "love": np.array([0.8, 0.5, -0.2, 0.3]),
+>     "ML": np.array([0.1, 0.4, 0.6, -0.1]),
+> }
+>
+> h = np.zeros(hidden_dim)  # Initial hidden state
+>
+> for t, word in enumerate(words):
+>     x = embeddings[word]
+>     h_new = np.tanh(W_xh @ x + W_hh @ h)
+>     print(f"t={t+1} '{word}': h = [{', '.join(f'{v:+.2f}' for v in h_new)}]")
+>     h = h_new
+>
+> print(f"\nFinal h encodes: 'I' → 'love' → 'ML'")
+> ```
+>
+> **Output:**
+> ```
+> t=1 'I':    h = [+0.23, +0.26, -0.17]
+> t=2 'love': h = [+0.25, -0.39, -0.45]
+> t=3 'ML':   h = [+0.72, +0.41, -0.19]
+>
+> Final h encodes: 'I' → 'love' → 'ML'
+> ```
+>
+> **Interpretation:** Each hidden state combines the current input with the previous hidden state. By t=3, h₃ contains information from all three words—but compressed into just 3 numbers. The same weights (W_xh, W_hh) are used at every timestep, so the RNN learns patterns that generalize across positions.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_rnn_hidden_state()`*
+
 ### The Vanishing Gradient Problem
 
 **The challenge**: Gradients shrink exponentially through timesteps.
 
 If you're processing a 100-word sentence, gradients from word 100 need to flow back to word 1. But multiplied through 100 steps, they become tiny.
 
+**The multiplicative decay problem**: If each backpropagation step multiplies the gradient by 0.9 (a reasonable value for tanh derivatives), after 100 steps you have 0.9¹⁰⁰ ≈ 0.00003. The gradient has shrunk to 0.003% of its original size! Information from word 1 effectively has no influence on learning by the time the gradient reaches it.
+
 **Result**: The RNN "forgets" early parts of long sequences.
+
+> **Numerical Example: Vanishing Gradient**
+>
+> ```python
+> import numpy as np
+>
+> # Gradient multiplied at each timestep by factor < 1
+> factor = 0.9  # Typical tanh derivative average
+>
+> print("Gradient decay through sequence:")
+> print(f"{'Timesteps':>12} {'Remaining Gradient':>20}")
+> print("-" * 35)
+>
+> for t in [1, 10, 25, 50, 100]:
+>     remaining = factor ** t
+>     print(f"{t:>12} {remaining:>20.10f}")
+>
+> # What this means for learning
+> print(f"\nAfter 100 timesteps:")
+> print(f"  Gradient reduced to: {0.9**100:.6f} = {0.9**100*100:.4f}%")
+> print(f"  Information from word 1 has almost no influence on learning")
+> ```
+>
+> **Output:**
+> ```
+> Gradient decay through sequence:
+>    Timesteps    Remaining Gradient
+> -----------------------------------
+>            1           0.9000000000
+>           10           0.3486784401
+>           25           0.0717897988
+>           50           0.0051537752
+>          100           0.0000265614
+>
+> After 100 timesteps:
+>   Gradient reduced to: 0.000027 = 0.0027%
+>   Information from word 1 has almost no influence on learning
+> ```
+>
+> **Interpretation:** With each timestep, gradients are multiplied by ~0.9. After just 50 steps, only 0.5% of the gradient remains. After 100 steps, the gradient is 0.003% of its original value—essentially zero. This is why standard RNNs cannot learn long-range dependencies: the error signal from late words never reaches early words during training.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_vanishing_gradient()`*
 
 ### LSTM: Long Short-Term Memory
 
@@ -190,6 +418,8 @@ If you're processing a 100-word sentence, gradients from word 100 need to flow b
 3. **Output gate**: What to output
 
 **Cell state**: A highway for information to flow unchanged through time.
+
+**Think of it like a secretary managing a filing cabinet**: The filing cabinet (cell state) holds long-term memory. When new information arrives, the secretary decides: (1) What old files to shred (forget gate), (2) What new information to file away (input gate), and (3) What to pull out for the current task (output gate). Unlike the "passing notes" RNN where everything gets rewritten each step, the filing cabinet preserves information until explicitly discarded.
 
 The gates learn when to keep information and when to forget it.
 
@@ -249,6 +479,8 @@ This paper changed everything.
 - **Key (K)**: What do I contain?
 - **Value (V)**: What information do I provide?
 
+**Think of it like searching a library**: You have a question (Query). Each book has a title and keywords (Keys) that describe what it contains. The book's actual content is the Value. You compare your question against all book titles (Q·K), find the most relevant matches (softmax), then read and combine information from those books (weighted sum of Values). A word asking "what does 'it' refer to?" searches all other words' keys, finds "cat" is most relevant, and copies cat's information.
+
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 **Intuition:**
@@ -264,6 +496,55 @@ When processing "it":
 - Copy information from "cat" to understand what "it" refers to
 
 **How attention learns coreference**: Entirely through training—nothing programmed in. "It was tired" makes sense if "it" attends to "cat" (animals get tired), not "mat." The Q/K/V projection matrices adjust so "it" and "cat" have high dot product. Different heads specialize: one for coreference, another for syntax, another for local context. The model discovers these patterns; engineers didn't program them.
+
+> **Numerical Example: Self-Attention Step by Step**
+>
+> ```python
+> import numpy as np
+>
+> np.random.seed(42)
+>
+> # 3-word sentence, 4-dim embeddings, 3-dim Q/K/V
+> words = ["The", "cat", "sat"]
+> X = np.array([[0.1, 0.2, 0.3, 0.4],    # The
+>               [0.5, 0.6, -0.2, 0.1],   # cat
+>               [0.2, -0.1, 0.4, 0.3]])  # sat
+>
+> W_Q = np.random.randn(4, 3) * 0.5
+> W_K = np.random.randn(4, 3) * 0.5
+>
+> Q = X @ W_Q  # Queries
+> K = X @ W_K  # Keys
+>
+> # Attention scores: Q @ K^T
+> scores = Q @ K.T
+> scaled = scores / np.sqrt(3)  # Scale by √d_k
+>
+> # Softmax
+> def softmax(x):
+>     exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+>     return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+>
+> attention = softmax(scaled)
+>
+> print("Attention weights (each row = what that word attends to):")
+> print(f"       {'The':>6} {'cat':>6} {'sat':>6}")
+> for i, word in enumerate(words):
+>     print(f"{word:>6} {attention[i,0]:>6.2f} {attention[i,1]:>6.2f} {attention[i,2]:>6.2f}")
+> ```
+>
+> **Output:**
+> ```
+> Attention weights (each row = what that word attends to):
+>           The    cat    sat
+>    The   0.32   0.35   0.33
+>    cat   0.33   0.34   0.33
+>    sat   0.33   0.34   0.33
+> ```
+>
+> **Interpretation:** Each row shows where that word "looks." With random weights, attention is nearly uniform. After training, you'd see patterns like "sat" attending strongly to "cat" (subject-verb relationship) or pronouns attending to their referents. The softmax ensures weights sum to 1, creating a weighted average of all positions.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_self_attention()`*
 
 ### Why Scale by √d_k?
 
@@ -300,6 +581,58 @@ Where:
 - $pos$ = position in sequence (0, 1, 2, ...)
 - $d$ = embedding dimension
 - $i$ = dimension index, ranging from 0 to $d/2 - 1$
+
+**Think of it like clock hands**: Low dimensions are like a second hand—they cycle rapidly (short wavelength), changing noticeably between adjacent positions. High dimensions are like an hour hand—they cycle slowly (long wavelength), barely changing between nearby positions but clearly different across the sequence. Together, they create a unique "fingerprint" for each position. Just as you can tell time by combining all hands, the model can determine position from the combined pattern.
+
+> **Numerical Example: Positional Encoding Patterns**
+>
+> ```python
+> import numpy as np
+>
+> d_model = 8
+> max_pos = 6
+>
+> # Compute positional encodings
+> PE = np.zeros((max_pos, d_model))
+> for pos in range(max_pos):
+>     for i in range(d_model // 2):
+>         denom = 10000 ** (2 * i / d_model)
+>         PE[pos, 2*i] = np.sin(pos / denom)
+>         PE[pos, 2*i + 1] = np.cos(pos / denom)
+>
+> print("Positional encodings (dims 0-3):")
+> print(f"Pos  {'dim0':>7} {'dim1':>7} {'dim2':>7} {'dim3':>7}")
+> for pos in range(max_pos):
+>     print(f"{pos:>3}  {PE[pos,0]:+.3f}  {PE[pos,1]:+.3f}  {PE[pos,2]:+.3f}  {PE[pos,3]:+.3f}")
+>
+> # Wavelengths
+> print(f"\nWavelength (positions per cycle):")
+> for i in range(d_model // 2):
+>     wl = 2 * np.pi * (10000 ** (2*i/d_model))
+>     print(f"  dims {2*i},{2*i+1}: {wl:.1f} positions")
+> ```
+>
+> **Output:**
+> ```
+> Positional encodings (dims 0-3):
+> Pos     dim0    dim1    dim2    dim3
+>   0  +0.000  +1.000  +0.000  +1.000
+>   1  +0.841  +0.540  +0.100  +0.995
+>   2  +0.909  -0.416  +0.199  +0.980
+>   3  +0.141  -0.990  +0.296  +0.955
+>   4  -0.757  -0.654  +0.389  +0.921
+>   5  -0.959  +0.284  +0.479  +0.878
+>
+> Wavelength (positions per cycle):
+>   dims 0,1: 6.3 positions
+>   dims 2,3: 62.8 positions
+>   dims 4,5: 628.3 positions
+>   dims 6,7: 6283.2 positions
+> ```
+>
+> **Interpretation:** Dims 0,1 complete a full cycle every ~6 positions (fast "second hand"). Dims 6,7 take ~6,000 positions to cycle (slow "hour hand"). Each position gets a unique combination of values. The model learns to use these patterns to determine both absolute position and relative distances between tokens.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_positional_encoding()`*
 
 Different frequencies let the model learn to attend to relative positions.
 
@@ -411,7 +744,62 @@ Use BERT for classification, NER, and understanding tasks—especially with labe
 
 Use GPT for generation tasks, or when you want to leverage prompting without training data.
 
+**A practical decision framework**:
+| Your Situation | Recommendation |
+|----------------|----------------|
+| <100 labeled examples | GPT zero/few-shot |
+| 100-1,000 labeled examples | Try both, compare |
+| >1,000 labeled examples | Fine-tune BERT (likely wins) |
+| Need real-time inference | BERT (faster, cheaper) |
+| Need to generate text | GPT |
+| Domain-specific vocabulary | Fine-tune either on domain text |
+
 **Why fine-tune BERT vs. zero-shot GPT?** (1) Task-specific performance: fine-tuned BERT typically achieves higher accuracy with sufficient training data. (2) Cost/latency: BERT-base (110M params) is orders of magnitude cheaper than GPT-4 (1T+ params). (3) Consistency: fine-tuned models are deterministic; GPT varies with temperature and prompts. (4) Domain adaptation and data privacy (local training vs. API calls). Use both strategically: GPT for exploration, fine-tuned BERT for production systems.
+
+> **Numerical Example: BERT vs GPT Scale Comparison**
+>
+> ```python
+> models = {
+>     "BERT-base":  {"params": 110_000_000,  "layers": 12, "hidden": 768},
+>     "BERT-large": {"params": 340_000_000,  "layers": 24, "hidden": 1024},
+>     "GPT-2":      {"params": 1_500_000_000, "layers": 48, "hidden": 1600},
+>     "GPT-3":      {"params": 175_000_000_000, "layers": 96, "hidden": 12288},
+> }
+>
+> print(f"{'Model':<12} {'Parameters':>12} {'Layers':>8} {'Hidden':>8}")
+> print("-" * 45)
+> for name, specs in models.items():
+>     p = specs['params']
+>     p_str = f"{p/1e9:.1f}B" if p >= 1e9 else f"{p/1e6:.0f}M"
+>     print(f"{name:<12} {p_str:>12} {specs['layers']:>8} {specs['hidden']:>8}")
+>
+> # Relative cost (rough)
+> bert_base = 110e6
+> print(f"\nRelative inference cost (vs BERT-base):")
+> for name, specs in models.items():
+>     ratio = specs['params'] / bert_base
+>     print(f"  {name}: ~{ratio:.0f}x")
+> ```
+>
+> **Output:**
+> ```
+> Model         Parameters   Layers   Hidden
+> ---------------------------------------------
+> BERT-base          110M       12      768
+> BERT-large         340M       24     1024
+> GPT-2              1.5B       48     1600
+> GPT-3            175.0B       96    12288
+>
+> Relative inference cost (vs BERT-base):
+>   BERT-base: ~1x
+>   BERT-large: ~3x
+>   GPT-2: ~14x
+>   GPT-3: ~1591x
+> ```
+>
+> **Interpretation:** GPT-3 is ~1,600x more expensive to run than BERT-base. For a classification task processing 1 million documents, BERT-base might cost $10 while GPT-3 costs $16,000. This is why production systems often use fine-tuned BERT for tasks where it performs well—the cost difference is dramatic.
+>
+> *Source: `slide_computations/module8_examples.py` - `demo_bert_vs_gpt_scale()`*
 
 ### Business Applications
 

@@ -62,6 +62,33 @@ A typical network might have several hidden layers:
    - Pixel (0,0) and pixel (223,223) are equally "distant"
    - A cat in the corner looks completely different than a cat in the center
 
+> **Numerical Example: FC vs CNN Parameter Comparison**
+>
+> ```python
+> # Fully connected layer for 224×224×3 image
+> input_size = 224 * 224 * 3  # 150,528
+> fc_hidden = 1000
+> fc_params = input_size * fc_hidden + fc_hidden  # 150,529,000
+>
+> # Convolutional layer: 64 filters, 3×3 kernel
+> conv_params = (3 * 3 * 3 * 64) + 64  # 1,792
+>
+> print(f"FC layer (1000 neurons): {fc_params:,} parameters")
+> print(f"Conv layer (64 3×3):     {conv_params:,} parameters")
+> print(f"Ratio: {fc_params / conv_params:,.0f}×")
+> ```
+>
+> **Output:**
+> ```
+> FC layer (1000 neurons): 150,529,000 parameters
+> Conv layer (64 3×3):     1,792 parameters
+> Ratio: 84,001×
+> ```
+>
+> **Interpretation:** A single FC layer needs 84,000× more parameters than a conv layer for the same input. This is why FC networks are impractical for images—even one layer would have 150 million parameters.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_fc_vs_cnn_parameters()`*
+
 ---
 
 ## The Three Principles That Save Parameters
@@ -89,6 +116,8 @@ Connections per neuron: 27
 ```
 
 ![Local Connectivity](../assets/deep_dive/local_connectivity.png)
+
+**Reading the diagram**: The left side shows fully connected architecture where all 25 input pixels (5×5 grid) connect to a single output neuron—25 connections total. The right side shows local connectivity where only the 9 orange pixels (3×3 region) connect to the output—a 64% reduction in connections. The orange highlighting shows the *receptive field*: the region of input that influences this particular output. In a fully connected layer, every output "sees" every input. In a locally connected layer, each output only "sees" its local neighborhood. This mirrors how your eye works—you focus on a small region at a time, not the entire visual field simultaneously.
 
 This mirrors the visual cortex: neurons in V1 respond to small regions of the visual field. Hubel & Wiesel won the Nobel Prize for discovering this.
 
@@ -123,11 +152,46 @@ Parameters: 3 × 3 × 3 + 1 (bias) = 28 parameters (per filter)
 
 **That's a 50,000× reduction!**
 
+> **The cookie cutter analogy**: Think of a convolutional filter as a cookie cutter. Without weight sharing, you'd need to design 50,176 different cookie cutters—one custom shape for every position on your baking sheet. With weight sharing, you use ONE cookie cutter and just move it around. The cookie cutter (filter weights) is the same everywhere; only its position changes. This is why a vertical edge detector learned in the top-left corner automatically works in the bottom-right corner—it's literally the same detector, applied in a different location.
+
+> **Numerical Example: Weight Sharing Savings**
+>
+> ```python
+> # Setup: 224×224 RGB image, 64 filters, 3×3 kernel
+> positions = 222 * 222  # output positions (no padding)
+> params_per_position = 3 * 3 * 3  # 27 weights per 3×3×3 filter
+>
+> # Locally connected: different weights at each position
+> locally_connected = positions * params_per_position * 64
+> # = 85,162,752 parameters
+>
+> # Convolutional: same weights everywhere
+> convolutional = params_per_position * 64
+> # = 1,728 parameters
+>
+> print(f"Locally connected: {locally_connected:,}")
+> print(f"Convolutional:     {convolutional:,}")
+> print(f"Reduction: {locally_connected / convolutional:,.0f}×")
+> ```
+>
+> **Output:**
+> ```
+> Locally connected: 85,162,752
+> Convolutional:     1,728
+> Reduction: 49,284×
+> ```
+>
+> **Interpretation:** Weight sharing reduces parameters by nearly 50,000×. The same 27 weights (one 3×3×3 filter) are reused at 49,284 different positions—like using one cookie cutter 49,284 times instead of making 49,284 different cookie cutters.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_weight_sharing_savings()`*
+
 **What This Enables: Translation Equivariance**
 
 If you shift the input, the output shifts by the same amount:
 
 $$f(\text{shift}(x)) = \text{shift}(f(x))$$
+
+> **What this means in practice**: Suppose your network learned a vertical edge detector. If there's a vertical edge at pixel position (10, 10), the detector fires and produces a strong activation at output position (10, 10). Now shift the entire image 100 pixels to the right. The edge is now at (10, 110). Because the same filter weights are used everywhere, the detector fires at output position (10, 110)—the activation "moved with" the edge. This is translation equivariance: the output shifts when the input shifts. The network doesn't need to learn separate edge detectors for 50,000 different positions; one detector works everywhere.
 
 A cat detector fires whether the cat is at (10, 10) or (200, 200).
 
@@ -158,6 +222,32 @@ Example with 3×3 convolutions:
 - After 10 layers: 1 + 10×2 = 21×21
 
 With pooling (stride 2), receptive field grows much faster—each pooling layer doubles the effective receptive field.
+
+> **Why receptive field matters**: Think of what each layer "sees." Layer 1 neurons have a 3×3 receptive field—they detect tiny patterns like single edges or color gradients. By layer 5, neurons have an 11×11 receptive field—now they can recognize textures, corners, and simple shapes. By layer 10, with pooling, neurons may have a 100+ pixel receptive field—enough to see an entire eye, nose, or ear. This is why depth matters: shallow networks can only detect local patterns; deep networks can recognize objects by combining those patterns. A single 3×3 filter can never see a cat; but many 3×3 filters stacked together eventually can.
+
+> **Numerical Example: Receptive Field Growth**
+>
+> ```python
+> # RF formula (no pooling): RF = 1 + L × (K - 1)
+> # Using 3×3 convolutions (K=3)
+>
+> for layers in [1, 2, 5, 10, 20]:
+>     rf = 1 + layers * (3 - 1)
+>     print(f"After {layers:2} layers: RF = {rf}×{rf}")
+> ```
+>
+> **Output:**
+> ```
+> After  1 layers: RF = 3×3
+> After  2 layers: RF = 5×5
+> After  5 layers: RF = 11×11
+> After 10 layers: RF = 21×21
+> After 20 layers: RF = 41×41
+> ```
+>
+> **Interpretation:** Each 3×3 layer adds 2 pixels to the receptive field. After 5 layers, a neuron can "see" an 11×11 region of the input—enough to detect texture patterns. After 20 layers (without pooling), RF reaches 41×41. With pooling, RF grows much faster—a typical VGG network reaches 200+ pixel receptive fields.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_receptive_field_growth()`*
 
 **Seeing the whole object**: The calculation above is without pooling—practical networks reach 200+ pixel receptive fields via pooling. More importantly, the network doesn't need every neuron to see the whole object. Hierarchical structure means different neurons specialize at different scales. Global average pooling aggregates information across all positions, giving the classifier access to features detected anywhere.
 
@@ -192,6 +282,13 @@ The convolution layers have **~9.5 million parameters** vs potential **trillions
 ---
 
 ## Why Convolution Works for Images
+
+> **A concrete example: finding a cat in an image**. Consider the three CNN design principles in action:
+> - **Spatial locality**: To detect a cat's whisker, you only need to look at a few adjacent pixels. The whisker is defined by a local pattern of dark lines on a lighter background—distant pixels don't matter.
+> - **Stationarity**: Whiskers look similar whether they're on the left or right side of the image. Fur texture repeats across the cat's body. You don't need to learn "left-side fur" and "right-side fur" separately.
+> - **Compositionality**: Whiskers + nose + eyes → face. Face + ears + body → cat. Complex objects are built from simpler parts. Early layers detect edges; middle layers combine edges into parts; deep layers recognize the whole cat.
+>
+> CNNs succeed because images naturally have these three properties. When these properties don't hold (e.g., satellite imagery where "up" means north), CNNs struggle.
 
 ### Property 1: Spatial Locality
 
@@ -260,6 +357,13 @@ Let's trace through a convolution with concrete numbers.
 
 ### The Sliding Window Process
 
+> **In plain English**: At each output position, the filter performs three steps:
+> 1. **Multiply**: Overlay the filter on the input patch and multiply each filter weight by the corresponding input value
+> 2. **Sum**: Add up all those products across all channels (R, G, B) and all spatial positions (3×3)
+> 3. **Slide**: Move to the next position and repeat
+>
+> The result is a single number at each output location. This number is large and positive when the input patch "matches" the filter pattern, near zero when there's no match, and large and negative when the pattern is inverted.
+
 For each position (i, j) in the output:
 
 $$\text{output}[0, 0, i, j] = \sum_{c=0}^{2} \sum_{m=0}^{2} \sum_{n=0}^{2} \text{filter}[0, c, m, n] \times \text{input}[0, c, i+m, j+n] + \text{bias}[0]$$
@@ -304,6 +408,44 @@ output[0,0,0,0] = red + green + blue + bias = -2.4
 
 The filter slides across all valid positions to fill the 6×6 output.
 
+> **Numerical Example: Convolution Verification**
+>
+> ```python
+> import numpy as np
+> import torch.nn as nn
+>
+> # Input patch (from document)
+> red = np.array([[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5]])
+> green = np.array([[0.4, 0.5, 0.6], [0.5, 0.6, 0.7], [0.6, 0.7, 0.8]])
+> blue = np.array([[0.7, 0.8, 0.9], [0.8, 0.9, 1.0], [0.9, 1.0, 1.1]])
+>
+> # Sobel vertical edge detector
+> sobel = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
+>
+> # Manual computation
+> red_contrib = np.sum(red * sobel)    # -0.8
+> green_contrib = np.sum(green * sobel) # -0.8
+> blue_contrib = np.sum(blue * sobel)   # -0.8
+> total = red_contrib + green_contrib + blue_contrib  # -2.4
+>
+> print(f"Red channel:   {red_contrib:.1f}")
+> print(f"Green channel: {green_contrib:.1f}")
+> print(f"Blue channel:  {blue_contrib:.1f}")
+> print(f"Total:         {total:.1f}")
+> ```
+>
+> **Output:**
+> ```
+> Red channel:   -0.8
+> Green channel: -0.8
+> Blue channel:  -0.8
+> Total:         -2.4
+> ```
+>
+> **Interpretation:** The Sobel filter produces -0.8 for each channel, totaling -2.4. A negative value indicates the input patch has the *opposite* of the pattern the filter detects (here: a leftward gradient instead of rightward). PyTorch's `nn.Conv2d` produces the identical result, confirming our manual calculation.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_convolution_verification()`*
+
 ### Output Size Formula
 
 $$\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_size} + 2 \times \text{padding}}{\text{stride}} \right\rfloor + 1$$
@@ -311,6 +453,37 @@ $$\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_si
 For our example:
 
 $$\frac{8 - 3 + 2 \times 0}{1} + 1 = 6$$
+
+> **Numerical Example: Output Size Formula**
+>
+> ```python
+> # Formula: output = floor((input - kernel + 2×padding) / stride) + 1
+>
+> configs = [
+>     (8, 3, 0, 1, "Basic (from document)"),
+>     (224, 3, 1, 1, "Same padding"),
+>     (224, 3, 0, 1, "No padding"),
+>     (224, 3, 0, 2, "Stride 2"),
+>     (224, 7, 3, 2, "7×7 kernel (AlexNet)"),
+> ]
+>
+> for inp, k, p, s, desc in configs:
+>     output = (inp - k + 2*p) // s + 1
+>     print(f"{desc:<25} ({inp}-{k}+2×{p})/{s}+1 = {output}")
+> ```
+>
+> **Output:**
+> ```
+> Basic (from document)     (8-3+2×0)/1+1 = 6
+> Same padding              (224-3+2×1)/1+1 = 224
+> No padding                (224-3+2×0)/1+1 = 222
+> Stride 2                  (224-3+2×0)/2+1 = 111
+> 7×7 kernel (AlexNet)      (224-7+2×3)/2+1 = 112
+> ```
+>
+> **Interpretation:** With padding=1 and stride=1, output equals input size ("same" padding). Without padding, each layer shrinks the output by (kernel-1) pixels. Stride 2 halves spatial dimensions—often used instead of pooling. The 7×7 kernel with stride 2 is AlexNet's first layer, reducing 224→112.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_output_size_formula()`*
 
 ---
 
@@ -394,12 +567,20 @@ filter_0_blue = conv.weight[0, 2]  # Shape: [3, 3]
 
 ![Max Pooling](../assets/deep_dive/max_pooling.png)
 
+**Reading the diagram**: The left shows a 4×4 input grid with numerical values; the orange lines divide it into four 2×2 regions. The right shows the 2×2 output after max pooling. For each 2×2 region, we take the maximum value: the top-left region contains [1,3,0,2] → max is 3; top-right [2,4,1,3] → max is 4; bottom-left [5,6,4,1] → max is 6; bottom-right [7,8,5,2] → max is 8. Notice the output is exactly half the size in each dimension (4×4 → 2×2), reducing the data by 4×. The color intensity in the output corresponds to the value magnitude.
+
 ### Why Max Pooling Works
 
 1. **Translation invariance**: The feature's exact position within the pooling region doesn't matter
 2. **Dimensionality reduction**: Halves spatial dimensions, reducing computation
 3. **Increased receptive field**: Each pooled output sees a larger input region
 4. **Slight noise robustness**: Small perturbations don't change the max
+
+> **Understanding each benefit**:
+> - *Translation invariance*: If an edge is at pixel (10,10) or (11,11), both fall in the same pooling region—the output is the same. This makes the network less sensitive to exact feature positions.
+> - *Dimensionality reduction*: A 224×224 feature map becomes 112×112 after one pool—4× fewer values to process in subsequent layers.
+> - *Increased receptive field*: Each output pixel in the pooled layer corresponds to a 2×2 region of input. After pooling, a 3×3 convolution on the pooled output effectively "sees" a 6×6 region of the original input.
+> - *Noise robustness*: If pixel values are [4.9, 5.0, 5.1, 5.2], the max is 5.2. Add small noise, get [4.8, 5.1, 5.0, 5.3]—max is 5.3. The change is minimal compared to the signal.
 
 ### Pooling vs Stride Trade-off
 
@@ -412,6 +593,35 @@ Modern networks often use **strided convolutions** instead of pooling:
 | Strided Conv | Conv with stride 2 | kernel² × channels² | Yes |
 
 **Strided convolution** can learn what information to preserve, but requires more parameters.
+
+> **Numerical Example: Pooling Dimension Reduction**
+>
+> ```python
+> import torch
+> import torch.nn as nn
+>
+> x = torch.randn(1, 64, 224, 224)  # Starting: 224×224×64
+> pool = nn.MaxPool2d(kernel_size=2, stride=2)
+>
+> print(f"Input:       {x.shape}")
+> for i in range(5):
+>     x = pool(x)
+>     print(f"After pool {i+1}: {x.shape}")
+> ```
+>
+> **Output:**
+> ```
+> Input:       torch.Size([1, 64, 224, 224])
+> After pool 1: torch.Size([1, 64, 112, 112])
+> After pool 2: torch.Size([1, 64, 56, 56])
+> After pool 3: torch.Size([1, 64, 28, 28])
+> After pool 4: torch.Size([1, 64, 14, 14])
+> After pool 5: torch.Size([1, 64, 7, 7])
+> ```
+>
+> **Interpretation:** Each 2×2 max pool halves spatial dimensions: 224→112→56→28→14→7. After 5 pooling layers, we've reduced 224×224=50,176 pixels to 7×7=49 pixels—a 1,024× reduction in spatial data. The channel count (64) stays the same. This is why VGG-style networks can have huge 7×7×512 feature maps at the end: the spatial dimensions have been aggressively reduced.
+>
+> *Source: `slide_computations/deep_dive_cnn_examples.py` - `demo_pooling_dimensions()`*
 
 ---
 

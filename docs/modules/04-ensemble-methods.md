@@ -42,6 +42,45 @@ This is exactly the principle behind ensemble machine learning.
 
 **Correlation matters**: Ensembles work best with uncorrelated errors, but help even with partially correlated errors. If individual models have variance σ² and correlation ρ between errors, ensemble variance is ρσ² + (1-ρ)σ²/n. With perfect independence (ρ=0), variance drops as 1/n. With perfect correlation (ρ=1), averaging doesn't help. In practice, even 50% correlation provides substantial benefit.
 
+**Concrete example:** Imagine 5 models, each with 70% accuracy on a binary prediction. If each model makes independent errors:
+- Probability all 5 are wrong on the same example: 0.3⁵ = 0.24%
+- Majority vote is wrong only when 3+ models are wrong
+- The ensemble achieves ~84% accuracy—significantly better than any individual
+
+But if all models make the *same* mistakes (ρ=1), the ensemble is still just 70% accurate. **Diversity is the key ingredient.**
+
+> **Numerical Example: Ensemble Variance and Correlation**
+>
+> ```python
+> import numpy as np
+>
+> # Parameters: 10 models, each with variance σ² = 100
+> individual_variance = 100
+> n_models = 10
+>
+> # Ensemble variance formula: Var = ρσ² + (1-ρ)σ²/n
+> for rho in [0.0, 0.25, 0.5, 0.75, 1.0]:
+>     ensemble_var = (
+>         rho * individual_variance
+>         + (1 - rho) * individual_variance / n_models
+>     )
+>     reduction = (1 - ensemble_var / individual_variance) * 100
+>     print(f"ρ={rho:.2f}: Var={ensemble_var:.1f}, Reduction={reduction:.0f}%")
+> ```
+>
+> **Output:**
+> ```
+> ρ=0.00: Var=10.0, Reduction=90%
+> ρ=0.25: Var=32.5, Reduction=68%
+> ρ=0.50: Var=55.0, Reduction=45%
+> ρ=0.75: Var=77.5, Reduction=22%
+> ρ=1.00: Var=100.0, Reduction=0%
+> ```
+>
+> **Interpretation:** With 10 independent models (ρ=0), variance drops by 90%. Even with moderate correlation (ρ=0.5), you still get 45% reduction. This is why Random Forest's feature sampling matters—it reduces ρ between trees.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_ensemble_variance_correlation()`*
+
 ### How Ensembles Improve Predictions
 
 **Variance Reduction (Bagging):**
@@ -111,6 +150,46 @@ $$(1 - \frac{1}{n})^n \approx e^{-1} \approx 0.368$$
 
 So ~36.8% are left out ("out-of-bag"), meaning ~63.2% are included.
 
+**Building intuition for this limit:** Consider sampling 1000 observations with replacement from 1000:
+- Each draw, P(row i is NOT picked) = 999/1000 = 0.999
+- After 1000 draws, P(row i NEVER picked) = 0.999^1000 ≈ 0.368
+- This converges to e⁻¹ as n grows—a fundamental constant in probability
+
+The math is elegant: (1 - 1/n)^n approaches e⁻¹ because this is how the exponential function is defined!
+
+> **Numerical Example: Bootstrap Sampling in Action**
+>
+> ```python
+> import numpy as np
+>
+> np.random.seed(42)
+> n_samples = 1000
+> n_bootstrap_samples = 100
+>
+> unique_fractions = []
+> for _ in range(n_bootstrap_samples):
+>     bootstrap_indices = np.random.choice(
+>         n_samples,
+>         size=n_samples,
+>         replace=True,
+>     )
+>     unique_count = len(np.unique(bootstrap_indices))
+>     unique_fractions.append(unique_count / n_samples)
+>
+> print(f"Mean unique fraction: {np.mean(unique_fractions):.3f}")
+> print(f"Theoretical (1 - e⁻¹): {1 - np.exp(-1):.3f}")
+> ```
+>
+> **Output:**
+> ```
+> Mean unique fraction: 0.632
+> Theoretical (1 - e⁻¹): 0.632
+> ```
+>
+> **Interpretation:** Across 100 bootstrap samples, exactly 63.2% of observations appear on average—matching the theoretical prediction. The remaining 36.8% are "out-of-bag" and can be used for free validation.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_bootstrap_sampling()`*
+
 **Why replacement?** Without replacement at the same size, you'd get identical datasets. With replacement: some observations appear multiple times (emphasized), some don't appear (~36.8%, providing OOB validation), and different trees emphasize different observations—creating diversity. Bootstrap sampling approximates drawing fresh samples from the true population.
 
 ### Random Forests: Double Randomness
@@ -151,6 +230,59 @@ Where:
 - Second term: Shrinks as you add trees
 
 **Key insight:** Lower correlation between trees = better ensemble. Feature sampling specifically reduces $\rho$.
+
+**Seeing the formula in action:** With 10 trees and σ²=100:
+
+| Correlation (ρ) | Ensemble Variance | Reduction |
+|-----------------|-------------------|-----------|
+| 0.0 (independent) | 10 | 90% |
+| 0.5 (moderate) | 55 | 45% |
+| 1.0 (identical) | 100 | 0% |
+
+Even with ρ=0.5, you still get 45% variance reduction. This explains why Random Forests work well in practice—trees don't need to be perfectly independent, just somewhat different.
+
+> **Numerical Example: Random Forest vs Single Tree**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split
+> from sklearn.tree import DecisionTreeClassifier
+> from sklearn.ensemble import RandomForestClassifier
+> import numpy as np
+>
+> np.random.seed(42)
+> X, y = make_classification(
+>     n_samples=500, n_features=20, n_informative=10,
+>     n_redundant=5, n_classes=2, random_state=42,
+> )
+>
+> # Run 20 different train/test splits
+> tree_scores, rf_scores = [], []
+> for trial in range(20):
+>     X_train, X_test, y_train, y_test = train_test_split(
+>         X, y, test_size=0.3, random_state=trial,
+>     )
+>     tree = DecisionTreeClassifier(max_depth=None, random_state=42)
+>     tree.fit(X_train, y_train)
+>     tree_scores.append(tree.score(X_test, y_test))
+>
+>     rf = RandomForestClassifier(n_estimators=100, random_state=42)
+>     rf.fit(X_train, y_train)
+>     rf_scores.append(rf.score(X_test, y_test))
+>
+> print(f"Single Tree: Mean={np.mean(tree_scores):.3f}, Std={np.std(tree_scores):.3f}")
+> print(f"RF (100):    Mean={np.mean(rf_scores):.3f}, Std={np.std(rf_scores):.3f}")
+> ```
+>
+> **Output:**
+> ```
+> Single Tree: Mean=0.809, Std=0.032
+> RF (100):    Mean=0.891, Std=0.025
+> ```
+>
+> **Interpretation:** Across 20 different data splits, Random Forest achieves 8 percentage points higher accuracy AND 22% lower variance. The ensemble is both more accurate and more stable than any single tree.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_rf_vs_single_tree()`*
 
 **Number of trees**: 100-500 trees usually sufficient. Plot OOB error vs. n_estimators—it decreases rapidly then flattens. Unlike boosting, more RF trees never hurt performance; they just stop helping. More trees mean more memory and slower inference, so balance accuracy against cost.
 
@@ -202,6 +334,48 @@ rf = RandomForestClassifier(oob_score=True)
 rf.fit(X_train, y_train)
 print(f"OOB Accuracy: {rf.oob_score_}")
 ```
+
+**Why OOB ≈ cross-validation:** For any single observation, about 36.8% of trees never saw it during training. When you predict that observation using only those trees, you get an honest estimate—those trees couldn't have memorized it. Aggregating these honest predictions across all observations gives you an error estimate very close to what k-fold cross-validation would produce, but without the computational cost of retraining k times.
+
+> **Numerical Example: OOB Error vs Cross-Validation**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import cross_val_score
+> from sklearn.ensemble import RandomForestClassifier
+> import numpy as np
+>
+> np.random.seed(42)
+> X, y = make_classification(
+>     n_samples=1000, n_features=20, n_informative=10,
+>     n_redundant=5, n_classes=2, random_state=42,
+> )
+>
+> # OOB scoring
+> rf = RandomForestClassifier(n_estimators=100, oob_score=True, random_state=42)
+> rf.fit(X, y)
+>
+> # Cross-validation
+> cv_scores = cross_val_score(
+>     RandomForestClassifier(n_estimators=100, random_state=42),
+>     X, y, cv=5,
+> )
+>
+> print(f"OOB Accuracy:    {rf.oob_score_:.4f}")
+> print(f"5-Fold CV Mean:  {np.mean(cv_scores):.4f}")
+> print(f"Difference:      {abs(rf.oob_score_ - np.mean(cv_scores)):.4f}")
+> ```
+>
+> **Output:**
+> ```
+> OOB Accuracy:    0.9210
+> 5-Fold CV Mean:  0.9330
+> Difference:      0.0120
+> ```
+>
+> **Interpretation:** OOB and 5-fold CV produce nearly identical estimates (within 1.2 percentage points), but OOB comes free—no extra model training required. Use OOB for quick hyperparameter feedback during tuning.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_oob_vs_cv()`*
 
 ### Common Misconceptions
 
@@ -272,6 +446,59 @@ The residual IS the negative gradient of the loss. When we fit trees to residual
 
 **Gradient in function space**: Normal gradient descent optimizes parameters (adjust θ). Gradient boosting optimizes functions (add a new tree). For squared error, the negative gradient is simply the residual. Fitting a tree to residuals approximates "what should I add to reduce error?" The learning rate works like in gradient descent—taking fractional steps (0.1 × tree_prediction) prevents overshooting. So: F_new(x) = F_old(x) + learning_rate × new_tree(x). Each tree is a step in function space toward lower loss.
 
+**Watching boosting learn:** On a simple regression problem (y = 2x + 3 + noise), here's what happens across boosting rounds:
+
+| Round | Residual Std | MSE |
+|-------|--------------|-----|
+| Init | 5.93 | 35.1 |
+| 1 | 4.69 | 22.0 |
+| 2 | 3.83 | 14.6 |
+| 3 | 3.22 | 10.4 |
+| 5 | 2.46 | 6.1 |
+
+Each tree chips away at the remaining error. The residual standard deviation drops steadily as boosting "discovers" the linear relationship through many small corrections.
+
+> **Numerical Example: Gradient Boosting Step by Step**
+>
+> ```python
+> from sklearn.tree import DecisionTreeRegressor
+> import numpy as np
+>
+> np.random.seed(42)
+> n_samples = 100
+> X = np.random.uniform(low=0, high=10, size=(n_samples, 1))
+> y = 2 * X.ravel() + 3 + np.random.normal(loc=0, scale=2, size=n_samples)
+>
+> # Manual gradient boosting
+> learning_rate = 0.3
+> prediction = np.full(n_samples, np.mean(y))  # Start with mean
+>
+> print(f"{'Round':>6} {'Residual Std':>14} {'MSE':>10}")
+> for round_num in range(6):
+>     residuals = y - prediction
+>     mse = np.mean(residuals ** 2)
+>     print(f"{round_num:>6} {np.std(residuals):>14.2f} {mse:>10.2f}")
+>     if round_num < 5:
+>         tree = DecisionTreeRegressor(max_depth=1, random_state=42)
+>         tree.fit(X, residuals)
+>         prediction += learning_rate * tree.predict(X)
+> ```
+>
+> **Output:**
+> ```
+> Round   Residual Std        MSE
+>      0           5.93      35.12
+>      1           4.69      21.99
+>      2           3.83      14.64
+>      3           3.22      10.35
+>      4           2.76       7.62
+>      5           2.46       6.06
+> ```
+>
+> **Interpretation:** Each round, a shallow tree predicts the residuals (errors), and we add a fraction of its predictions. MSE drops from 35 to 6 in just 5 rounds as boosting learns the linear pattern y = 2x + 3.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_gradient_boosting_steps()`*
+
 ### Key Boosting Hyperparameters
 
 | Parameter | Effect |
@@ -281,6 +508,49 @@ The residual IS the negative gradient of the loss. When we fit trees to residual
 | `max_depth` | Usually 3-8 (much shallower than RF) |
 
 **Trade-off**: Lower learning rate + more trees often gives best results but takes longer.
+
+**Practical guidance for learning rate:**
+- **Start with 0.1**: Good default, fast enough to iterate
+- **Try 0.01-0.05**: If overfitting (training >> test accuracy)
+- **Use 0.3**: Only for quick prototyping or if data is very large
+- **Always pair with early stopping**: Let the algorithm find optimal n_estimators
+
+The key insight: a lower learning rate makes each tree's contribution smaller, requiring more trees to reach the same capacity. This acts as implicit regularization—the model has more chances to "change its mind" and doesn't commit too heavily to early patterns.
+
+> **Numerical Example: Learning Rate Effects on Boosting**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split
+> from sklearn.ensemble import GradientBoostingClassifier
+>
+> X, y = make_classification(
+>     n_samples=1000, n_features=20, n_informative=10,
+>     n_redundant=5, n_classes=2, random_state=42,
+> )
+> X_train, X_test, y_train, y_test = train_test_split(
+>     X, y, test_size=0.3, random_state=42,
+> )
+>
+> configs = [(0.3, 50), (0.1, 150), (0.03, 500)]
+> for lr, n_est in configs:
+>     gb = GradientBoostingClassifier(
+>         learning_rate=lr, n_estimators=n_est, max_depth=3, random_state=42,
+>     )
+>     gb.fit(X_train, y_train)
+>     print(f"LR={lr:.2f}, Trees={n_est:>3}: Test={gb.score(X_test, y_test):.4f}")
+> ```
+>
+> **Output:**
+> ```
+> LR=0.30, Trees= 50: Test=0.9033
+> LR=0.10, Trees=150: Test=0.9067
+> LR=0.03, Trees=500: Test=0.9033
+> ```
+>
+> **Interpretation:** All three configurations achieve similar test accuracy, but through different paths. Lower learning rate + more trees is slower to train but often more stable. The medium configuration (0.1, 150) slightly edges out the others here.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_learning_rate_effects()`*
 
 **Tree depth difference:**
 - Random Forest: Deep, fully-grown trees (low bias, high variance). Averaging reduces variance.
@@ -330,6 +600,46 @@ print(f"Best iteration: {xgb_model.best_iteration}")
 Without early stopping, boosting overfits. With it, training stops when validation plateaus.
 
 **Why early stopping beats fixed n_estimators**: The optimal number depends on learning rate, tree depth, data complexity, and sample size—a fixed number can't adapt. Set a large n_estimators as an upper limit, monitor validation loss, stop when no improvement for N consecutive rounds. The model finds its own stopping point, works with any learning rate, and prevents overfitting automatically. Always use a separate validation set for early stopping—not your final test set.
+
+> **Numerical Example: Early Stopping in Action**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split
+> from sklearn.ensemble import GradientBoostingClassifier
+> import numpy as np
+>
+> X, y = make_classification(
+>     n_samples=500, n_features=20, n_informative=5,
+>     n_redundant=10, n_clusters_per_class=3, random_state=42,
+> )
+> X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.4, random_state=42)
+> X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+>
+> gb = GradientBoostingClassifier(
+>     n_estimators=300, learning_rate=0.1, max_depth=4, random_state=42,
+> )
+> gb.fit(X_train, y_train)
+>
+> # Track validation accuracy at each stage
+> val_scores = [np.mean(pred == y_val) for pred in gb.staged_predict(X_val)]
+> best_n = np.argmax(val_scores) + 1
+>
+> print(f"Best validation at {best_n} trees: {val_scores[best_n-1]:.4f}")
+> print(f"Final (300 trees):                 {val_scores[-1]:.4f}")
+> print(f"Overfit penalty: {(val_scores[best_n-1] - val_scores[-1])*100:.1f} points")
+> ```
+>
+> **Output:**
+> ```
+> Best validation at 14 trees: 0.9000
+> Final (300 trees):           0.8800
+> Overfit penalty: 2.0 points
+> ```
+>
+> **Interpretation:** Validation accuracy peaks at just 14 trees, then declines as the model overfits. Training to 300 trees costs 2 percentage points of accuracy. Early stopping would have stopped at 14 trees automatically.
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_early_stopping()`*
 
 ### LightGBM and CatBoost
 
@@ -400,6 +710,8 @@ If you train RF on all training data and use its predictions on that same data a
 4. Continue for all folds
 5. Meta-model trains on these honest predictions
 
+**Why this matters numerically:** Suppose a Random Forest achieves 95% training accuracy but only 85% test accuracy. If you use training predictions as meta-features, the meta-model sees "RF predicts 0.95 probability" for examples RF memorized. It learns to over-trust RF. On new data, RF's predictions are less confident, but the meta-model doesn't know this—it still over-trusts RF. Out-of-fold predictions ensure the meta-model only sees RF's "honest" performance level.
+
 **Multi-level stacking**: Going deeper is possible but rarely worthwhile. Two levels is usually sufficient (Netflix Prize used two). Each additional level requires proper out-of-fold predictions (complex bookkeeping), increases overfitting risk, and slows inference. In production, a single well-tuned XGBoost or simple two-level stack is almost always preferred.
 
 ### Voting Classifiers
@@ -418,6 +730,57 @@ Simpler than stacking: combine predictions directly.
 ```
 
 **Soft voting usually performs better** (uses more information).
+
+**When hard and soft voting disagree:** Consider three models predicting classes A vs B:
+- Model 1: P(A)=0.45, P(B)=0.55 → predicts B
+- Model 2: P(A)=0.49, P(B)=0.51 → predicts B
+- Model 3: P(A)=0.90, P(B)=0.10 → predicts A
+
+Hard voting: A=1, B=2 → **B wins**
+Soft voting: P(A)=(0.45+0.49+0.90)/3=0.613 → **A wins**
+
+Soft voting correctly captures that Model 3 is *highly confident* about A, while Models 1 and 2 are barely confident about B. A 90% confident prediction should count more than two 51% predictions.
+
+> **Numerical Example: Soft vs Hard Voting**
+>
+> ```python
+> from sklearn.datasets import make_classification
+> from sklearn.model_selection import train_test_split
+> from sklearn.ensemble import (
+>     RandomForestClassifier, GradientBoostingClassifier, VotingClassifier,
+> )
+> from sklearn.linear_model import LogisticRegression
+>
+> X, y = make_classification(
+>     n_samples=500, n_features=10, n_informative=5, random_state=42,
+> )
+> X_train, X_test, y_train, y_test = train_test_split(
+>     X, y, test_size=0.3, random_state=42,
+> )
+>
+> rf = RandomForestClassifier(n_estimators=50, random_state=42)
+> gb = GradientBoostingClassifier(n_estimators=50, random_state=42)
+> lr = LogisticRegression(random_state=42)
+>
+> hard = VotingClassifier([('rf', rf), ('gb', gb), ('lr', lr)], voting='hard')
+> soft = VotingClassifier([('rf', rf), ('gb', gb), ('lr', lr)], voting='soft')
+>
+> hard.fit(X_train, y_train)
+> soft.fit(X_train, y_train)
+>
+> print(f"Hard Voting: {hard.score(X_test, y_test):.4f}")
+> print(f"Soft Voting: {soft.score(X_test, y_test):.4f}")
+> ```
+>
+> **Output:**
+> ```
+> Hard Voting: 0.9333
+> Soft Voting: 0.9200
+> ```
+>
+> **Interpretation:** In this case, hard voting slightly outperforms soft voting. Results vary by dataset—soft voting usually wins when models have well-calibrated probabilities, but hard voting can win when probability estimates are noisy. Try both!
+>
+> *Source: `slide_computations/module4_examples.py` - `demo_soft_vs_hard_voting()`*
 
 ```python
 from sklearn.ensemble import VotingClassifier, StackingClassifier
