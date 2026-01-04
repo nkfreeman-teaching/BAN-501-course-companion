@@ -1193,6 +1193,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendices/surprising-phenomena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surprising Phenomena in Deep Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1727,6 +1755,7 @@
 - Why was THIS customer predicted to churn?
 - What would change THIS decision?</p>
 <p>Both matter. Executives want global insights: "What drives churn?" Customer service needs local explanations: "Why was this specific customer flagged?"</p>
+<p><strong>The forest vs. tree analogy</strong>: Think of global interpretability as understanding the <em>forest</em>—stepping back to see the overall patterns, which species are most common, how the ecosystem works. Local interpretability is examining a <em>single tree</em>—why is this particular tree thriving or dying? You need both perspectives. A forester managing the whole forest needs global patterns; a botanist treating a sick tree needs local diagnosis.</p>
 <h3 id="permutation-importance">Permutation Importance<a class="headerlink" href="#permutation-importance" title="Permanent link">&para;</a></h3>
 <p><strong>The idea:</strong>
 1. Train model, measure baseline performance
@@ -1734,6 +1763,7 @@
 3. Measure performance drop
 4. Larger drop = more important feature</p>
 <p><strong>Why it works</strong>: If a feature is important, breaking its signal hurts predictions.</p>
+<p><strong>The blindfold test</strong>: Imagine testing how much a basketball player relies on their vision. Blindfold them and see how much worse they play. If performance drops dramatically, vision was important. If they still play well (maybe they're great at listening for the ball), vision wasn't crucial. Permutation importance "blindfolds" each feature one at a time and measures how much the model's performance degrades.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">result</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span>
@@ -1754,6 +1784,32 @@
 <p><strong>Disadvantages:</strong>
 - Slow for many features
 - Misleading with correlated features (shuffling one is compensated by another)</p>
+<blockquote>
+<p><strong>Numerical Example: Permutation Importance Step by Step</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Dataset: x1 (strong signal), x2 (moderate), x3 (noise)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># Target depends on: 2*x1 + 0.5*x2, not on x3</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Train Random Forest and measure baseline accuracy</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">baseline_accuracy</span> <span class="o">=</span> <span class="mf">0.647</span>  <span class="c1"># 64.7%</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Shuffle each feature and measure performance drop</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># x1 (strong): shuffle → accuracy drops to 40.0%</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># x2 (moderate): shuffle → accuracy stays ~same</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># x3 (noise): shuffle → accuracy stays ~same</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">importance_x1</span> <span class="o">=</span> <span class="mf">0.647</span> <span class="o">-</span> <span class="mf">0.400</span>  <span class="c1"># = 0.247 (24.7%)</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">importance_x2</span> <span class="o">=</span> <span class="mf">0.647</span> <span class="o">-</span> <span class="mf">0.707</span>  <span class="c1"># = -0.06 (noise)</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">importance_x3</span> <span class="o">=</span> <span class="mf">0.647</span> <span class="o">-</span> <span class="mf">0.660</span>  <span class="c1"># = -0.01 (noise)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>x1 (strong): Shuffle → accuracy drops to 40.0%
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>             Importance = 64.7% - 40.0% = 24.7%
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>x2 (moderate): Importance ≈ 0% (signal carried by x1)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>x3 (noise): Importance ≈ 0% (model doesn&#39;t use it)
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Shuffling x1 destroys the main signal, causing a 24.7% accuracy drop. Shuffling noise features has no effect—the model wasn't using them anyway. This is the "blindfold test" in action.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_permutation_importance()</code></em></p>
+</blockquote>
 <h3 id="partial-dependence-plots-pdp">Partial Dependence Plots (PDP)<a class="headerlink" href="#partial-dependence-plots-pdp" title="Permanent link">&para;</a></h3>
 <p>PDPs show the average effect of a feature on predictions.</p>
 <p><strong>How it works:</strong>
@@ -1761,19 +1817,48 @@
 2. Set ALL samples to that value
 3. Average the predictions
 4. Plot average prediction vs feature value</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialDependenceDisplay</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">PartialDependenceDisplay</span><span class="o">.</span><span class="n">from_estimator</span><span class="p">(</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">model</span><span class="p">,</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">X_train</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">]</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+<p><strong>The what-if slider</strong>: Imagine a dashboard with a slider for each feature. When you drag the "age" slider from 20 to 80, the PDP shows how the <em>average</em> prediction changes. It's answering: "If I could magically set everyone's age to 50, what would the average prediction be?" This isolates the marginal effect of that feature, averaging over all the other features in the data.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialDependenceDisplay</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">PartialDependenceDisplay</span><span class="o">.</span><span class="n">from_estimator</span><span class="p">(</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">model</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">X_train</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">]</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span>
 </span></code></pre></div>
 <p><strong>Interpretation:</strong>
 - Upward slope: Higher feature value → higher prediction
 - Flat line: Little average effect
 - Non-linear shape: Complex relationship</p>
 <p><strong>Limitation</strong>: Assumes feature independence. Can show impossible combinations (20-year-olds with $500K income).</p>
+<blockquote>
+<p><strong>Numerical Example: Building a Partial Dependence Plot</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Churn prediction model with age, income, tenure</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># PDP for &#39;age&#39;: What happens to average churn as we vary age?</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># For each age value, set ALL customers to that age</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># and average the predictions</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">age_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">65</span><span class="p">]</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">avg_churn_probs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="k">for</span> <span class="n">age</span> <span class="ow">in</span> <span class="n">age_values</span><span class="p">:</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">X_modified</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">X_modified</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">age</span>  <span class="c1"># Everyone is now this age</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">avg_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_modified</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="n">avg_churn_probs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">avg_prob</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Age Value    Avg Churn Prob
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>--------------------------------
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>      25              71.0%
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>      35              64.0%
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>      45              53.9%
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>      55              47.2%
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>      65              28.7%
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The PDP shows a clear downward trend—as age increases, average churn probability decreases. This is the "what-if slider": drag age from 25→65 and watch the average prediction drop from 71%→29%.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_partial_dependence()</code></em></p>
+</blockquote>
 <h3 id="shap-shapley-additive-explanations">SHAP (SHapley Additive exPlanations)<a class="headerlink" href="#shap-shapley-additive-explanations" title="Permanent link">&para;</a></h3>
 <p><strong>Foundation</strong>: Shapley values from game theory—fairly distribute "credit" among players.</p>
 <p><strong>Applied to ML</strong>: How much did each feature contribute to pushing this prediction away from the average?</p>
@@ -1785,40 +1870,104 @@
 - SHAP &gt; 0: Feature pushed prediction higher
 - SHAP &lt; 0: Feature pushed prediction lower
 - Magnitude: Strength of effect</p>
+<p><strong>Understanding Shapley through a concrete example</strong>: Before the formula, consider three data scientists (A, B, C) working on a project. Alone, A generates $50k, B generates $40k, C generates $20k. But together, A+B generate $120k (synergy!), and all three generate $150k. How do you fairly split the $150k? Shapley values average each person's marginal contribution across all possible orderings they could have joined. Player A's Shapley value is $66.7k—they get more because they add value in every combination. This is the same math SHAP uses: features are "players" and the prediction is the "payoff."</p>
 <p><strong>The Shapley formula:</strong></p>
 <div class="arithmatex">\[\phi_j = \sum_{S \subseteq N \setminus \{j\}} \frac{|S|!(|N|-|S|-1)!}{|N|!} [f(S \cup \{j\}) - f(S)]\]</div>
 <p><strong>In plain English:</strong> Consider all possible subsets of features. For each subset, measure how much adding feature j changes the prediction. Average these contributions with weights ensuring fairness.</p>
 <p><strong>Computational complexity</strong>: Exact Shapley computation is exponential (2^n subsets). TreeSHAP exploits tree structure for polynomial-time exact values—use it for random forests, XGBoost, LightGBM. DeepSHAP uses gradient approximations for neural networks. KernelSHAP handles arbitrary models but is slow. This often influences model choice: if interpretability + speed are required, tree-based models with TreeSHAP become attractive.</p>
+<blockquote>
+<p><strong>Numerical Example: Shapley Values in a Simple Game</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Three data scientists (A, B, C) work on a project</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Coalition payoffs (in $1000s):</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">payoffs</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="s1">&#39;∅&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>      <span class="s1">&#39;</span><span class="si">{A}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>   <span class="s1">&#39;</span><span class="si">{B}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>   <span class="s1">&#39;</span><span class="si">{C}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="s1">&#39;{A,B}&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>  <span class="c1"># A+B have synergy!</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="s1">&#39;{A,C}&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>   <span class="s1">&#39;{B,C}&#39;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="s1">&#39;{A,B,C}&#39;</span><span class="p">:</span> <span class="mi">150</span>  <span class="c1"># Grand coalition</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="p">}</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># For each player, average marginal contribution across</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># all orderings they could join:</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># Player A joins: ∅→+50, {B}→+80, {C}→+60, {B,C}→+80</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">shapley_A</span> <span class="o">=</span> <span class="n">weighted_average</span><span class="p">([</span><span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">80</span><span class="p">])</span>  <span class="c1"># = $66.7k</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="c1"># Player B joins: ∅→+40, {A}→+70, {C}→+50, {A,C}→+70</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="n">shapley_B</span> <span class="o">=</span> <span class="n">weighted_average</span><span class="p">([</span><span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">])</span>  <span class="c1"># = $56.7k</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="c1"># Player C joins: ∅→+20, {A}→+30, {B}→+30, {A,B}→+30</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="n">shapley_C</span> <span class="o">=</span> <span class="n">weighted_average</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>  <span class="c1"># = $26.7k</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Final allocation:
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  A: $66.7k (highest—adds value everywhere)
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  B: $56.7k (good synergy with A)
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  C: $26.7k (consistent but lower contribution)
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  Total: $150.0k (= grand coalition value)
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Shapley values are the <em>only</em> allocation that is fair, efficient, and additive. In ML, features are "players" and the prediction is the "payoff"—SHAP tells us how much each feature contributed to pushing the prediction away from the baseline.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_shapley_game()</code></em></p>
+</blockquote>
 <h3 id="shap-in-practice">SHAP in Practice<a class="headerlink" href="#shap-in-practice" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># For tree-based models (fast!)</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">TreeExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Summary plot (global view)</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">shap</span><span class="o">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Force plot (single prediction)</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Waterfall plot (detailed breakdown)</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="p">(</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">values</span><span class="o">=</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">base_values</span><span class="o">=</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">data</span><span class="o">=</span><span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="p">))</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># For tree-based models (fast!)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">TreeExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Summary plot (global view)</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">shap</span><span class="o">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Force plot (single prediction)</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">shap</span><span class="o">.</span><span class="n">force_plot</span><span class="p">(</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="p">)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Waterfall plot (detailed breakdown)</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="p">(</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="n">values</span><span class="o">=</span><span class="n">shap_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="n">base_values</span><span class="o">=</span><span class="n">explainer</span><span class="o">.</span><span class="n">expected_value</span><span class="p">,</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">data</span><span class="o">=</span><span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="p">))</span>
 </span></code></pre></div>
 <p><strong>SHAP variants:</strong>
 - <strong>TreeSHAP</strong>: Exact, fast for tree models
 - <strong>KernelSHAP</strong>: Model-agnostic, slower
 - <strong>DeepSHAP</strong>: For neural networks</p>
 <p>Use TreeSHAP when possible—it's exact and fast.</p>
+<blockquote>
+<p><strong>Numerical Example: SHAP Values Sum to Prediction</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># For a single test instance:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">baseline</span> <span class="o">=</span> <span class="mf">0.517</span>  <span class="c1"># Average training prediction</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">prediction</span> <span class="o">=</span> <span class="mf">0.913</span>  <span class="c1"># This instance&#39;s prediction</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">difference</span> <span class="o">=</span> <span class="n">prediction</span> <span class="o">-</span> <span class="n">baseline</span>  <span class="c1"># = +0.396 to explain</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># SHAP breaks down the difference by feature:</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">shap_values</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="s1">&#39;feature_1&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.328</span><span class="p">,</span>  <span class="c1"># Pushed prediction UP</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="s1">&#39;feature_2&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.301</span><span class="p">,</span>  <span class="c1"># Pushed prediction DOWN</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="s1">&#39;feature_3&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.086</span><span class="p">,</span>  <span class="c1"># Pushed prediction DOWN</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="s1">&#39;feature_4&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.455</span><span class="p">,</span>  <span class="c1"># Pushed prediction UP</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="p">}</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1"># Sum: 0.328 + (-0.301) + (-0.086) + 0.455 = +0.396</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Component             Value
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>----------------------------------------
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Base value            0.517
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>feature_1         +   0.328
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>feature_2         -   0.301
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>feature_3         -   0.086
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>feature_4         +   0.455
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>----------------------------------------
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>Prediction            0.913  ✓
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The SHAP additivity property guarantees: base_value + Σ(SHAP values) = prediction. Every prediction is <em>fully</em> explained—no residual, no approximation. Feature 4 pushed the prediction up most (+0.455), while features 2 and 3 pushed it down.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_shap_sum_to_prediction()</code></em></p>
+</blockquote>
 <h3 id="shap-visualizations">SHAP Visualizations<a class="headerlink" href="#shap-visualizations" title="Permanent link">&para;</a></h3>
 <p><strong>Summary plot</strong>: Global importance with direction
 - Each dot is one sample
@@ -1834,31 +1983,93 @@
 <p><strong>Dependence plot</strong>: Feature effect with interactions
 - Like PDP but shows actual points
 - Can color by another feature to see interactions</p>
+<p><strong>How to read a SHAP summary plot step by step</strong>:
+1. <strong>Look at feature order</strong>: Features at the top are most important (widest spread of dots)
+2. <strong>Find the red dots</strong>: Red = high feature value, blue = low feature value
+3. <strong>See where red clusters</strong>: If red dots are on the RIGHT → high values increase predictions
+4. <strong>See where blue clusters</strong>: If blue dots are on the RIGHT → low values increase predictions
+5. <strong>Check the spread</strong>: Wide horizontal spread = strong impact; tight cluster at 0 = weak impact</p>
+<p>Example interpretation: If "support_tickets" shows red dots clustered on the right, it means: "Customers with many support tickets (high value = red) have higher churn predictions (positive SHAP = right)."</p>
+<blockquote>
+<p><strong>Numerical Example: Reading a SHAP Summary Plot</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Churn prediction model - SHAP summary patterns:</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># (Each feature shows where high/low values cluster)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">feature_patterns</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="s1">&#39;support_tickets&#39;</span><span class="p">:</span> <span class="s1">&#39;Red dots RIGHT → high tickets = higher churn&#39;</span><span class="p">,</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="s1">&#39;months_customer&#39;</span><span class="p">:</span> <span class="s1">&#39;Red dots LEFT → long tenure = lower churn&#39;</span><span class="p">,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="s1">&#39;income&#39;</span><span class="p">:</span>          <span class="s1">&#39;Red dots LEFT → higher income = lower churn&#39;</span><span class="p">,</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="s1">&#39;age&#39;</span><span class="p">:</span>             <span class="s1">&#39;Dots spread evenly → weak/noisy effect&#39;</span><span class="p">,</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Feature            High values (red)    Pattern
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>----------------------------------------------------------------
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>support_tickets    → cluster RIGHT      More tickets = higher churn
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>months_customer    → cluster LEFT       Longer tenure = lower churn
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>income             → cluster LEFT       Higher income = lower churn
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>age                → spread across      Age effect is noisy/weak
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The summary plot tells a complete story. Support tickets is the top driver (widest spread), with high values strongly increasing churn risk. Tenure is protective—long-term customers (red) have negative SHAP values (left). Age shows no clear pattern, suggesting it's not a reliable predictor.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_shap_summary_interpretation()</code></em></p>
+</blockquote>
 <h3 id="lime-local-interpretable-model-agnostic-explanations">LIME (Local Interpretable Model-agnostic Explanations)<a class="headerlink" href="#lime-local-interpretable-model-agnostic-explanations" title="Permanent link">&para;</a></h3>
 <p><strong>Core idea</strong>: Approximate complex model locally with a simple one.</p>
+<p><strong>The magnifying glass analogy</strong>: A complex model's decision boundary might be wildly curved and twisted at the global level—impossible to describe simply. But if you zoom in with a magnifying glass to a tiny neighborhood around one point, even the most complex curve looks approximately straight. LIME zooms into that local neighborhood, fits a simple linear model that captures the local behavior, and interprets <em>that</em> simple model. The explanation is only valid in that neighborhood—move to a different point and you'd get a different local approximation.</p>
 <p><strong>How it works:</strong>
 1. Generate perturbed samples around the instance
 2. Get complex model's predictions for those samples
 3. Fit simple model (linear) weighted by distance
 4. Interpret the simple model</p>
 <p><em>"In the neighborhood of THIS prediction, what does the model behave like?"</em></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lime.lime_tabular</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">X_train</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span><span class="p">,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Not Churn&#39;</span><span class="p">,</span> <span class="s1">&#39;Churn&#39;</span><span class="p">],</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">)</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">explanation</span><span class="o">.</span><span class="n">show_in_notebook</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">lime.lime_tabular</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">X_train</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span><span class="p">,</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Not Churn&#39;</span><span class="p">,</span> <span class="s1">&#39;Churn&#39;</span><span class="p">],</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">)</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="n">X_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">)</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="n">explanation</span><span class="o">.</span><span class="n">show_in_notebook</span><span class="p">()</span>
 </span></code></pre></div>
+<blockquote>
+<p><strong>Numerical Example: LIME Perturbation in Action</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Original instance: [0.80, 0.90, 0.10] → P(class=1) = 100%</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1"># LIME generates nearby perturbed samples and gets predictions:</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">perturbed_samples</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.29</span><span class="p">],</span>  <span class="c1"># → 94%</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="p">[</span><span class="mf">1.26</span><span class="p">,</span> <span class="mf">0.83</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span>  <span class="c1"># → 100%</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="p">[</span><span class="mf">0.63</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.19</span><span class="p">],</span>  <span class="c1"># → 98%</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="p">[</span><span class="mf">0.53</span><span class="p">,</span> <span class="mf">0.48</span><span class="p">,</span> <span class="mf">0.54</span><span class="p">],</span>  <span class="c1"># → 100%</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>    <span class="c1"># ... more samples ...</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="p">]</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1"># Fit weighted linear model (closer samples get more weight)</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="c1"># Local linear approximation coefficients:</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="n">local_coefs</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>    <span class="s1">&#39;feature_A&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.041</span><span class="p">,</span>  <span class="c1"># increases prediction locally</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>    <span class="s1">&#39;feature_B&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.057</span><span class="p">,</span>  <span class="c1"># decreases prediction locally</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>    <span class="s1">&#39;feature_C&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.015</span><span class="p">,</span>  <span class="c1"># slight positive effect</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Local linear approximation (LIME):
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  feature_A: +0.041 (increases prediction)
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>  feature_B: -0.057 (decreases prediction)
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>  feature_C: +0.015 (increases prediction)
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>  Intercept: 0.977
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> In the <em>neighborhood</em> of this specific instance, the model behaves approximately linearly. Feature A has a positive local effect, while feature B has a negative effect. This explanation is only valid nearby—a different instance might have completely different local behavior.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_lime_perturbation()</code></em></p>
+</blockquote>
 <h3 id="shap-vs-lime">SHAP vs LIME<a class="headerlink" href="#shap-vs-lime" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1892,10 +2103,36 @@
 </tbody>
 </table>
 <p>Both are valuable. SHAP has stronger theoretical foundations. LIME can be more intuitive.</p>
+<blockquote>
+<p><strong>Numerical Example: SHAP vs Permutation Importance</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Dataset with correlated features:</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="c1"># x1: True predictor (target depends on x1)</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># x2: Correlated with x1 (r ≈ 0.96) but not directly causal</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># x3: Independent noise</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># Correlation matrix:</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1">#         x1      x2      x3</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1"># x1    1.00    0.96   -0.06</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1"># x2    0.96    1.00   -0.03</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># x3   -0.06   -0.03    1.00</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Feature              Permutation     SHAP (mean |val|)
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>-------------------------------------------------------
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>x1 (causal)                0.216              0.350
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>x2 (correlated)            0.016              0.250
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>x3 (noise)                 0.005              0.020
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Permutation importance shows x2 as unimportant (0.016) because when x2 is shuffled, x1 still carries the signal. SHAP distributes credit between correlated features, giving x2 a meaningful value (0.250). Neither is "wrong"—they answer different questions:
+- Permutation: "What if we removed this feature?"
+- SHAP: "How much did each feature contribute to predictions?"</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_shap_vs_permutation()</code></em></p>
+</blockquote>
 <h3 id="important-caveats">Important Caveats<a class="headerlink" href="#important-caveats" title="Permanent link">&para;</a></h3>
 <p><strong>Feature importance ≠ causation.</strong></p>
 <p>When SHAP says "age is the most important feature," it means age most influences predictions. It does NOT mean age <em>causes</em> the outcome.</p>
 <p>A model might use age as a strong predictor of churn, but that doesn't mean getting older causes churn. There might be a confounder.</p>
+<p><strong>The umbrella sales example</strong>: A model predicting outdoor event attendance might show "umbrella sales" as the most important feature. But buying umbrellas doesn't <em>cause</em> low attendance—both are caused by rain (a confounder). If you tried to increase attendance by banning umbrella sales, you'd fail miserably. The model correctly learned that umbrella sales predict attendance, but the <em>causal</em> intervention point is weather, not umbrellas. This is why domain expertise matters: a meteorologist would immediately spot the spurious relationship.</p>
 <p><strong>Don't confuse prediction importance with causal importance.</strong></p>
 <h3 id="common-misconceptions_1">Common Misconceptions<a class="headerlink" href="#common-misconceptions_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -1940,28 +2177,72 @@ The compliance officer wants: "Can we legally use this?"</p>
 </ol>
 <p><em>No code. No jargon. Just business value.</em></p>
 <h3 id="example-executive-summary">Example Executive Summary<a class="headerlink" href="#example-executive-summary" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>EXECUTIVE SUMMARY: Customer Churn Model
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Business Question: Which customers are likely to cancel
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>their subscription in the next 90 days?
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>Key Finding: We can identify 75% of churning customers
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>before they leave, with 80% precision—meaning 4 out of 5
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>customers we flag will actually churn.
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>Top Factors Driving Churn Risk:
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>1. Support tickets in last 30 days (more tickets = higher risk)
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>2. Days since last login (longer gap = higher risk)
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>3. Contract type (monthly contracts 3x more likely to churn)
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>Confidence: Model validated on 6 months of holdout data.
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>Limitation: Works best for customers with 90+ days of history.
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>Recommendation: Prioritize retention outreach to customers
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>with churn probability &gt; 70%. Expected ROI: $2.50 saved
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>per $1 spent on retention.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>EXECUTIVE SUMMARY: Customer Churn Model
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>Business Question: Which customers are likely to cancel
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>their subscription in the next 90 days?
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>Key Finding: We can identify 75% of churning customers
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>before they leave, with 80% precision—meaning 4 out of 5
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>customers we flag will actually churn.
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>Top Factors Driving Churn Risk:
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>1. Support tickets in last 30 days (more tickets = higher risk)
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>2. Days since last login (longer gap = higher risk)
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>3. Contract type (monthly contracts 3x more likely to churn)
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>Confidence: Model validated on 6 months of holdout data.
+</span><span id="__span-18-16"><a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>Limitation: Works best for customers with 90+ days of history.
+</span><span id="__span-18-17"><a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>
+</span><span id="__span-18-18"><a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>Recommendation: Prioritize retention outreach to customers
+</span><span id="__span-18-19"><a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>with churn probability &gt; 70%. Expected ROI: $2.50 saved
+</span><span id="__span-18-20"><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>per $1 spent on retention.
 </span></code></pre></div>
 <p>No mention of random forests, SHAP, or cross-validation. Just business-relevant insights.</p>
+<blockquote>
+<p><strong>Numerical Example: From SHAP to Business English</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Raw SHAP output for a high-risk customer:</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">shap_output</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="s1">&#39;base_value&#39;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>      <span class="c1"># Average churn rate (25%)</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="s1">&#39;prediction&#39;</span><span class="p">:</span> <span class="mf">0.78</span><span class="p">,</span>       <span class="c1"># This customer (78%)</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="s1">&#39;contributions&#39;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>        <span class="s1">&#39;support_tickets_30d&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.22</span><span class="p">,</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>        <span class="s1">&#39;days_since_login&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.18</span><span class="p">,</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>        <span class="s1">&#39;contract_type&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.12</span><span class="p">,</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>        <span class="s1">&#39;tenure_months&#39;</span><span class="p">:</span> <span class="o">+</span><span class="mf">0.08</span><span class="p">,</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>        <span class="s1">&#39;satisfaction_score&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>        <span class="s1">&#39;total_spend&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.02</span><span class="p">,</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>    <span class="p">}</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><strong>Translated to business language:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Customer Churn Risk Assessment
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>--------------------------------
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>Risk Level: HIGH (78% likelihood of churning)
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>Baseline: Average customer has 25% churn risk
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>Top factors INCREASING risk:
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>1. SUPPORT ISSUES (+22 points)
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>   Filed 5 tickets in 30 days—indicates frustration
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>2. ENGAGEMENT DROP (+18 points)
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>   Last login 45 days ago—stopped using product
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>3. CONTRACT FLEXIBILITY (+12 points)
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>   Monthly contract—easy to cancel anytime
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>Mitigating factors:
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a>- Satisfaction score 6/10 (better than churners)
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a>- Recent spending $250 (some investment)
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>
+</span><span id="__span-20-20"><a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a>RECOMMENDED ACTIONS:
+</span><span id="__span-20-21"><a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a>1. Customer success outreach within 48 hours
+</span><span id="__span-20-22"><a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a>2. Resolve open support tickets immediately
+</span><span id="__span-20-23"><a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a>3. Offer annual contract incentive
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The translation removes all technical jargon (no "SHAP values," "base value," or decimals). It groups factors into "increasing risk" vs "mitigating," uses percentage points instead of raw values, and ends with actionable recommendations.</p>
+<p><em>Source: <code>slide_computations/module9_examples.py</code> - <code>demo_shap_to_business()</code></em></p>
+</blockquote>
 <h3 id="visualizations-for-business-audiences">Visualizations for Business Audiences<a class="headerlink" href="#visualizations-for-business-audiences" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Keep visualizations simple</li>
@@ -1981,16 +2262,16 @@ The compliance officer wants: "Can we legally use this?"</p>
 - Provide actionable insights</p>
 <h3 id="adverse-action-example">Adverse Action Example<a class="headerlink" href="#adverse-action-example" title="Permanent link">&para;</a></h3>
 <p>When someone is denied credit, they're legally entitled to reasons:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Your loan application was declined. The main factors were:
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>1. Your debt-to-income ratio is above our threshold
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>2. Your credit history is shorter than we typically require
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>3. Recent credit inquiries suggest high credit-seeking behavior
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>Steps you can take to improve your chances:
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>- Pay down existing debt to lower your debt-to-income ratio
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>- Wait 6 months to build more credit history
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>- Avoid applying for new credit in the near term
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>Your loan application was declined. The main factors were:
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>1. Your debt-to-income ratio is above our threshold
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>2. Your credit history is shorter than we typically require
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>3. Recent credit inquiries suggest high credit-seeking behavior
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>Steps you can take to improve your chances:
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>- Pay down existing debt to lower your debt-to-income ratio
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>- Wait 6 months to build more credit history
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>- Avoid applying for new credit in the near term
 </span></code></pre></div>
 <p>Specific, actionable, no jargon.</p>
 <h3 id="model-cards">Model Cards<a class="headerlink" href="#model-cards" title="Permanent link">&para;</a></h3>

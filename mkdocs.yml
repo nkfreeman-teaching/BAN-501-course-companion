@@ -50,6 +50,7 @@ nav:
     - "Neural Networks as Universal Approximators": appendices/universal-approximators.md
     - "CNN Architecture": appendices/cnn-architecture.md
     - "Transformer Architecture": appendices/transformer-architecture.md
+    - "Surprising Phenomena in Deep Learning": appendices/surprising-phenomena.md
 
 markdown_extensions:
   - pymdownx.arithmatex:

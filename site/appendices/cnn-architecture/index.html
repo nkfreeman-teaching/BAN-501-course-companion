@@ -1195,6 +1195,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../surprising-phenomena/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surprising Phenomena in Deep Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1715,6 +1743,28 @@
 <li>Pixel (0,0) and pixel (223,223) are equally "distant"</li>
 <li>A cat in the corner looks completely different than a cat in the center</li>
 </ol>
+<blockquote>
+<p><strong>Numerical Example: FC vs CNN Parameter Comparison</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Fully connected layer for 224×224×3 image</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">input_size</span> <span class="o">=</span> <span class="mi">224</span> <span class="o">*</span> <span class="mi">224</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># 150,528</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">fc_hidden</span> <span class="o">=</span> <span class="mi">1000</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">fc_params</span> <span class="o">=</span> <span class="n">input_size</span> <span class="o">*</span> <span class="n">fc_hidden</span> <span class="o">+</span> <span class="n">fc_hidden</span>  <span class="c1"># 150,529,000</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Convolutional layer: 64 filters, 3×3 kernel</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">conv_params</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">64</span><span class="p">)</span> <span class="o">+</span> <span class="mi">64</span>  <span class="c1"># 1,792</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FC layer (1000 neurons): </span><span class="si">{</span><span class="n">fc_params</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> parameters&quot;</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conv layer (64 3×3):     </span><span class="si">{</span><span class="n">conv_params</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> parameters&quot;</span><span class="p">)</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ratio: </span><span class="si">{</span><span class="n">fc_params</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">conv_params</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">×&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>FC layer (1000 neurons): 150,529,000 parameters
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Conv layer (64 3×3):     1,792 parameters
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Ratio: 84,001×
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> A single FC layer needs 84,000× more parameters than a conv layer for the same input. This is why FC networks are impractical for images—even one layer would have 150 million parameters.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_fc_vs_cnn_parameters()</code></em></p>
+</blockquote>
 <hr />
 <h2 id="the-three-principles-that-save-parameters">The Three Principles That Save Parameters<a class="headerlink" href="#the-three-principles-that-save-parameters" title="Permanent link">&para;</a></h2>
 <p>CNNs achieve <strong>99.9%+ parameter reduction</strong> through three key principles:</p>
@@ -1723,14 +1773,15 @@
 <p>Instead of connecting every input pixel to every hidden neuron, each neuron only "sees" a small local region called the <strong>receptive field</strong>.</p>
 <p><strong>Connectivity Comparison:</strong></p>
 <p><strong>Fully Connected</strong>:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Every input pixel → Every hidden neuron
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Connections: 150,528 × 1,000 = 150,528,000
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Every input pixel → Every hidden neuron
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Connections: 150,528 × 1,000 = 150,528,000
 </span></code></pre></div></p>
 <p><strong>Locally Connected</strong> (3×3 receptive field):
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Each hidden neuron sees only 3×3×3 = 27 input values
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Connections per neuron: 27
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Each hidden neuron sees only 3×3×3 = 27 input values
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Connections per neuron: 27
 </span></code></pre></div></p>
 <p><img alt="Local Connectivity" src="../../assets/deep_dive/local_connectivity.png" /></p>
+<p><strong>Reading the diagram</strong>: The left side shows fully connected architecture where all 25 input pixels (5×5 grid) connect to a single output neuron—25 connections total. The right side shows local connectivity where only the 9 orange pixels (3×3 region) connect to the output—a 64% reduction in connections. The orange highlighting shows the <em>receptive field</em>: the region of input that influences this particular output. In a fully connected layer, every output "sees" every input. In a locally connected layer, each output only "sees" its local neighborhood. This mirrors how your eye works—you focus on a small region at a time, not the entire visual field simultaneously.</p>
 <p>This mirrors the visual cortex: neurons in V1 respond to small regions of the visual field. Hubel &amp; Wiesel won the Nobel Prize for discovering this.</p>
 <p><strong>Brain inspiration</strong>: CNNs were directly inspired by neuroscience—Hubel &amp; Wiesel showed visual cortex neurons respond to simple patterns in small regions. Other brain-inspired ideas: the neuron model (McCulloch-Pitts), ReLU (firing thresholds), dropout (neural noise), attention (selective focus). Caution warranted: backpropagation has no clear biological analog; transformers aren't obviously brain-like.</p>
 <h3 id="principle-2-weight-sharing-translation-equivariance">Principle 2: Weight Sharing (Translation Equivariance)<a class="headerlink" href="#principle-2-weight-sharing-translation-equivariance" title="Permanent link">&para;</a></h3>
@@ -1738,20 +1789,50 @@
 <p>A "vertical edge detector" should work whether the edge is in the top-left or bottom-right. Why learn separate detectors for each position?</p>
 <p><strong>Without Weight Sharing</strong> (Locally Connected):</p>
 <p>If we had local connectivity but different weights at each position:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>For 224×224 output with 3×3 filters:
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Positions: 224 × 224 = 50,176
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Parameters per position: 3 × 3 × 3 = 27
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Total: 50,176 × 27 = 1,354,752 parameters (per filter)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>For 224×224 output with 3×3 filters:
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Positions: 224 × 224 = 50,176
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Parameters per position: 3 × 3 × 3 = 27
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Total: 50,176 × 27 = 1,354,752 parameters (per filter)
 </span></code></pre></div>
 <p>Still a lot!</p>
 <p><strong>With Weight Sharing</strong> (Convolutional):</p>
 <p>The same 3×3×3 filter is applied at every position:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Parameters: 3 × 3 × 3 + 1 (bias) = 28 parameters (per filter)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Parameters: 3 × 3 × 3 + 1 (bias) = 28 parameters (per filter)
 </span></code></pre></div>
 <p><strong>That's a 50,000× reduction!</strong></p>
+<blockquote>
+<p><strong>The cookie cutter analogy</strong>: Think of a convolutional filter as a cookie cutter. Without weight sharing, you'd need to design 50,176 different cookie cutters—one custom shape for every position on your baking sheet. With weight sharing, you use ONE cookie cutter and just move it around. The cookie cutter (filter weights) is the same everywhere; only its position changes. This is why a vertical edge detector learned in the top-left corner automatically works in the bottom-right corner—it's literally the same detector, applied in a different location.</p>
+<p><strong>Numerical Example: Weight Sharing Savings</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Setup: 224×224 RGB image, 64 filters, 3×3 kernel</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">positions</span> <span class="o">=</span> <span class="mi">222</span> <span class="o">*</span> <span class="mi">222</span>  <span class="c1"># output positions (no padding)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">params_per_position</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># 27 weights per 3×3×3 filter</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Locally connected: different weights at each position</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">locally_connected</span> <span class="o">=</span> <span class="n">positions</span> <span class="o">*</span> <span class="n">params_per_position</span> <span class="o">*</span> <span class="mi">64</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># = 85,162,752 parameters</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Convolutional: same weights everywhere</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">convolutional</span> <span class="o">=</span> <span class="n">params_per_position</span> <span class="o">*</span> <span class="mi">64</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="c1"># = 1,728 parameters</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Locally connected: </span><span class="si">{</span><span class="n">locally_connected</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convolutional:     </span><span class="si">{</span><span class="n">convolutional</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reduction: </span><span class="si">{</span><span class="n">locally_connected</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">convolutional</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">×&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Locally connected: 85,162,752
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Convolutional:     1,728
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Reduction: 49,284×
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Weight sharing reduces parameters by nearly 50,000×. The same 27 weights (one 3×3×3 filter) are reused at 49,284 different positions—like using one cookie cutter 49,284 times instead of making 49,284 different cookie cutters.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_weight_sharing_savings()</code></em></p>
+</blockquote>
 <p><strong>What This Enables: Translation Equivariance</strong></p>
 <p>If you shift the input, the output shifts by the same amount:</p>
 <div class="arithmatex">\[f(\text{shift}(x)) = \text{shift}(f(x))\]</div>
+<blockquote>
+<p><strong>What this means in practice</strong>: Suppose your network learned a vertical edge detector. If there's a vertical edge at pixel position (10, 10), the detector fires and produces a strong activation at output position (10, 10). Now shift the entire image 100 pixels to the right. The edge is now at (10, 110). Because the same filter weights are used everywhere, the detector fires at output position (10, 110)—the activation "moved with" the edge. This is translation equivariance: the output shifts when the input shifts. The network doesn't need to learn separate edge detectors for 50,000 different positions; one detector works everywhere.</p>
+</blockquote>
 <p>A cat detector fires whether the cat is at (10, 10) or (200, 200).</p>
 <h3 id="principle-3-hierarchical-feature-learning">Principle 3: Hierarchical Feature Learning<a class="headerlink" href="#principle-3-hierarchical-feature-learning" title="Permanent link">&para;</a></h3>
 <p><strong>The insight</strong>: Complex features are built from simpler ones.</p>
@@ -1807,6 +1888,26 @@
 - After 5 layers: 1 + 5×2 = 11×11
 - After 10 layers: 1 + 10×2 = 21×21</p>
 <p>With pooling (stride 2), receptive field grows much faster—each pooling layer doubles the effective receptive field.</p>
+<blockquote>
+<p><strong>Why receptive field matters</strong>: Think of what each layer "sees." Layer 1 neurons have a 3×3 receptive field—they detect tiny patterns like single edges or color gradients. By layer 5, neurons have an 11×11 receptive field—now they can recognize textures, corners, and simple shapes. By layer 10, with pooling, neurons may have a 100+ pixel receptive field—enough to see an entire eye, nose, or ear. This is why depth matters: shallow networks can only detect local patterns; deep networks can recognize objects by combining those patterns. A single 3×3 filter can never see a cat; but many 3×3 filters stacked together eventually can.</p>
+<p><strong>Numerical Example: Receptive Field Growth</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># RF formula (no pooling): RF = 1 + L × (K - 1)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># Using 3×3 convolutions (K=3)</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">for</span> <span class="n">layers</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]:</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">rf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">layers</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After </span><span class="si">{</span><span class="n">layers</span><span class="si">:</span><span class="s2">2</span><span class="si">}</span><span class="s2"> layers: RF = </span><span class="si">{</span><span class="n">rf</span><span class="si">}</span><span class="s2">×</span><span class="si">{</span><span class="n">rf</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>After  1 layers: RF = 3×3
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>After  2 layers: RF = 5×5
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>After  5 layers: RF = 11×11
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>After 10 layers: RF = 21×21
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>After 20 layers: RF = 41×41
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Each 3×3 layer adds 2 pixels to the receptive field. After 5 layers, a neuron can "see" an 11×11 region of the input—enough to detect texture patterns. After 20 layers (without pooling), RF reaches 41×41. With pooling, RF grows much faster—a typical VGG network reaches 200+ pixel receptive fields.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_receptive_field_growth()</code></em></p>
+</blockquote>
 <p><strong>Seeing the whole object</strong>: The calculation above is without pooling—practical networks reach 200+ pixel receptive fields via pooling. More importantly, the network doesn't need every neuron to see the whole object. Hierarchical structure means different neurons specialize at different scales. Global average pooling aggregates information across all positions, giving the classifier access to features detected anywhere.</p>
 <hr />
 <h2 id="the-savings-breakdown">The Savings Breakdown<a class="headerlink" href="#the-savings-breakdown" title="Permanent link">&para;</a></h2>
@@ -1903,6 +2004,13 @@
 </table>
 <hr />
 <h2 id="why-convolution-works-for-images">Why Convolution Works for Images<a class="headerlink" href="#why-convolution-works-for-images" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>A concrete example: finding a cat in an image</strong>. Consider the three CNN design principles in action:
+- <strong>Spatial locality</strong>: To detect a cat's whisker, you only need to look at a few adjacent pixels. The whisker is defined by a local pattern of dark lines on a lighter background—distant pixels don't matter.
+- <strong>Stationarity</strong>: Whiskers look similar whether they're on the left or right side of the image. Fur texture repeats across the cat's body. You don't need to learn "left-side fur" and "right-side fur" separately.
+- <strong>Compositionality</strong>: Whiskers + nose + eyes → face. Face + ears + body → cat. Complex objects are built from simpler parts. Early layers detect edges; middle layers combine edges into parts; deep layers recognize the whole cat.</p>
+<p>CNNs succeed because images naturally have these three properties. When these properties don't hold (e.g., satellite imagery where "up" means north), CNNs struggle.</p>
+</blockquote>
 <h3 id="property-1-spatial-locality">Property 1: Spatial Locality<a class="headerlink" href="#property-1-spatial-locality" title="Permanent link">&para;</a></h3>
 <p><strong>Nearby pixels are statistically related</strong></p>
 <ul>
@@ -1971,110 +2079,177 @@
 <li>Shape: <code>(1, 1, 6, 6)</code> - (batch, out_channels, height, width)</li>
 </ul>
 <h3 id="the-sliding-window-process">The Sliding Window Process<a class="headerlink" href="#the-sliding-window-process" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>In plain English</strong>: At each output position, the filter performs three steps:
+1. <strong>Multiply</strong>: Overlay the filter on the input patch and multiply each filter weight by the corresponding input value
+2. <strong>Sum</strong>: Add up all those products across all channels (R, G, B) and all spatial positions (3×3)
+3. <strong>Slide</strong>: Move to the next position and repeat</p>
+<p>The result is a single number at each output location. This number is large and positive when the input patch "matches" the filter pattern, near zero when there's no match, and large and negative when the pattern is inverted.</p>
+</blockquote>
 <p>For each position (i, j) in the output:</p>
 <div class="arithmatex">\[\text{output}[0, 0, i, j] = \sum_{c=0}^{2} \sum_{m=0}^{2} \sum_{n=0}^{2} \text{filter}[0, c, m, n] \times \text{input}[0, c, i+m, j+n] + \text{bias}[0]\]</div>
 <h3 id="concrete-example">Concrete Example<a class="headerlink" href="#concrete-example" title="Permanent link">&para;</a></h3>
 <p>Let's compute one output value at position (0, 0):</p>
 <p><strong>Input patch</strong> (top-left 3×3 of each channel):
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Red channel:        Green channel:      Blue channel:
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>│ 0.1 0.2 0.3 │     │ 0.4 0.5 0.6 │     │ 0.7 0.8 0.9 │
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│ 0.2 0.3 0.4 │     │ 0.5 0.6 0.7 │     │ 0.8 0.9 1.0 │
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ 0.3 0.4 0.5 │     │ 0.6 0.7 0.8 │     │ 0.9 1.0 1.1 │
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Red channel:        Green channel:      Blue channel:
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>│ 0.1 0.2 0.3 │     │ 0.4 0.5 0.6 │     │ 0.7 0.8 0.9 │
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>│ 0.2 0.3 0.4 │     │ 0.5 0.6 0.7 │     │ 0.8 0.9 1.0 │
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│ 0.3 0.4 0.5 │     │ 0.6 0.7 0.8 │     │ 0.9 1.0 1.1 │
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
 </span></code></pre></div></p>
 <p><strong>Filter weights</strong> (Sobel-like vertical edge detector):
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Red weights:        Green weights:      Blue weights:
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│ 2   0  -2   │     │ 2   0  -2   │     │ 2   0  -2   │
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Red weights:        Green weights:      Blue weights:
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>│ 2   0  -2   │     │ 2   0  -2   │     │ 2   0  -2   │
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>│ 1   0  -1   │     │ 1   0  -1   │     │ 1   0  -1   │
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>└─────────────┘     └─────────────┘     └─────────────┘
 </span></code></pre></div></p>
 <p><strong>Computation</strong>:
-<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Red channel contribution</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>       <span class="mf">0.2</span><span class="err">×</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>       <span class="mf">0.3</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="o">=</span> <span class="mf">0.1</span> <span class="o">-</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">-</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.5</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="o">=</span> <span class="o">-</span><span class="mf">0.8</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Similarly for green and blue...</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Total (sum across channels) + bias</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">green</span> <span class="o">+</span> <span class="n">blue</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.4</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Red channel contribution</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>       <span class="mf">0.2</span><span class="err">×</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.3</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>       <span class="mf">0.3</span><span class="err">×</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.4</span><span class="err">×</span><span class="mi">0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="err">×</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="o">=</span> <span class="mf">0.1</span> <span class="o">-</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">-</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.5</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="o">=</span> <span class="o">-</span><span class="mf">0.8</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># Similarly for green and blue...</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1"># Total (sum across channels) + bias</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">green</span> <span class="o">+</span> <span class="n">blue</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.4</span>
 </span></code></pre></div></p>
 <p>The filter slides across all valid positions to fill the 6×6 output.</p>
+<blockquote>
+<p><strong>Numerical Example: Convolution Verification</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Input patch (from document)</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">red</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]])</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">green</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]])</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">blue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]])</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Sobel vertical edge detector</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">sobel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1"># Manual computation</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="n">red_contrib</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">red</span> <span class="o">*</span> <span class="n">sobel</span><span class="p">)</span>    <span class="c1"># -0.8</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="n">green_contrib</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">green</span> <span class="o">*</span> <span class="n">sobel</span><span class="p">)</span> <span class="c1"># -0.8</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="n">blue_contrib</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">blue</span> <span class="o">*</span> <span class="n">sobel</span><span class="p">)</span>   <span class="c1"># -0.8</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="n">total</span> <span class="o">=</span> <span class="n">red_contrib</span> <span class="o">+</span> <span class="n">green_contrib</span> <span class="o">+</span> <span class="n">blue_contrib</span>  <span class="c1"># -2.4</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Red channel:   </span><span class="si">{</span><span class="n">red_contrib</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Green channel: </span><span class="si">{</span><span class="n">green_contrib</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Blue channel:  </span><span class="si">{</span><span class="n">blue_contrib</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total:         </span><span class="si">{</span><span class="n">total</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Red channel:   -0.8
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>Green channel: -0.8
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>Blue channel:  -0.8
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>Total:         -2.4
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The Sobel filter produces -0.8 for each channel, totaling -2.4. A negative value indicates the input patch has the <em>opposite</em> of the pattern the filter detects (here: a leftward gradient instead of rightward). PyTorch's <code>nn.Conv2d</code> produces the identical result, confirming our manual calculation.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_convolution_verification()</code></em></p>
+</blockquote>
 <h3 id="output-size-formula">Output Size Formula<a class="headerlink" href="#output-size-formula" title="Permanent link">&para;</a></h3>
 <div class="arithmatex">\[\text{output\_size} = \left\lfloor \frac{\text{input\_size} - \text{kernel\_size} + 2 \times \text{padding}}{\text{stride}} \right\rfloor + 1\]</div>
 <p>For our example:</p>
 <div class="arithmatex">\[\frac{8 - 3 + 2 \times 0}{1} + 1 = 6\]</div>
+<blockquote>
+<p><strong>Numerical Example: Output Size Formula</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Formula: output = floor((input - kernel + 2×padding) / stride) + 1</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Basic (from document)&quot;</span><span class="p">),</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Same padding&quot;</span><span class="p">),</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;No padding&quot;</span><span class="p">),</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Stride 2&quot;</span><span class="p">),</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;7×7 kernel (AlexNet)&quot;</span><span class="p">),</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="p">]</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="k">for</span> <span class="n">inp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>    <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="o">//</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">desc</span><span class="si">:</span><span class="s2">&lt;25</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">inp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">+2×</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">)/</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">+1 = </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Basic (from document)     (8-3+2×0)/1+1 = 6
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>Same padding              (224-3+2×1)/1+1 = 224
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>No padding                (224-3+2×0)/1+1 = 222
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>Stride 2                  (224-3+2×0)/2+1 = 111
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>7×7 kernel (AlexNet)      (224-7+2×3)/2+1 = 112
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> With padding=1 and stride=1, output equals input size ("same" padding). Without padding, each layer shrinks the output by (kernel-1) pixels. Stride 2 halves spatial dimensions—often used instead of pooling. The 7×7 kernel with stride 2 is AlexNet's first layer, reducing 224→112.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_output_size_formula()</code></em></p>
+</blockquote>
 <hr />
 <h2 id="annotated-nnconv2d-walkthrough">Annotated nn.Conv2d Walkthrough<a class="headerlink" href="#annotated-nnconv2d-walkthrough" title="Permanent link">&para;</a></h2>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Create a convolutional layer</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># RGB input</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>    <span class="c1"># Number of filters (feature maps)</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># 3×3 filter</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>           <span class="c1"># Move 1 pixel at a time</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>          <span class="c1"># Add 1 pixel border of zeros</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="n">bias</span><span class="o">=</span><span class="kc">True</span>           <span class="c1"># Include bias term</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">)</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="c1"># WHERE THE PARAMETERS LIVE</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="c1"># Output: torch.Size([64, 3, 3, 3])</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Interpretation: [out_channels, in_channels, kernel_height, kernel_width]</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="c1"># - 64 different filters</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="c1"># - Each filter has 3 channels (one for R, G, B)</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="c1"># - Each channel is 3×3</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight parameters: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="c1"># Output: 1728</span>
-</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="c1"># Calculation: 64 × 3 × 3 × 3 = 1,728</span>
-</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
-</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bias shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="c1"># Output: torch.Size([64])</span>
-</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="c1"># One bias per output channel (filter)</span>
-</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>
-</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total parameters: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">conv</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="c1"># Output: 1792</span>
-</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="c1"># = 1,728 (weights) + 64 (biases)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Create a convolutional layer</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># RGB input</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>    <span class="c1"># Number of filters (feature maps)</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># 3×3 filter</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>           <span class="c1"># Move 1 pixel at a time</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>    <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>          <span class="c1"># Add 1 pixel border of zeros</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>    <span class="n">bias</span><span class="o">=</span><span class="kc">True</span>           <span class="c1"># Include bias term</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="p">)</span>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="c1"># WHERE THE PARAMETERS LIVE</span>
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-18-16"><a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="c1"># Output: torch.Size([64, 3, 3, 3])</span>
+</span><span id="__span-18-17"><a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="c1"># Interpretation: [out_channels, in_channels, kernel_height, kernel_width]</span>
+</span><span id="__span-18-18"><a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="c1"># - 64 different filters</span>
+</span><span id="__span-18-19"><a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="c1"># - Each filter has 3 channels (one for R, G, B)</span>
+</span><span id="__span-18-20"><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="c1"># - Each channel is 3×3</span>
+</span><span id="__span-18-21"><a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>
+</span><span id="__span-18-22"><a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Weight parameters: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-18-23"><a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="c1"># Output: 1728</span>
+</span><span id="__span-18-24"><a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="c1"># Calculation: 64 × 3 × 3 × 3 = 1,728</span>
+</span><span id="__span-18-25"><a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>
+</span><span id="__span-18-26"><a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bias shape: </span><span class="si">{</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-18-27"><a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="c1"># Output: torch.Size([64])</span>
+</span><span id="__span-18-28"><a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a><span class="c1"># One bias per output channel (filter)</span>
+</span><span id="__span-18-29"><a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a>
+</span><span id="__span-18-30"><a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total parameters: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">conv</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-18-31"><a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="c1"># Output: 1792</span>
+</span><span id="__span-18-32"><a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="c1"># = 1,728 (weights) + 64 (biases)</span>
 </span></code></pre></div>
 <h3 id="understanding-the-weight-tensor">Understanding the Weight Tensor<a class="headerlink" href="#understanding-the-weight-tensor" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Access filter 0 (first of 64 filters)</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">filter_0</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3, 3]</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Filter 0&#39;s red channel weights</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">filter_0_red</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Filter 0&#39;s green channel weights</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">filter_0_green</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Filter 0&#39;s blue channel weights</span>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="n">filter_0_blue</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Access filter 0 (first of 64 filters)</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">filter_0</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3, 3]</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Filter 0&#39;s red channel weights</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">filter_0_red</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Filter 0&#39;s green channel weights</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">filter_0_green</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="c1"># Filter 0&#39;s blue channel weights</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="n">filter_0_blue</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># Shape: [3, 3]</span>
 </span></code></pre></div>
 <h3 id="visualizing-parameter-sharing">Visualizing Parameter Sharing<a class="headerlink" href="#visualizing-parameter-sharing" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># The SAME weights are used for EVERY spatial position</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># This is what makes CNNs parameter-efficient</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># These two output positions use the SAME filter weights:</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># y[0, 0, 0, 0] uses conv.weight[0] applied at position (0,0)</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># y[0, 0, 5, 5] uses conv.weight[0] applied at position (5,5)</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># Without weight sharing, we&#39;d need:</span>
-</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># 64 filters × 8×8 positions × 3×3×3 weights = 884,736 parameters</span>
-</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1"># With weight sharing:</span>
-</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="c1"># 64 filters × 3×3×3 weights = 1,728 parameters</span>
-</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># That&#39;s a 512× reduction!</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># The SAME weights are used for EVERY spatial position</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1"># This is what makes CNNs parameter-efficient</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># These two output positions use the SAME filter weights:</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="c1"># y[0, 0, 0, 0] uses conv.weight[0] applied at position (0,0)</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># y[0, 0, 5, 5] uses conv.weight[0] applied at position (5,5)</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="c1"># Without weight sharing, we&#39;d need:</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="c1"># 64 filters × 8×8 positions × 3×3×3 weights = 884,736 parameters</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="c1"># With weight sharing:</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="c1"># 64 filters × 3×3×3 weights = 1,728 parameters</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="c1"># That&#39;s a 512× reduction!</span>
 </span></code></pre></div>
 <hr />
 <h2 id="pooling-trading-resolution-for-invariance">Pooling: Trading Resolution for Invariance<a class="headerlink" href="#pooling-trading-resolution-for-invariance" title="Permanent link">&para;</a></h2>
 <h3 id="what-max-pooling-does">What Max Pooling Does<a class="headerlink" href="#what-max-pooling-does" title="Permanent link">&para;</a></h3>
 <p><strong>Max pooling</strong> takes the maximum value in each patch:</p>
 <p><img alt="Max Pooling" src="../../assets/deep_dive/max_pooling.png" /></p>
+<p><strong>Reading the diagram</strong>: The left shows a 4×4 input grid with numerical values; the orange lines divide it into four 2×2 regions. The right shows the 2×2 output after max pooling. For each 2×2 region, we take the maximum value: the top-left region contains [1,3,0,2] → max is 3; top-right [2,4,1,3] → max is 4; bottom-left [5,6,4,1] → max is 6; bottom-right [7,8,5,2] → max is 8. Notice the output is exactly half the size in each dimension (4×4 → 2×2), reducing the data by 4×. The color intensity in the output corresponds to the value magnitude.</p>
 <h3 id="why-max-pooling-works">Why Max Pooling Works<a class="headerlink" href="#why-max-pooling-works" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Translation invariance</strong>: The feature's exact position within the pooling region doesn't matter</li>
@@ -2082,6 +2257,13 @@
 <li><strong>Increased receptive field</strong>: Each pooled output sees a larger input region</li>
 <li><strong>Slight noise robustness</strong>: Small perturbations don't change the max</li>
 </ol>
+<blockquote>
+<p><strong>Understanding each benefit</strong>:
+- <em>Translation invariance</em>: If an edge is at pixel (10,10) or (11,11), both fall in the same pooling region—the output is the same. This makes the network less sensitive to exact feature positions.
+- <em>Dimensionality reduction</em>: A 224×224 feature map becomes 112×112 after one pool—4× fewer values to process in subsequent layers.
+- <em>Increased receptive field</em>: Each output pixel in the pooled layer corresponds to a 2×2 region of input. After pooling, a 3×3 convolution on the pooled output effectively "sees" a 6×6 region of the original input.
+- <em>Noise robustness</em>: If pixel values are [4.9, 5.0, 5.1, 5.2], the max is 5.2. Add small noise, get [4.8, 5.1, 5.0, 5.3]—max is 5.3. The change is minimal compared to the signal.</p>
+</blockquote>
 <h3 id="pooling-vs-stride-trade-off">Pooling vs Stride Trade-off<a class="headerlink" href="#pooling-vs-stride-trade-off" title="Permanent link">&para;</a></h3>
 <p>Modern networks often use <strong>strided convolutions</strong> instead of pooling:</p>
 <table>
@@ -2115,6 +2297,30 @@
 </tbody>
 </table>
 <p><strong>Strided convolution</strong> can learn what information to preserve, but requires more parameters.</p>
+<blockquote>
+<p><strong>Numerical Example: Pooling Dimension Reduction</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>  <span class="c1"># Starting: 224×224×64</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">pool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input:       </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">pool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After pool </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Input:       torch.Size([1, 64, 224, 224])
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>After pool 1: torch.Size([1, 64, 112, 112])
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>After pool 2: torch.Size([1, 64, 56, 56])
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>After pool 3: torch.Size([1, 64, 28, 28])
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>After pool 4: torch.Size([1, 64, 14, 14])
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>After pool 5: torch.Size([1, 64, 7, 7])
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Each 2×2 max pool halves spatial dimensions: 224→112→56→28→14→7. After 5 pooling layers, we've reduced 224×224=50,176 pixels to 7×7=49 pixels—a 1,024× reduction in spatial data. The channel count (64) stays the same. This is why VGG-style networks can have huge 7×7×512 feature maps at the end: the spatial dimensions have been aggressively reduced.</p>
+<p><em>Source: <code>slide_computations/deep_dive_cnn_examples.py</code> - <code>demo_pooling_dimensions()</code></em></p>
+</blockquote>
 <hr />
 <h2 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h2>
 <table>

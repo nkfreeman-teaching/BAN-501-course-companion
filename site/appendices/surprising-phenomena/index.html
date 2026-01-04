@@ -1,0 +1,2394 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Predictive Modeling - Course Companion">
+      
+      
+        <meta name="author" content="Nick Freeman">
+      
+      
+        <link rel="canonical" href="https://nkfreeman-teaching.github.io/BAN-501-course-companion/appendices/surprising-phenomena/">
+      
+      
+        <link rel="prev" href="../transformer-architecture/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Surprising Phenomena in Deep Learning - BAN 501 Course Companion</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deep-dive-surprising-phenomena-in-modern-deep-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="BAN 501 Course Companion" class="md-header__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BAN 501 Course Companion
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Surprising Phenomena in Deep Learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BAN 501 Course Companion" class="md-nav__button md-logo" aria-label="BAN 501 Course Companion" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BAN 501 Course Companion
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nkfreeman-teaching/BAN-501-course-companion" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nkfreeman-teaching/BAN-501-course-companion
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modules
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modules
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/01-foundations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations of ML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/02-regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/03-classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/04-ensemble-methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Ensemble Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/05-unsupervised/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Unsupervised Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/06-neural-networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Neural Networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/07-computer-vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Computer Vision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/08-nlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. NLP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/09-interpretability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Interpretability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/10-ethics-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Ethics & Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal-approximators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Neural Networks as Universal Approximators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cnn-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CNN Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transformer-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transformer Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surprising Phenomena in Deep Learning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surprising Phenomena in Deep Learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-classical-view-a-brief-recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Classical View: A Brief Recap
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Classical View: A Brief Recap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-bias-variance-tradeoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bias-Variance Tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-1-double-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 1: Double Descent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 1: Double Descent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-double-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Double Descent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-this-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Does This Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-2-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 2: Grokking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 2: Grokking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-discovery_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Grokking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-this-happen_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Does This Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#critical-factors-for-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical Factors for Grokking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-3-emergent-abilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 3: Emergent Abilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 3: Emergent Abilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Observation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-claimed-emergent-abilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples of (Claimed) Emergent Abilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-emergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Emergence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-debate-real-or-mirage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Debate: Real or Mirage?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-the-phenomena" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting the Phenomena
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting the Phenomena">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-phase-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Phase Transitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-the-role-of-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The Role of Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-theory-lags-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Theory Lags Practice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-incomplete-understanding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Incomplete Understanding
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-classical-view-a-brief-recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Classical View: A Brief Recap
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Classical View: A Brief Recap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-bias-variance-tradeoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bias-Variance Tradeoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Early Stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-1-double-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 1: Double Descent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 1: Double Descent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-double-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Double Descent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-this-happen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Does This Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-2-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 2: Grokking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 2: Grokking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-discovery_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Grokking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-this-happen_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Does This Happen?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#critical-factors-for-grokking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical Factors for Grokking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phenomenon-3-emergent-abilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phenomenon 3: Emergent Abilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phenomenon 3: Emergent Abilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Observation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-claimed-emergent-abilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples of (Claimed) Emergent Abilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-emergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizing Emergence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-debate-real-or-mirage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Debate: Real or Mirage?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Matters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-implications_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Implications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-the-phenomena" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting the Phenomena
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting the Phenomena">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-phase-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Phase Transitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-the-role-of-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The Role of Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-theory-lags-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Theory Lags Practice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-incomplete-understanding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Incomplete Understanding
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-misconceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Misconceptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practice Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="deep-dive-surprising-phenomena-in-modern-deep-learning">Deep Dive: Surprising Phenomena in Modern Deep Learning<a class="headerlink" href="#deep-dive-surprising-phenomena-in-modern-deep-learning" title="Permanent link">&para;</a></h1>
+<p><em>Extends Module 6: Neural Networks</em></p>
+<hr />
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>In Module 6, we learned how neural networks work: layers of neurons, activation functions, backpropagation, and gradient descent. We also learned the classical story of model complexity—that there's a "sweet spot" between underfitting and overfitting, captured by the bias-variance tradeoff.</p>
+<p>But modern deep learning doesn't quite follow that script.</p>
+<p>Over the past several years, researchers have discovered phenomena that challenge our classical understanding of how machine learning works. Neural networks with <em>billions</em> of parameters don't overfit the way theory predicts. Models sometimes learn to generalize <em>long after</em> they've memorized their training data. And capabilities can appear suddenly at scale, rather than improving gradually.</p>
+<p>These aren't just academic curiosities—they affect practical decisions about model selection, training duration, and when to trust small-scale experiments.</p>
+<p>This deep dive explores three such phenomena:
+1. <strong>Double Descent</strong>: Why more parameters can actually <em>reduce</em> overfitting
+2. <strong>Grokking</strong>: Why generalization can occur long after memorization
+3. <strong>Emergent Abilities</strong>: Why capabilities can appear suddenly at scale</p>
+<p><strong>Why this matters for practitioners</strong>: These phenomena suggest that intuitions built on classical ML may mislead you when working with modern neural networks. Understanding them helps you make better decisions about model size, training time, and when to trust (or distrust) your experiments.</p>
+<hr />
+<h2 id="the-classical-view-a-brief-recap">The Classical View: A Brief Recap<a class="headerlink" href="#the-classical-view-a-brief-recap" title="Permanent link">&para;</a></h2>
+<p>Before exploring what's surprising, let's recall what we expect.</p>
+<h3 id="the-bias-variance-tradeoff">The Bias-Variance Tradeoff<a class="headerlink" href="#the-bias-variance-tradeoff" title="Permanent link">&para;</a></h3>
+<p>Classical machine learning theory tells us that prediction error has two components:</p>
+<div class="arithmatex">\[\text{Error} = \text{Bias}^2 + \text{Variance} + \text{Irreducible Noise}\]</div>
+<ul>
+<li><strong>Bias</strong>: Error from overly simple models that can't capture the true pattern</li>
+<li><strong>Variance</strong>: Error from models that are too sensitive to training data</li>
+</ul>
+<p>As model complexity increases:
+- Bias decreases (the model can fit more patterns)
+- Variance increases (the model becomes more sensitive to noise)</p>
+<p>This creates the famous <strong>U-shaped curve</strong>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Test Error
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    │
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    │    *
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    │      *
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    │        *       *   *   *
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    │          *   *           *  *  *
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    │            *
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    └────────────────────────────────────
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>              Model Complexity →
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>         Underfitting  ←→  Overfitting
+</span></code></pre></div>
+<p><strong>Reading the diagram</strong>: The vertical axis shows test error (higher is worse), and the horizontal axis shows model complexity (number of parameters, polynomial degree, tree depth, etc.). The asterisks trace a U-shaped curve: error is high on the left (models too simple to capture the pattern), decreases to a minimum in the middle (the "sweet spot"), then increases again on the right (models so complex they memorize noise). The labels below the axis remind us that the left side corresponds to underfitting (high bias) and the right side to overfitting (high variance). Classical ML wisdom says: find the bottom of the U and stop there.</p>
+<blockquote>
+<p><strong>Numerical Example: Bias-Variance Tradeoff with Polynomial Regression</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># True function: quadratic with noise</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">y_true</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">y</span> <span class="o">=</span> <span class="n">y_true</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># Split and fit polynomials of increasing degree</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">35</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">35</span><span class="p">:]</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">35</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">35</span><span class="p">:]</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="k">for</span> <span class="n">degree</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">]:</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">poly</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">degree</span><span class="p">)</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">X_train_poly</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="n">X_test_poly</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_poly</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="n">train_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_poly</span><span class="p">))</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="n">test_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_poly</span><span class="p">))</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    <span class="c1"># Record results...</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Degree     Train MSE    Test MSE     Regime
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>------------------------------------------------------
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>1          2.1182       1.8187       Underfitting (high bias)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>2          0.2128       0.1968       Sweet spot
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>3          0.2109       0.1974       Slight overfitting
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>5          0.2050       0.1808       Slight overfitting
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>8          0.1592       0.2805       Overfitting (high var)
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>12         0.1267       0.3458       Overfitting (high var)
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>15         0.1249       0.3610       Overfitting (high var)
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Test error follows the U-curve. Degree 2 (matching the true quadratic function) achieves the lowest test error. Higher degrees drive training error down but test error <em>up</em>—the classic signature of overfitting.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_bias_variance_tradeoff()</code></em></p>
+</blockquote>
+<p><strong>The classical prescription</strong>: Find the sweet spot. Don't make your model too simple (high bias) or too complex (high variance).</p>
+<h3 id="early-stopping">Early Stopping<a class="headerlink" href="#early-stopping" title="Permanent link">&para;</a></h3>
+<p>A related principle: stop training when validation loss starts increasing. If you keep training after that point, you're just memorizing noise.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Loss
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    │
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    │ *
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    │   *  Training Loss
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    │     *
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    │       *  *  *  *  *  *  *  *
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    │
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    │   *      Validation Loss
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    │     *  *
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    │           *
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    │              *  *  *  *  *  *  ← Stop here!
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    │
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    └─────────────────────────────────
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>                  Epochs →
+</span></code></pre></div>
+<p><strong>Reading the diagram</strong>: Two curves show how training and validation loss evolve as training progresses (epochs increase to the right). The upper curve (training loss) drops quickly and then flattens—the model fits the training data well. The lower curve (validation loss) initially drops in parallel, but then starts <em>increasing</em> while training loss stays flat. This divergence is the signature of overfitting: the model is memorizing training-specific noise rather than learning generalizable patterns. The arrow marks where validation loss bottoms out—the classical prescription says to stop training here and use this model.</p>
+<p><strong>The classical prescription</strong>: Monitor validation loss and stop when it starts increasing.</p>
+<p>These principles served us well for decades. But modern deep learning has revealed their limitations.</p>
+<hr />
+<h2 id="phenomenon-1-double-descent">Phenomenon 1: Double Descent<a class="headerlink" href="#phenomenon-1-double-descent" title="Permanent link">&para;</a></h2>
+<h3 id="the-discovery">The Discovery<a class="headerlink" href="#the-discovery" title="Permanent link">&para;</a></h3>
+<p>In 2019, Mikhail Belkin and colleagues published a paper that reconciled a puzzling observation: modern deep learning practitioners were using models with far more parameters than classical theory suggested—and getting <em>better</em> results, not worse.</p>
+<p>They showed that if you keep increasing model complexity past the "interpolation threshold" (the point where the model has just enough capacity to perfectly fit the training data), test error can <em>decrease again</em>.</p>
+<p><strong>Key paper</strong>: Belkin et al. (2019), "Reconciling modern machine learning practice and the bias-variance trade-off"</p>
+<h3 id="visualizing-double-descent">Visualizing Double Descent<a class="headerlink" href="#visualizing-double-descent" title="Permanent link">&para;</a></h3>
+<p>The phenomenon looks like this:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Test Error
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    │
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    │  *
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    │    *                                  Classical U-curve
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    │      *                               /
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    │        *       *                    /
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    │          *   *   *                 /
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    │            *       *     *        ← Interpolation threshold
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    │                      *      *
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    │                          *    *  *  ← Second descent!
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    │
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    └──────────────────────────────────────
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>              Model Complexity →
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    |-- Underparameterized --|-- Overparameterized --|
+</span></code></pre></div>
+<p><strong>Reading the diagram</strong>: This extends the classical U-curve to much higher model complexity. Moving left to right: test error initially decreases (classical improvement), reaches a minimum (the classical sweet spot), then increases toward a <em>peak</em> at the "interpolation threshold" (marked with an arrow). This threshold is where the model has exactly enough parameters to perfectly fit the training data. But the key surprise is what happens <em>after</em> this peak: as we keep adding parameters, test error <em>decreases again</em>—the "second descent." The bottom labels divide the x-axis into two regimes: underparameterized (classical territory) and overparameterized (modern deep learning territory). The annotation shows that classical theory (dashed line) would predict continued increase, but reality shows descent.</p>
+<p><strong>Three regimes</strong>:</p>
+<ol>
+<li>
+<p><strong>Underparameterized</strong> (classical regime): Model has fewer parameters than needed to fit the data. Test error follows the classical U-curve.</p>
+</li>
+<li>
+<p><strong>Interpolation threshold</strong>: Model has <em>exactly</em> enough parameters to fit the training data perfectly. Test error often <em>peaks</em> here—the model fits the noise.</p>
+</li>
+<li>
+<p><strong>Overparameterized</strong> (modern regime): Model has <em>far more</em> parameters than data points. Surprisingly, test error <em>decreases</em> again.</p>
+</li>
+</ol>
+<h3 id="why-does-this-happen">Why Does This Happen?<a class="headerlink" href="#why-does-this-happen" title="Permanent link">&para;</a></h3>
+<p>The key insight is that there are <strong>many</strong> ways to interpolate (perfectly fit) training data when you have excess capacity. Not all interpolating solutions are equal.</p>
+<p><strong>Implicit regularization from SGD</strong>: Stochastic gradient descent doesn't just find <em>any</em> solution—it tends to find solutions with certain properties:
+- Flatter loss landscape (better generalization)
+- Smaller weight norms
+- Simpler decision boundaries</p>
+<p><strong>The "benign overfitting" concept</strong>: When you have many more parameters than data points, the model can fit both the signal <em>and</em> the noise—but the noise fits get "diluted" across many parameters, so they don't dominate predictions on new data.</p>
+<p><strong>Analogy</strong>: Imagine fitting a curve through 10 points. With exactly 10 parameters, you're forced to fit every point exactly—including the noise. But with 1,000 parameters, you have many ways to fit those points. SGD tends to find the "smoothest" solution, which often generalizes better.</p>
+<blockquote>
+<p><strong>The "Many Roads" Intuition</strong></p>
+<p>Think of it this way: you need to get from A to B (fit the training data). At the interpolation threshold, there's exactly one road—you must take it, and it goes through every muddy patch (noise) along the way. But in the overparameterized regime, there are thousands of roads. SGD naturally tends toward the widest, smoothest highways rather than the narrow, winding paths. The smooth highways generalize better because they don't encode every bump and pothole (noise) in the training data. This is why more parameters can actually help: more roads means SGD can be more selective.</p>
+<p><strong>Numerical Example: Double Descent in Random Features</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ridge</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Setup: 100 training points, varying number of random features</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">n_train</span><span class="p">,</span> <span class="n">n_test</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># True function: y = sin(x) + noise</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_train</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">X_train</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_train</span><span class="p">)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">X_test</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="c1"># Random Fourier features to increase complexity</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="k">def</span><span class="w"> </span><span class="nf">random_features</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_features</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n_features</span><span class="p">)</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_features</span><span class="p">)</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">X</span> <span class="o">@</span> <span class="n">W</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="c1"># Vary number of features from 10 to 2000</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="n">feature_counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="c1"># Fit ridge regression with tiny regularization</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="k">for</span> <span class="n">n_feat</span> <span class="ow">in</span> <span class="n">feature_counts</span><span class="p">:</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>    <span class="n">Phi_train</span> <span class="o">=</span> <span class="n">random_features</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">n_feat</span><span class="p">)</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>    <span class="n">Phi_test</span> <span class="o">=</span> <span class="n">random_features</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">n_feat</span><span class="p">)</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>    <span class="n">model</span> <span class="o">=</span> <span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Phi_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>    <span class="n">test_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Phi_test</span><span class="p">))</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>    <span class="c1"># Record test MSE...</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>  Features    Ratio to n    Test MSE         Regime
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>--------------------------------------------------------
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        10         0.10       0.342      Underparameterized
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        50         0.50       0.089      Underparameterized
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        80         0.80       0.052      Underparameterized
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>       100         1.00       0.487      Interpolation peak!
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>       120         1.20       0.156      Just overparameterized
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>       200         2.00       0.067      Overparameterized
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>       500         5.00       0.041      Overparameterized
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>      1000        10.00       0.038      Overparameterized
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>      2000        20.00       0.035      Overparameterized
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Test error peaks at 100 features (the interpolation threshold, where features = samples). As we add more features, error <em>decreases</em>—the second descent. With 2000 features (20× the data), we get lower error than the classical sweet spot.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_double_descent_random_features()</code></em></p>
+<p><strong>Numerical Example: The Interpolation Threshold Up Close</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Zoom in around n_features = n_samples to see the peak</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">n_train</span> <span class="o">=</span> <span class="mi">50</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># ... setup similar to above ...</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">for</span> <span class="n">n_feat</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="c1"># Fit model with n_feat features</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">ratio</span> <span class="o">=</span> <span class="n">n_feat</span> <span class="o">/</span> <span class="n">n_train</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="c1"># ... compute test MSE ...</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Features   Ratio      Test MSE     Note
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>--------------------------------------------------------------
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>30         0.60       1.2311
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>40         0.80       3.6692
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>45         0.90       6.1485       Near threshold
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>48         0.96       6.6199       Near threshold
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>50         1.00       4.9464       &lt;&lt;&lt; PEAK: exactly n features
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>52         1.04       3.9456       Near threshold
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>55         1.10       2.8352       Descending...
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>60         1.20       2.6002       Descending...
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>80         1.60       5.5102       Descending...
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>100        2.00       1.6794       Descending...
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The peak in test error occurs right at or near the interpolation threshold (features = samples). Even adding just 2-5 extra features past the threshold starts the descent. This is why "barely enough capacity" is dangerous—you're forced to fit every data point exactly, including the noise.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_interpolation_threshold_peak()</code></em></p>
+</blockquote>
+<h3 id="practical-implications">Practical Implications<a class="headerlink" href="#practical-implications" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Don't fear large models</strong>: If you have enough data, a larger model might generalize better, not worse.</p>
+</li>
+<li>
+<p><strong>The interpolation threshold is dangerous</strong>: Having just barely enough capacity to fit the data is often the <em>worst</em> regime.</p>
+</li>
+<li>
+<p><strong>Implicit regularization matters</strong>: How you train (SGD vs. exact solutions) affects which interpolating solution you find.</p>
+</li>
+<li>
+<p><strong>But regularization still helps</strong>: Even in the overparameterized regime, explicit regularization (dropout, weight decay) often improves results further.</p>
+</li>
+</ol>
+<hr />
+<h2 id="phenomenon-2-grokking">Phenomenon 2: Grokking<a class="headerlink" href="#phenomenon-2-grokking" title="Permanent link">&para;</a></h2>
+<h3 id="the-discovery_1">The Discovery<a class="headerlink" href="#the-discovery_1" title="Permanent link">&para;</a></h3>
+<p>In 2022, researchers at OpenAI discovered something unexpected while training neural networks on simple algorithmic tasks like modular arithmetic.</p>
+<p>They observed networks that:
+1. Quickly achieved perfect training accuracy (memorization)
+2. Showed no improvement in test accuracy for thousands of epochs
+3. Then suddenly achieved perfect test accuracy (generalization)</p>
+<p>They called this phenomenon <strong>grokking</strong>.</p>
+<p><strong>Key paper</strong>: Power et al. (2022), "Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets"</p>
+<h3 id="visualizing-grokking">Visualizing Grokking<a class="headerlink" href="#visualizing-grokking" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Accuracy
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>   100%│              Training ──────────────────
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>       │         ************************************
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>       │       **
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>       │     **
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>       │   **
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    50%│  *
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>       │  │
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>       │  │                              Test
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>       │  │                         ********
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>       │  │                    *****
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>       │  │             *******
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>     0%│**│*************│
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>       └──┴─────────────┴────────────────────────────
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>          │             │
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>       Memorization   Grokking!
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>         (fast)       (delayed)
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>       Epoch 0    1000   10000   20000   30000
+</span></code></pre></div>
+<p><strong>Reading the diagram</strong>: The vertical axis shows accuracy (0-100%), and the horizontal axis shows training epochs on a log-like scale (note the jump from 1,000 to 30,000). Two curves tell dramatically different stories. The <em>training</em> curve (upper) shoots up quickly—by epoch 100-500, the network achieves 100% training accuracy. It then stays flat at 100% forever. The <em>test</em> curve (lower) starts near 0% and <em>stays there</em> for thousands of epochs (the flat line on the bottom). Then, around epoch 10,000-20,000, it suddenly climbs to 100%. The vertical dashed lines mark two events: "Memorization" (when training accuracy hits 100%) and "Grokking!" (when test accuracy finally catches up). The gap between these events—thousands of epochs—is the puzzle.</p>
+<p>The network memorizes quickly but generalizes <em>much</em> later—sometimes 100× as many epochs.</p>
+<h3 id="why-does-this-happen_1">Why Does This Happen?<a class="headerlink" href="#why-does-this-happen_1" title="Permanent link">&para;</a></h3>
+<p>The leading explanation involves the competition between <strong>memorization circuits</strong> and <strong>generalization circuits</strong> in the network.</p>
+<p><strong>Memorization is easy</strong>: The network can quickly learn to store input-output pairs as a lookup table. This requires little structure—just associate each input with its output.</p>
+<p><strong>Generalization requires structure</strong>: To generalize, the network must learn the underlying <em>rule</em> (e.g., how modular arithmetic works). This requires discovering and encoding the mathematical structure.</p>
+<p><strong>Weight decay tips the balance</strong>: Without regularization, the network stops at memorization—it works, so gradients are small. But weight decay keeps pushing the weights toward simpler solutions. Eventually, the simpler generalizing solution becomes preferable.</p>
+<p><strong>The circuit formation hypothesis</strong>: Research in mechanistic interpretability suggests that during the grokking transition, networks form specific circuits that implement the underlying algorithm, replacing the memorization lookup.</p>
+<blockquote>
+<p><strong>The "Parallel Construction" Intuition</strong></p>
+<p>Imagine two teams racing to solve the same problem. Team Memorization works fast: they just build a giant lookup table, matching each input to its output. Done in a few epochs! Team Generalization works slowly: they're trying to discover the underlying mathematical rule, which is harder. If there's no pressure to economize, Team Memorization wins and we're stuck with a lookup table forever. But weight decay acts like a tax on resources: the bigger your solution, the more you pay. Team Memorization's huge lookup table becomes expensive to maintain. Team Generalization's compact rule-based solution, though slower to build, eventually becomes cheaper. Around epoch 10,000-20,000, the tax makes the compact solution preferable, and the network "reorganizes" from lookup to rule. This is grokking: the slow victory of compact generalization over fast memorization, enabled by resource pressure.</p>
+<p><strong>Numerical Example: Grokking on Modular Addition</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Task: Learn (a + b) mod p for p = 97</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># Input: one-hot encoded (a, b), Output: (a + b) mod 97</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="n">p</span> <span class="o">=</span> <span class="mi">97</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># Generate all pairs</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="c1"># Split: 50% train, 50% test</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="n">train_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># 4705 examples</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="n">test_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># 4704 examples</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="c1"># Simple MLP: 2*97 -&gt; 128 -&gt; 128 -&gt; 97</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="p">)</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="c1"># Training with weight decay (critical!)</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="c1"># Train for many epochs, logging accuracy</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="c1"># ... training loop ...</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>   Epoch     Train Acc     Test Acc       Phase
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>------------------------------------------------
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>     100        100.0%        3.2%       Memorized
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    1000        100.0%        3.4%       Memorized
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    5000        100.0%        4.1%       Memorized
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>   10000        100.0%        8.7%       Starting...
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>   15000        100.0%       23.4%       Transition
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>   20000        100.0%       67.8%       Grokking!
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>   25000        100.0%       98.2%       Almost there
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>   30000        100.0%      100.0%       Full generalization
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> The network hits 100% training accuracy by epoch 100, but test accuracy stays near random (1/97 ≈ 1%) for thousands of epochs. Around epoch 10,000-25,000, generalization suddenly improves. Without weight decay, this wouldn't happen—the network would stay memorized.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_grokking_simulation()</code></em></p>
+<p><strong>Numerical Example: Weight Norm Evolution</strong></p>
+<p>Weight decay continuously pushes weights toward smaller values. This simulation shows how weight norms evolve with and without regularization:</p>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Epoch      No Weight Decay    With Weight Decay  Ratio
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>--------------------------------------------------------
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>0          5.0                5.0                1.00x
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>100        24.7               24.0               1.03x
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>500        50.9               30.0               1.70x
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>1000       54.7               29.5               1.85x
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>5000       55.0               25.5               2.16x
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>10000      55.0               20.0               2.75x
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>20000      55.0               12.5               4.40x
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>30000      55.0               5.0                11.00x
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Without weight decay, weights plateau at a high value once memorization is achieved—there's no pressure to simplify. With weight decay, the norm gradually decreases over thousands of epochs, eventually pushing the network toward a simpler solution. By epoch 30,000, the regularized network has weights 11× smaller than the unregularized one. This continuous pressure is what eventually tips the balance from memorization to generalization.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_weight_norm_evolution()</code></em></p>
+</blockquote>
+<h3 id="critical-factors-for-grokking">Critical Factors for Grokking<a class="headerlink" href="#critical-factors-for-grokking" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Regularization is essential</strong>: Weight decay (or similar) is required to push past memorization.</p>
+</li>
+<li>
+<p><strong>Small dataset relative to model capacity</strong>: Grokking is most dramatic when the model can easily memorize.</p>
+</li>
+<li>
+<p><strong>Structured problem</strong>: The task must have an underlying pattern to discover.</p>
+</li>
+<li>
+<p><strong>Long training</strong>: You must train far past the point where training loss converges.</p>
+</li>
+</ol>
+<h3 id="practical-implications_1">Practical Implications<a class="headerlink" href="#practical-implications_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Early stopping might be wrong</strong>: If you stop when validation loss stops improving, you might miss grokking.</p>
+</li>
+<li>
+<p><strong>Regularization isn't just about preventing overfitting</strong>: It's about guiding the network toward generalizing solutions.</p>
+</li>
+<li>
+<p><strong>Patience matters</strong>: Some tasks require very long training to find good solutions.</p>
+</li>
+<li>
+<p><strong>Perfect training accuracy doesn't mean you're done</strong>: The network might still be improving its internal representations.</p>
+</li>
+</ol>
+<p><strong>Caveat</strong>: Grokking is most dramatic on small algorithmic datasets. In large-scale settings, generalization usually happens alongside memorization, not dramatically delayed. But the principle—that regularization guides networks toward generalizing solutions—applies broadly.</p>
+<hr />
+<h2 id="phenomenon-3-emergent-abilities">Phenomenon 3: Emergent Abilities<a class="headerlink" href="#phenomenon-3-emergent-abilities" title="Permanent link">&para;</a></h2>
+<h3 id="the-observation">The Observation<a class="headerlink" href="#the-observation" title="Permanent link">&para;</a></h3>
+<p>As language models grew from millions to billions to hundreds of billions of parameters, researchers noticed something unexpected: certain capabilities appeared to emerge suddenly at scale.</p>
+<p>Models would show near-random performance on a task across many scales, then suddenly achieve high performance once they crossed a threshold.</p>
+<p><strong>Key paper</strong>: Wei et al. (2022), "Emergent Abilities of Large Language Models"</p>
+<h3 id="examples-of-claimed-emergent-abilities">Examples of (Claimed) Emergent Abilities<a class="headerlink" href="#examples-of-claimed-emergent-abilities" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Ability</th>
+<th>Small Models</th>
+<th>Large Models</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multi-step arithmetic (3-digit addition)</td>
+<td>Near random</td>
+<td>High accuracy</td>
+</tr>
+<tr>
+<td>Chain-of-thought reasoning</td>
+<td>Provides wrong chains</td>
+<td>Correct reasoning</td>
+</tr>
+<tr>
+<td>Word unscrambling</td>
+<td>Random</td>
+<td>High accuracy</td>
+</tr>
+<tr>
+<td>Translating to new languages</td>
+<td>Poor</td>
+<td>Good</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visualizing-emergence">Visualizing Emergence<a class="headerlink" href="#visualizing-emergence" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Task Performance
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>   100%│                              ********
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>       │                           ***
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>       │                          *
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>       │                         *
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    50%│                        *
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>       │                       *
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>       │                      *
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>       │                     *
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>     0%│ * * * * * * * * * *
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>       └──────────────────────────────────────────
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>         1M   10M   100M   1B   10B   100B   1T
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>                Model Parameters (log scale) →
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>                            │
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>                       Emergence threshold
+</span></code></pre></div>
+<p><strong>Reading the diagram</strong>: The vertical axis shows task performance (0-100%), and the horizontal axis shows model size on a logarithmic scale spanning 6 orders of magnitude (from 1 million to 1 trillion parameters). The asterisks show how performance changes with scale. On the left (smaller models), performance stays flat near 0%—essentially random guessing—across 1M, 10M, 100M, even 1B parameters. Then, somewhere between 10B and 100B parameters (the "emergence threshold"), performance suddenly shoots up in an S-curve to near 100%. This is the signature of an "emergent" ability: zero capability becomes high capability with no visible intermediate stage. The question is whether this sudden jump is a real phenomenon or an artifact of how we measure.</p>
+<p>Performance stays flat (near random) across orders of magnitude, then suddenly jumps.</p>
+<h3 id="the-debate-real-or-mirage">The Debate: Real or Mirage?<a class="headerlink" href="#the-debate-real-or-mirage" title="Permanent link">&para;</a></h3>
+<p>In 2023, Schaeffer and colleagues published a counterargument: <strong>emergent abilities might be a measurement artifact</strong>.</p>
+<p><strong>Key paper</strong>: Schaeffer et al. (2023), "Are Emergent Abilities of Large Language Models a Mirage?"</p>
+<p>Their argument:</p>
+<ol>
+<li>
+<p><strong>Discontinuous metrics create apparent discontinuities</strong>: If you measure "exact match accuracy" (all-or-nothing), you see sharp transitions. If you measure token-level error (continuous), you see gradual improvement.</p>
+</li>
+<li>
+<p><strong>The threshold depends on the metric</strong>: Choose a different (but equally valid) metric, and the "emergence" often disappears.</p>
+</li>
+<li>
+<p><strong>Performance is usually improving gradually</strong>: The underlying capability is getting better; the metric just doesn't show it.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Numerical Example: Metric Choice and Apparent Emergence</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Simulation: Model improves gradually, but metric shows discontinuity</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># True capability: smooth sigmoid</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">true_capability</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability of getting each step right&quot;&quot;&quot;</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">scale</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Task requires 5 correct steps (like multi-digit arithmetic)</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="k">def</span><span class="w"> </span><span class="nf">exact_match</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;All 5 steps must be correct&quot;&quot;&quot;</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">true_capability</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>    <span class="k">return</span> <span class="n">p</span> <span class="o">**</span> <span class="mi">5</span>  <span class="c1"># Probability all 5 correct</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">per_step_accuracy</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Average accuracy per step&quot;&quot;&quot;</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>    <span class="k">return</span> <span class="n">true_capability</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scales</span><span class="p">:</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>    <span class="n">em</span> <span class="o">=</span> <span class="n">exact_match</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    <span class="n">psa</span> <span class="o">=</span> <span class="n">per_step_accuracy</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>    <span class="c1"># Log results...</span>
+</span></code></pre></div>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>  Scale    Per-Step Acc    Exact Match      Appearance
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>---------------------------------------------------------
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>      5          11.2%           0.0%      Both low
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>      7          26.9%           0.1%      Gradual vs flat
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>      9          50.0%           3.1%      Gradual vs flat
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>     10          62.2%           9.2%      Gradual vs jump
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>     11          73.1%          20.8%      Gradual vs jump
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>     13          88.1%          52.8%      Gradual vs jump
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>     15          95.3%          78.3%      Both high
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> Per-step accuracy improves gradually and smoothly. But exact match (requiring all 5 steps correct) shows a sharp transition. Same underlying capability, different appearance—just from metric choice.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_emergence_metric_mirage()</code></em></p>
+</blockquote>
+<h3 id="why-this-matters">Why This Matters<a class="headerlink" href="#why-this-matters" title="Permanent link">&para;</a></h3>
+<p><strong>If emergent abilities are real</strong>:
+- AI development is harder to predict and control
+- Small experiments don't tell you what large models will do
+- "Sharp left turns" in capability could be dangerous</p>
+<p><strong>If they're measurement artifacts</strong>:
+- AI development is more predictable than feared
+- We just need better metrics
+- Capabilities scale smoothly, not discontinuously</p>
+<p><strong>The current consensus</strong>: Probably both. Some apparent emergences are artifacts of measurement. But some genuine phase transitions likely exist, especially for capabilities that require combining multiple learned skills.</p>
+<h3 id="practical-implications_2">Practical Implications<a class="headerlink" href="#practical-implications_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>Be cautious about small-scale experiments</strong>: A model that fails at 1B parameters might succeed at 100B.</p>
+</li>
+<li>
+<p><strong>Consider your metrics carefully</strong>: All-or-nothing metrics can hide gradual improvement (or sudden emergence).</p>
+</li>
+<li>
+<p><strong>Scale is a blunt instrument</strong>: Bigger models often work better, but we don't fully understand why.</p>
+</li>
+<li>
+<p><strong>Emergence debates are active research</strong>: Don't treat either side as settled fact.</p>
+</li>
+</ol>
+<hr />
+<h2 id="connecting-the-phenomena">Connecting the Phenomena<a class="headerlink" href="#connecting-the-phenomena" title="Permanent link">&para;</a></h2>
+<p>These three phenomena share common themes:</p>
+<h3 id="1-phase-transitions">1. Phase Transitions<a class="headerlink" href="#1-phase-transitions" title="Permanent link">&para;</a></h3>
+<p>All three involve sudden changes rather than gradual improvement:
+- <strong>Double descent</strong>: Error suddenly drops past the interpolation threshold
+- <strong>Grokking</strong>: Test accuracy suddenly improves after long plateau
+- <strong>Emergence</strong>: Capabilities suddenly appear at scale</p>
+<blockquote>
+<p><strong>The Physical Analogy</strong></p>
+<p>These sudden changes resemble <em>phase transitions</em> in physics. Water doesn't gradually become "more solid" as you cool it—it stays liquid until 0°C, then suddenly freezes. Iron isn't "slightly magnetic" at 770°C—it has zero magnetism above that temperature and strong magnetism below. Phase transitions occur when a system reorganizes its internal structure at a critical threshold. Neural networks may be doing something similar: at certain points (in model size, training time, or parameter count), the network's internal structure reorganizes—from memorization to generalization, from scattered representations to structured ones. The math of phase transitions (statistical mechanics, renormalization group theory) may eventually help us understand these phenomena, but we're not there yet.</p>
+<p><strong>Numerical Example: Comparing Phase Transitions</strong></p>
+<p>All three phenomena show non-linear behavior around critical thresholds:</p>
+<p><strong>Output:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>┌────────────────────┬────────────────────┬─────────────────────────┐
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>│Phenomenon          │X-Axis              │Sudden Change            │
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>├────────────────────┼────────────────────┼─────────────────────────┤
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>│Double Descent      │Model complexity    │Error drops past threshold│
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>│Grokking            │Training epochs     │Test acc jumps late      │
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>│Emergence           │Model scale (params)│Capability appears       │
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>└────────────────────┴────────────────────┴─────────────────────────┘
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>Position     DD Error        Grok Test Acc   Emerge Perf
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>---------------------------------------------------------
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>Pre-crit     0.70            0.10            0.05
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>Critical     1.00            0.30            0.20
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>Post-crit    0.30            0.95            0.85
+</span></code></pre></div></p>
+<p><strong>Interpretation:</strong> All three phenomena show the signature of a phase transition: performance metrics change suddenly rather than gradually as you cross a critical threshold. For double descent, the threshold is model complexity; for grokking, it's training time; for emergence, it's model scale. The underlying mechanism likely involves some form of internal reorganization—though we don't yet fully understand what.</p>
+<p><em>Source: <code>slide_computations/deep_dive_surprising_phenomena_examples.py</code> - <code>demo_phase_transitions_comparison()</code></em></p>
+</blockquote>
+<h3 id="2-the-role-of-optimization">2. The Role of Optimization<a class="headerlink" href="#2-the-role-of-optimization" title="Permanent link">&para;</a></h3>
+<p>How we train matters as much as what we train:
+- <strong>Double descent</strong>: SGD's implicit bias toward flat minima
+- <strong>Grokking</strong>: Weight decay pushing toward simpler solutions
+- <strong>Emergence</strong>: Whatever makes large-scale training work</p>
+<h3 id="3-theory-lags-practice">3. Theory Lags Practice<a class="headerlink" href="#3-theory-lags-practice" title="Permanent link">&para;</a></h3>
+<p>All three phenomena were discovered empirically, not predicted by theory:
+- Practitioners used overparameterized models before theory explained why
+- Grokking was an unexpected observation
+- Emergence remains controversial precisely because theory is unclear</p>
+<h3 id="4-incomplete-understanding">4. Incomplete Understanding<a class="headerlink" href="#4-incomplete-understanding" title="Permanent link">&para;</a></h3>
+<p>Our theoretical understanding of neural networks remains incomplete. These phenomena remind us that deep learning is partly empirical science—we observe, then try to explain.</p>
+<p><strong>The meta-lesson</strong>: Be humble about classical intuitions. Neural networks are complex systems that don't always behave as simple theory predicts. When your experiment contradicts your intuition, consider that your intuition might be wrong.</p>
+<hr />
+<h2 id="common-misconceptions">Common Misconceptions<a class="headerlink" href="#common-misconceptions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Misconception</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"More parameters always means more overfitting"</td>
+<td>Double descent shows overparameterized models can generalize well</td>
+</tr>
+<tr>
+<td>"Stop training when validation loss increases"</td>
+<td>Grokking shows generalization can occur much later</td>
+</tr>
+<tr>
+<td>"Model capabilities scale smoothly with size"</td>
+<td>Emergent abilities may appear suddenly at scale thresholds</td>
+</tr>
+<tr>
+<td>"These phenomena only matter for researchers"</td>
+<td>They affect practical decisions about model size and training</td>
+</tr>
+<tr>
+<td>"Grokking only happens on toy problems"</td>
+<td>It's been observed in realistic settings, though less dramatically</td>
+</tr>
+<tr>
+<td>"Emergent abilities prove models 'understand'"</td>
+<td>Sudden capability doesn't imply understanding</td>
+</tr>
+<tr>
+<td>"Classical ML theory is wrong"</td>
+<td>It's incomplete, not wrong—these are edge cases it didn't cover</td>
+</tr>
+<tr>
+<td>"We should always train for longer"</td>
+<td>Resource constraints are real; these insights help prioritize</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="reflection-questions">Reflection Questions<a class="headerlink" href="#reflection-questions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>If double descent is real, why do we still use regularization? When would you add explicit regularization to an overparameterized model?</p>
+</li>
+<li>
+<p>How would you modify your training procedure if you suspected grokking might occur? What would you monitor, and how long would you train?</p>
+</li>
+<li>
+<p>A colleague says "our small prototype works, so the full model will work too." What's the concern with this reasoning, and what's the counter-concern?</p>
+</li>
+<li>
+<p>Why might emergent abilities be a measurement artifact? Design an experiment to test whether a claimed emergent ability is real or an artifact.</p>
+</li>
+<li>
+<p>What do these phenomena suggest about our theoretical understanding of neural networks? Does it matter if we can't fully explain why models work?</p>
+</li>
+<li>
+<p>How do these phenomena relate to the Universal Approximation Theorem from the earlier Deep Dive? Does that theorem predict any of this behavior?</p>
+</li>
+</ol>
+<hr />
+<h2 id="practice-problems">Practice Problems<a class="headerlink" href="#practice-problems" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><strong>Sketch the double descent curve</strong> and label: (a) the classical regime, (b) the interpolation threshold, (c) the overparameterized regime. Where would you expect test error to be highest? Lowest?</p>
+</li>
+<li>
+<p><strong>Grokking scenario</strong>: You're training a model on a dataset with 10,000 examples. At epoch 500, training accuracy is 100% and test accuracy is 65%. Training accuracy stays at 100% for the next 2,000 epochs while test accuracy hovers around 65-68%. What would you do next? How long would you continue training? What would change your decision?</p>
+</li>
+<li>
+<p><strong>Emergence analysis</strong>: Find one claimed example of an "emergent ability" in the literature (Wei et al. 2022 is a good source). Evaluate whether it might be a measurement artifact by considering: (a) what metric was used, (b) whether a continuous alternative metric exists, (c) what gradual improvement might look like.</p>
+</li>
+<li>
+<p><strong>Connecting phenomena</strong>: All three phenomena involve some kind of "sudden change." Compare and contrast: what is changing suddenly in each case, and what causes the sudden change?</p>
+</li>
+</ol>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><strong>Key takeaways:</strong></p>
+<ol>
+<li>
+<p><strong>Double descent</strong> shows that overparameterized models can generalize well, contradicting the classical bias-variance intuition. The interpolation threshold (where parameters ≈ data points) is often the worst place to be.</p>
+</li>
+<li>
+<p><strong>Grokking</strong> demonstrates that generalization can occur long after memorization, challenging early stopping heuristics. Regularization is critical for pushing networks from memorization to generalization.</p>
+</li>
+<li>
+<p><strong>Emergent abilities</strong> (possibly) show sudden capability gains at scale, making small-scale experiments unreliable predictors of large-scale behavior. But some claimed emergences may be measurement artifacts.</p>
+</li>
+<li>
+<p>All three phenomena involve <strong>phase transitions</strong>—sudden changes rather than gradual improvement—which makes them hard to predict.</p>
+</li>
+<li>
+<p><strong>Implicit regularization</strong> from optimization (SGD, weight decay) appears to play a role in all these phenomena, suggesting that <em>how</em> we train matters as much as <em>what</em> we train.</p>
+</li>
+<li>
+<p>Our theoretical understanding of neural networks remains incomplete—these phenomena were discovered empirically, not predicted from first principles.</p>
+</li>
+<li>
+<p><strong>Practical implication</strong>: Don't extrapolate too confidently from small experiments or short training runs. Classical intuitions are incomplete guides to modern deep learning.</p>
+</li>
+</ol>
+<hr />
+<h2 id="further-reading">Further Reading<a class="headerlink" href="#further-reading" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Belkin, M. et al. (2019). "Reconciling modern machine learning practice and the bias-variance trade-off." PNAS.</li>
+<li>Power, A. et al. (2022). "Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets." arXiv.</li>
+<li>Wei, J. et al. (2022). "Emergent Abilities of Large Language Models." arXiv.</li>
+<li>Schaeffer, R. et al. (2023). "Are Emergent Abilities of Large Language Models a Mirage?" arXiv.</li>
+<li>Nakkiran, P. et al. (2019). "Deep Double Descent: Where Bigger Models and More Data Can Hurt." arXiv.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

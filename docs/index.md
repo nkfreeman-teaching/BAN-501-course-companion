@@ -41,3 +41,4 @@ The appendices provide deeper technical explorations:
 - **Universal Approximators**: Why neural networks can learn any function
 - **CNN Architecture**: Detailed breakdown of convolutional networks
 - **Transformer Architecture**: The architecture behind modern NLP
+- **Surprising Phenomena**: Double descent, grokking, and emergent abilities

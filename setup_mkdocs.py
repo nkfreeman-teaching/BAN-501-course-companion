@@ -38,6 +38,10 @@ FILE_MAPPING: Dict[str, Tuple[str, str]] = {
     ),
     "Deep Dive - CNN Architecture.md": ("appendices", "cnn-architecture.md"),
     "Deep Dive - Transformer Architecture.md": ("appendices", "transformer-architecture.md"),
+    "Deep Dive - Surprising Phenomena in Modern Deep Learning.md": (
+        "appendices",
+        "surprising-phenomena.md",
+    ),
 }
 
 SITE_CONFIG = {
@@ -233,6 +237,7 @@ The appendices provide deeper technical explorations:
 - **Universal Approximators**: Why neural networks can learn any function
 - **CNN Architecture**: Detailed breakdown of convolutional networks
 - **Transformer Architecture**: The architecture behind modern NLP
+- **Surprising Phenomena**: Double descent, grokking, and emergent abilities
 """
 
 
@@ -290,6 +295,7 @@ nav:
     - "Neural Networks as Universal Approximators": appendices/universal-approximators.md
     - "CNN Architecture": appendices/cnn-architecture.md
     - "Transformer Architecture": appendices/transformer-architecture.md
+    - "Surprising Phenomena in Deep Learning": appendices/surprising-phenomena.md
 
 markdown_extensions:
   - pymdownx.arithmatex:
