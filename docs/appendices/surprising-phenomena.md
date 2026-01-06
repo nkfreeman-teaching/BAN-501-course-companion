@@ -42,21 +42,9 @@ As model complexity increases:
 
 This creates the famous **U-shaped curve**:
 
-```
-Test Error
-    │
-    │    *
-    │      *
-    │        *       *   *   *
-    │          *   *           *  *  *
-    │            *
-    │
-    └────────────────────────────────────
-              Model Complexity →
-         Underfitting  ←→  Overfitting
-```
+![Bias-Variance U-Curve](../assets/deep_dive/bias_variance_u_curve.png)
 
-**Reading the diagram**: The vertical axis shows test error (higher is worse), and the horizontal axis shows model complexity (number of parameters, polynomial degree, tree depth, etc.). The asterisks trace a U-shaped curve: error is high on the left (models too simple to capture the pattern), decreases to a minimum in the middle (the "sweet spot"), then increases again on the right (models so complex they memorize noise). The labels below the axis remind us that the left side corresponds to underfitting (high bias) and the right side to overfitting (high variance). Classical ML wisdom says: find the bottom of the U and stop there.
+**Reading the diagram**: The vertical axis shows test error (higher is worse), and the horizontal axis shows model complexity (number of parameters, polynomial degree, tree depth, etc.). The blue curve traces a U-shape: error is high on the left (models too simple to capture the pattern), decreases to a minimum in the middle (the "sweet spot" marked with a green star), then increases again on the right (models so complex they memorize noise). The shaded regions highlight the underfitting zone (left, blue) and overfitting zone (right, red). Classical ML wisdom says: find the bottom of the U and stop there.
 
 > **Numerical Example: Bias-Variance Tradeoff with Polynomial Regression**
 >
@@ -109,24 +97,9 @@ Test Error
 
 A related principle: stop training when validation loss starts increasing. If you keep training after that point, you're just memorizing noise.
 
-```
-Loss
-    │
-    │ *
-    │   *  Training Loss
-    │     *
-    │       *  *  *  *  *  *  *  *
-    │
-    │   *      Validation Loss
-    │     *  *
-    │           *
-    │              *  *  *  *  *  *  ← Stop here!
-    │
-    └─────────────────────────────────
-                  Epochs →
-```
+![Early Stopping](../assets/deep_dive/early_stopping.png)
 
-**Reading the diagram**: Two curves show how training and validation loss evolve as training progresses (epochs increase to the right). The upper curve (training loss) drops quickly and then flattens—the model fits the training data well. The lower curve (validation loss) initially drops in parallel, but then starts *increasing* while training loss stays flat. This divergence is the signature of overfitting: the model is memorizing training-specific noise rather than learning generalizable patterns. The arrow marks where validation loss bottoms out—the classical prescription says to stop training here and use this model.
+**Reading the diagram**: Two curves show how training and validation loss evolve as training progresses (epochs increase to the right). The blue curve (training loss) drops quickly and then flattens—the model fits the training data well. The orange curve (validation loss) initially drops in parallel, but then starts *increasing* while training loss stays flat. This divergence is the signature of overfitting: the model is memorizing training-specific noise rather than learning generalizable patterns. The green marker and vertical line show where validation loss bottoms out—the classical prescription says to stop training here and use this model. The shaded red region indicates the "overfitting zone" where continued training hurts generalization.
 
 **The classical prescription**: Monitor validation loss and stop when it starts increasing.
 
@@ -148,25 +121,9 @@ They showed that if you keep increasing model complexity past the "interpolation
 
 The phenomenon looks like this:
 
-```
-Test Error
-    │
-    │  *
-    │    *                                  Classical U-curve
-    │      *                               /
-    │        *       *                    /
-    │          *   *   *                 /
-    │            *       *     *        ← Interpolation threshold
-    │                      *      *
-    │                          *    *  *  ← Second descent!
-    │
-    └──────────────────────────────────────
-              Model Complexity →
+![Double Descent](../assets/deep_dive/double_descent.png)
 
-    |-- Underparameterized --|-- Overparameterized --|
-```
-
-**Reading the diagram**: This extends the classical U-curve to much higher model complexity. Moving left to right: test error initially decreases (classical improvement), reaches a minimum (the classical sweet spot), then increases toward a *peak* at the "interpolation threshold" (marked with an arrow). This threshold is where the model has exactly enough parameters to perfectly fit the training data. But the key surprise is what happens *after* this peak: as we keep adding parameters, test error *decreases again*—the "second descent." The bottom labels divide the x-axis into two regimes: underparameterized (classical territory) and overparameterized (modern deep learning territory). The annotation shows that classical theory (dashed line) would predict continued increase, but reality shows descent.
+**Reading the diagram**: This extends the classical U-curve to much higher model complexity. The blue solid line shows actual behavior, while the gray dashed line shows what classical theory predicts. Moving left to right: test error initially decreases (classical improvement), reaches a minimum (the classical sweet spot), then increases toward a *peak* at the "interpolation threshold" (marked with a red vertical line). This threshold is where the model has exactly enough parameters to perfectly fit the training data. But the key surprise is what happens *after* this peak: as we keep adding parameters, test error *decreases again*—the "second descent" (annotated in green). The bottom labels divide the x-axis into two regimes: underparameterized (classical territory, blue shading) and overparameterized (modern deep learning territory, green shading).
 
 **Three regimes**:
 
@@ -310,29 +267,9 @@ They called this phenomenon **grokking**.
 
 ### Visualizing Grokking
 
-```
-Accuracy
-   100%│              Training ──────────────────
-       │         ************************************
-       │       **
-       │     **
-       │   **
-    50%│  *
-       │  │
-       │  │                              Test
-       │  │                         ********
-       │  │                    *****
-       │  │             *******
-     0%│**│*************│
-       └──┴─────────────┴────────────────────────────
-          │             │
-       Memorization   Grokking!
-         (fast)       (delayed)
+![Grokking](../assets/deep_dive/grokking.png)
 
-       Epoch 0    1000   10000   20000   30000
-```
-
-**Reading the diagram**: The vertical axis shows accuracy (0-100%), and the horizontal axis shows training epochs on a log-like scale (note the jump from 1,000 to 30,000). Two curves tell dramatically different stories. The *training* curve (upper) shoots up quickly—by epoch 100-500, the network achieves 100% training accuracy. It then stays flat at 100% forever. The *test* curve (lower) starts near 0% and *stays there* for thousands of epochs (the flat line on the bottom). Then, around epoch 10,000-20,000, it suddenly climbs to 100%. The vertical dashed lines mark two events: "Memorization" (when training accuracy hits 100%) and "Grokking!" (when test accuracy finally catches up). The gap between these events—thousands of epochs—is the puzzle.
+**Reading the diagram**: The vertical axis shows accuracy (0-100%), and the horizontal axis shows training epochs from 0 to 30,000. Two curves tell dramatically different stories. The blue *training* curve shoots up quickly—by epoch 500, the network achieves 100% training accuracy. It then stays flat at 100% forever. The orange *test* curve starts near 5% (random guessing) and *stays there* for thousands of epochs. Then, around epoch 15,000, it suddenly climbs to 100%. The gray vertical line marks "Memorization" (when training accuracy hits 100%), and the green vertical line marks "Grokking!" (when test accuracy finally catches up). The double-headed arrow highlights the "long gap" between these events—thousands of epochs—which is the puzzle.
 
 The network memorizes quickly but generalizes *much* later—sometimes 100× as many epochs.
 
@@ -469,25 +406,9 @@ Models would show near-random performance on a task across many scales, then sud
 
 ### Visualizing Emergence
 
-```
-Task Performance
-   100%│                              ********
-       │                           ***
-       │                          *
-       │                         *
-    50%│                        *
-       │                       *
-       │                      *
-       │                     *
-     0%│ * * * * * * * * * *
-       └──────────────────────────────────────────
-         1M   10M   100M   1B   10B   100B   1T
-                Model Parameters (log scale) →
-                            │
-                       Emergence threshold
-```
+![Emergent Abilities](../assets/deep_dive/emergent_abilities.png)
 
-**Reading the diagram**: The vertical axis shows task performance (0-100%), and the horizontal axis shows model size on a logarithmic scale spanning 6 orders of magnitude (from 1 million to 1 trillion parameters). The asterisks show how performance changes with scale. On the left (smaller models), performance stays flat near 0%—essentially random guessing—across 1M, 10M, 100M, even 1B parameters. Then, somewhere between 10B and 100B parameters (the "emergence threshold"), performance suddenly shoots up in an S-curve to near 100%. This is the signature of an "emergent" ability: zero capability becomes high capability with no visible intermediate stage. The question is whether this sudden jump is a real phenomenon or an artifact of how we measure.
+**Reading the diagram**: The vertical axis shows task performance (0-100%), and the horizontal axis shows model size on a logarithmic scale spanning 6 orders of magnitude (from 1 million to 1 trillion parameters). The blue curve shows how performance changes with scale. On the left (smaller models), performance stays flat near 0%—essentially random guessing (gray shaded region)—across 1M, 10M, 100M, even 1B parameters. Then, around 30B parameters (the "emergence threshold" marked by the orange dashed line), performance suddenly shoots up in an S-curve to near 100%. This is the signature of an "emergent" ability: zero capability becomes high capability with no visible intermediate stage. The question is whether this sudden jump is a real phenomenon or an artifact of how we measure.
 
 Performance stays flat (near random) across orders of magnitude, then suddenly jumps.
 
